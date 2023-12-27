@@ -105,7 +105,7 @@ function on_bump(tile,at)
   end
 
   if tile == 11 then
-   ok_msg("the chest is empty")
+   show_msg("the chest is empty")
   else
   _opx,_opy=_plyr.pos.x+_d.x*1.5
       ,_plyr.pos.y+_d.y*1.5
@@ -248,19 +248,29 @@ function add_win(x,y,w,h,txt)
 end
 
 function ok_msg(txt)
-	local msg = " " .. txt.. " "
+ local l = #txt[1]
+ for msg in all(txt) do
+   msg = " " .. msg .. " " 
+   l = max(#msg,l)
+ end
+ 
+ local len=l/2
+ local w = add_win(64-len*4,64
+           ,(l+1)*4
+           ,7*#txt
+           ,txt)
+           
+ return w
+end
+
+function show_msg(txt)
+ 	local msg = " " .. txt.. " "
  local len=#msg/2
  local w = add_win(64-len*4,64
            ,(#msg+1)*4
            ,10
            ,{msg})
            
- return w
-end
-
-function show_msg(txt)
- local w = ok_msg(txt)
- w.t = 1
  return w
 end
 
