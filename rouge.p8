@@ -47,11 +47,8 @@ end
 function start()
 	_plyr = ent(1,240,p(4,2))
 	_anim = anim({240,241},3,1)
+	_pl = anim_pl(3)
 	_plyr.anim = _anim
-	_pl = anim_pl(_anim)
-	_px = _plyr.pos.x
-	_py = _plyr.pos.y
-	_opx,_opy = _px,_py
 	_plyr.ease = ease_lerp
 	_tile_sfx = {
 	[9]=sfx_door,
@@ -60,8 +57,6 @@ function start()
 	[1]=sfx_bmp
 	}
 	_slime_anim = anim({210,211},3,1)
-	_slime_pl = anim_pl(_slime_anim)
---	_slime = ent(2,210,p(9,10))
 	_ents = {}
 	add_ent(_plyr)
  add_slime(2,p(9,10))
@@ -305,15 +300,12 @@ function anim(f,fps,loop)
  return {f=f,fps=fps,loop=loop}
 end
 
-function anim_pl(anim)
+function anim_pl(fps)
  return
  {
-  anim=anim,
-  fps=anim.fps,
-  loop = anim.loop,
+  fps=fps,
   frame_cnt=0,
   frame_i=1,
-  frame=anim.f[1]
  }
 end
 
