@@ -213,13 +213,6 @@ function ease_lerp(ent)
              _t)
 end
 
-function ent_lerp()
- for ent in all(_ents) do
-	 ent.pos_ren.x = lerp(ent.pos_lst.x,ent.pos.x,_t)
-	 ent.pos_ren.y = lerp(ent.pos_lst.y,ent.pos.y,_t)
- end
-end
-
 function set_lst_pos(ent)
  ent.pos_lst.x = ent.pos_ren.x
  ent.pos_lst.y = ent.pos_ren.y
@@ -247,9 +240,7 @@ function upd_ease()
  end
  
  for e in all (_ents) do
-  local nx,ny = e.ease(e) 
-	 e.pos_ren.x = nx
-	 e.pos_ren.y = ny 
+  e.pos_ren.x,e.pos_ren.y = e.ease(e)
  end
 end
 -->8
