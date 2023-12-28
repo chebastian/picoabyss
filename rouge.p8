@@ -193,9 +193,7 @@ _t = 0
 function drw_game()
 	map()
 	_pl.frame_cnt+=1
-	_plyr.sprid = upd_anim(_pl,_anim)
-	drw_ent(_plyr,_plyr.pos_ren)
-  
+	 
  for e in all(_ents) do
   e.sprid = upd_anim(_pl,_slime_anim)
 	 drw_ent(e,e.pos_ren)
@@ -240,7 +238,8 @@ function upd_ease()
  end
  
  for e in all (_ents) do
-  e.pos_ren.x,e.pos_ren.y = e.ease(e)
+  e.pos_ren.x,
+  e.pos_ren.y = e.ease(e)
  end
 end
 -->8
