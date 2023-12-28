@@ -61,7 +61,6 @@ function start()
 	add_ent(_plyr)
  add_slime(2,p(9,10))
  add_slime(3,p(9,11))
--- add_ent(ent(3,210,p(12,9)))
 end
 
 function add_slime(id,p)
@@ -126,7 +125,6 @@ function upd_game_ent(ent,d)
  
  sfx(sfx_wlk)
  move_t(ent.pos,d)
--- push_upd(upd_ease)
  ent.ease=ease_lerp
 end
 
@@ -398,7 +396,6 @@ function upd_win()
    end
   end
  end
- -- 930
 
  for w in all(_wnd) do
   if w.t then
