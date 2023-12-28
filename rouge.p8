@@ -146,45 +146,6 @@ function upd_game()
 	 
 	 push_upd(upd_ease)
 	end
---	if _d then
---	 _t = 0
---	 _plyr.hflip = _d.x < 0 or (_plyr.hflip and _d.x == 0)
---  local np = add_t(_plyr.pos,_d)
---	 local tile = mget(np.x
---	                  ,np.y)
---	 local ent = ent_at(np)
---	 if(fget(tile,0))then
---	  _plyr.ease=ease_bump
---	  on_bump(tile,np,_plyr)
---	  _d = nil
---	  return
---	 elseif(ent)then
---	  _plyr.ease=ease_bump
---	  on_atk(ent,np)
---	  _d = nil
---	  return
---	 end
---	 
---	 sfx(sfx_wlk)
---	 move_t(_plyr.pos,_d)
---	 push_upd(upd_ease)
---	 _plyr.ease=ease_lerp
---	 _d = nil
---	 
---	 -- update enemy locations
---	 for e in all(_ents) do
---	  if e.ctrl then
---	   -- player so noop
---   else
---		  local e_np,e_d = next_p(e.pos)
---		  if (is_solid(e_np)==false) then
-----			  e.pos.x = e_np.x
-----			  e.pos.y = e_np.y
---       upd_ent(e,e_d)
---		  end
---	  end
---	 end
---	end
 end
 
 function upd_ent(ent,d)
@@ -206,12 +167,9 @@ function on_atk(atk,ent,at,d)
 end
 
 function bump_at(ent,d)
--- _opx,_opy=_plyr.pos.x+_d.x*1.5
---     ,_plyr.pos.y+_d.y*1.5
  ent.pos_lst.x,
  ent.pos_lst.y=ent.pos.x+d.x*1.5
      ,ent.pos.y+d.y*1.5
--- push_upd(upd_ease)
 end
 
 function on_bump(tile,at,ent,d)
@@ -293,9 +251,6 @@ function upd_ease()
 	 e.pos_ren.x = nx
 	 e.pos_ren.y = ny 
  end
--- local nx,ny = _plyr.ease(_plyr) 
--- _plyr.pos_ren.x = nx
--- _plyr.pos_ren.y = ny
 end
 -->8
 --utils
