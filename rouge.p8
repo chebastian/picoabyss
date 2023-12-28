@@ -148,24 +148,13 @@ function upd_game()
 	end
 end
 
-function upd_ent(ent,d)
-	ent.hflip = d.x < 0 or (ent.hflip and d.x == 0)
- local np = add_t(ent.pos,d)
- local tile = mget(np.x
-                  ,np.y)
-
- local ent_2 = ent_at(np)
- 
- ent.pos.x += d.x
- ent.pos.y += d.y
-end
-
 function on_atk(atk,ent,at,d)
  bump_at(atk,d)
  del(_ents,ent)
  sfx(4)
 end
 
+-- ★ move code?
 function bump_at(ent,d)
  ent.pos_lst.x,
  ent.pos_lst.y=ent.pos.x+d.x*1.5
