@@ -46,14 +46,12 @@ end
 --game
 function start()
 	_plyr = ent(1,240,p(4,2))
-	_plyr.ctrl = true
 	_anim = anim({240,241},3,1)
 	_pl = anim_pl(_anim)
 	_px = _plyr.pos.x
 	_py = _plyr.pos.y
 	_opx,_opy = _px,_py
 	_plyr.ease = ease_lerp
-	_d = nil
 	_tile_sfx = {
 	[9]=sfx_door,
 	[13]=sfx_lmp,
@@ -84,21 +82,14 @@ function ent_at(p)
  return nil
 end
 
-function setnext_d()
+function getnext_d()
  for i=1,#dirs do
  	if btnp(buttons[i]) then
- 	 _d = dirs[i]
+ 	 return dirs[i]
  	end
  end
-end
-
-function next_d()
- return dirs[flr(rnd(4))+1]
-end
-
-function next_p(_p)
- local d = next_d()
- return p(_p.x+d.x,_p.y+d.y),d
+ 
+ return nil
 end
 
 function is_solid(p)
@@ -130,9 +121,12 @@ end
 
 function upd_game()
 
-	setnext_d()
+	local nd = getnext_d()
+	if nd then
+	 _d = nd
+ end
+ 
 	if _d then
-	 --upd_game_ent(_plyr,_d)
 	 _plyr.d = _d
 	 _d = nil
 	 _t = 0
@@ -218,7 +212,11 @@ function ease_bump(ent)
 end
 
 function upd_ease()
- setnext_d()
+ local nd = getnext_d()
+	if nd then
+	 _d = nd
+ end
+ 
  _t=min(_t+0.1,1)
  if(_t == 1) then
   pop_upd()
@@ -263,6 +261,15 @@ end
 function move_t(po,d)
  po.x += d.x
  po.y += d.y
+end
+
+function next_d()
+ return dirs[flr(rnd(4))+1]
+end
+
+function next_p(_p)
+ local d = next_d()
+ return p(_p.x+d.x,_p.y+d.y),d
 end
 
 
