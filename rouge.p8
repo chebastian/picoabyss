@@ -340,32 +340,31 @@ function show_msg(txt)
 end
 
 function drw_win()
- for w in all(_wnd) do
+	for w in all(_wnd) do
   local wh,wy = w.h,w.y
   if w.t then
    local si = abs(sin(w.t))
+   
    if w.t < 0.2 then
 	   wh = si*w.h	   
-	  else if w.t >= 0.8 then
+	  elseif w.t >= 0.8 then
 	   wh = si*w.h
 	  end
 	  local df = w.h-wh
 	  wy += df*.5
-	  
 	 end
-	end
-  drw_box(
-  w.x,  wy,
-  w.w,  wh,
-  6,  0)
-  
-  clip(w.x,wy,w.w-2,wh-2)
-  for i=1,#w.txt do
-   local txt=w.txt[i]
-   print(txt,
-   w.x+2
-   ,wy+2+(i-1)*6
-   ,6)
+	
+	 drw_box(w.x,wy,
+	 w.w,wh,
+	 6,0)
+ 
+	 clip(w.x,wy,w.w-2,wh-2)
+	 for i=1,#w.txt do
+	  local txt=w.txt[i]
+	  print(txt,
+	  w.x+2
+	  ,wy+2+(i-1)*6
+	  ,6)
   end
   clip()
  end
