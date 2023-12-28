@@ -208,15 +208,13 @@ function ease_bump()
  local tme = _t
  if(_t<0.50) tme = 1-_t
 
- _px = lerp(_opx,_plyr.pos.x,tme)
- _py = lerp(_opy,_plyr.pos.y,tme)
+ _px,_py = lerp(_opx,_plyr.pos.x,tme), lerp(_opy,_plyr.pos.y,tme)
 end
 
 function upd_ease()
  setnext_d()
  _t=min(_t+0.1,1)
  if(_t == 1) then
---  _upd=upd_game
   pop_upd()
   _opx=_px
   _opy=_py
@@ -249,10 +247,6 @@ end
 function lerp(a,b,d)
 	if(d >= 1.0) return b
  return a+(b-a)*d
-end
-
-function ease(a,b)
- return a
 end
 
 function add_t(po,d)
@@ -299,6 +293,7 @@ function anim_pl(anim)
   frame=anim.f[1]
  }
 end
+
 function upd_anim(pl,anim)
  if(pl.frame_cnt >= 60/pl.fps) then
   pl.frame_i+=1
