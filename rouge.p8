@@ -47,6 +47,7 @@ end
 function start()
 	_plyr = ent(1,240,p(4,2))
 	_anim = anim({240,241},3,1)
+	_plyr.anim = _anim
 	_pl = anim_pl(_anim)
 	_px = _plyr.pos.x
 	_py = _plyr.pos.y
@@ -60,11 +61,19 @@ function start()
 	}
 	_slime_anim = anim({210,211},3,1)
 	_slime_pl = anim_pl(_slime_anim)
-	_slime = ent(2,210,p(9,10))
+--	_slime = ent(2,210,p(9,10))
 	_ents = {}
 	add_ent(_plyr)
-	add_ent(_slime)
-	add_ent(ent(3,210,p(12,9)))
+ add_slime(2,p(9,10))
+ add_slime(3,p(9,11))
+-- add_ent(ent(3,210,p(12,9)))
+end
+
+function add_slime(id,p)
+ local e = ent(id,210,p)
+ e.anim = _slime_anim
+ add_ent(e)
+ return e
 end
 
 function add_ent(ent)
@@ -182,7 +191,7 @@ function drw_game()
 	_pl.frame_cnt+=1
 	 
  for e in all(_ents) do
-  e.sprid = upd_anim(_pl,_slime_anim)
+  e.sprid = upd_anim(_pl,e.anim)
 	 drw_ent(e,e.pos_ren)
  end
 end
