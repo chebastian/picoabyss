@@ -92,6 +92,13 @@ function getnext_d()
  return nil
 end
 
+function buff_input()
+ local nd = getnext_d()
+	if nd then
+	 _d = nd
+ end
+end
+
 function is_solid(p)
  local tile = mget(p.x,p.y)
  return fget(tile,0)
@@ -121,10 +128,7 @@ end
 
 function upd_game()
 
-	local nd = getnext_d()
-	if nd then
-	 _d = nd
- end
+	buff_input()
  
 	if _d then
 	 _plyr.d = _d
@@ -212,11 +216,7 @@ function ease_bump(ent)
 end
 
 function upd_ease()
- local nd = getnext_d()
-	if nd then
-	 _d = nd
- end
- 
+  buff_input()
  _t=min(_t+0.1,1)
  if(_t == 1) then
   pop_upd()
