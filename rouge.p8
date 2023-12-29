@@ -116,7 +116,7 @@ function upd_game()
 	buff_input()
 	
 	if(btnp(❎))then
-	 ok_msg({"what do we have"})
+	 add_win(0,0,40,10,{"heuooo"})
 	end
  
 	if _d then
@@ -390,15 +390,12 @@ end
 
 function upd_win()
 
- for b in all(buttons) do
-  if btnp(b) then
-	  //del(_wnd,_wnd[#_wnd])
-	  local w = _wnd[#_wnd]
-	  if(w.t == nil) then 
-	   w.t = .3
-	  else
-	   w.t = min(w.t,.3)
-   end
+ if btnp(❎) then
+  local w = _wnd[#_wnd]
+  if(w.t == nil) then 
+   w.t = .3
+  else
+   w.t = min(w.t,.3)
   end
  end
 
