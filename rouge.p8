@@ -140,21 +140,29 @@ function drw_game()
 	 drw_ent(e,e.pos_ren)
  end
  
- for dmg in all(_atks) do
+ drw_dmg()
+ drw_hud()
+ 
+end
+
+function drw_dmg()
+for dmg in all(_atks) do
   local dy = dmg.pos.y
   local off = 1-(dmg.t/dmg.ot)
-       
-  for di in all(dir8) do
-   local tx = dmg.pos.x*8
-   local ty = dmg.pos.y*8
-   print(dmg.txt,tx+di.x
-      ,di.y+ty-(off*4),8)
-  end
-  print(dmg.txt,dmg.pos.x*8
-       ,dmg.pos.y*8-(off*6),7)
+  
+  drw_txt8(dmg.txt,
+           p(dmg.pos.x*8,
+             8*dmg.pos.y-off*8),
+           7,8)
   dmg.t-=1
   if(dmg.t<=0)del(_atks,dmg)
  end
+end
+-- 
+function drw_hud()
+  drw_rectf(0,0,128,10,1)
+  drw_txt8("♥ ".._plyr.hp..
+           " カ " .. _plyr.atk,p(8,2),3,7)
 end
 
 function ease_lerp(ent)
@@ -239,8 +247,7 @@ function drw_ent(ent,at)
 	palt(0,false)
 	local flash=ent.flash
 	if(flash and flash > 0) then
-	 pal(9,1)
-	 if(flash%2==0) pal(9,7)
+	 pal(9,7)
 	 ent.flash -= 1
 	end
 	spr(ent.sprid,
@@ -258,6 +265,18 @@ end
 function drw_box(x,y,w,h,fg,bg)
  drw_rectf(x,y,w,h,fg)
  drw_rectf(x+1,y+1,w-2,h-2,bg)
+end
+
+function drw_txt8(txt,pos,fg,bg)
+	for di in all(dir8) do
+  local tx = pos.x
+  local ty = pos.y
+  print(txt,tx+di.x
+     ,di.y+ty,bg)
+ end
+ 
+ print(txt,pos.x
+      ,pos.y,fg)   
 end
 
 -- animations
@@ -330,7 +349,7 @@ end
 function add_atk(ent,def)
  add(_atks,
     prl("-"..ent.atk
-       ,25
+       ,40
        ,p(def.pos.x,def.pos.y)))
 end
 
@@ -447,7 +466,7 @@ function on_atk(atk,ent,at,d)
  bump_at(atk,d)
  
  ent.hp-=atk.atk
- ent.flash=7
+ ent.flash=10
  add_atk(atk,ent)
  if(ent.hp <= 0) then
 	 del(_ents,ent)
