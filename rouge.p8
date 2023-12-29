@@ -114,6 +114,10 @@ end
 
 function upd_game()
 	buff_input()
+	
+	if(btnp(❎))then
+	 ok_msg({"what do we have"})
+	end
  
 	if _d then
 	 _plyr.d = _d
@@ -325,7 +329,7 @@ function ok_msg(txt)
  local len=l/2
  local w = add_win(64-len*4,64
            ,(l+1)*4
-           ,7*#txt
+           ,max(10,7*#txt)
            ,txt)
            
  return w
