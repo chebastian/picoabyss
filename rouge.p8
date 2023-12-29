@@ -46,25 +46,29 @@ end
 --game
 function start()
 	_t = 0
- _pid = 240
-	_plyr = ent(240,40,p(4,2))
-	_anim = anim({240,241},3,1)
+ _pid = 1
+ 	
+	_hp = {4,1,2}
+	_atk = {1,1,1}
+	_anims = {240,210,194}
+	
+	_plyr = add_mob(1,p(4,3))--ent(240,p(4,2))
 	_pl = anim_pl(3)
-	_plyr.anim = _anim
 	_plyr.ease = ease_lerp
-	_plyr.atk = true
 	_tile_sfx = {
 	[9]=sfx_door,
 	[13]=sfx_lmp,
 	[15]=sfx_lmp,
 	[1]=sfx_bmp
 	}
+
+	
 	_slime_anim = anim({210,211},3,1)
 	_ents = {}
 	add_ent(_plyr)
- add_mob(210,p(9,10))
- add_mob(210,p(9,11))
- add_mob(194,p(5,5))
+ add_mob(2,p(9,10))
+ add_mob(2,p(9,11))
+ add_mob(3,p(5,5))
 end
 
 function chk_tile(p,flag)
@@ -185,15 +189,6 @@ function p(x,y)
 	return {x=x,y=y}
 end
 
-function ent(id,sprid,po)
-	return {id=id,
-							  sprid=sprid,
-							  pos=po,
-							  hflip=false,
-							  pos_ren=p(po.x,po.y),
-							  pos_lst=p(po.x,po.y)
-							 }
-end
 
 -- functions
 function lerp(a,b,d)
@@ -361,14 +356,27 @@ end
 -->8
 --ent
 
+function ent(id,po)
+	return {id=id,
+							  sprid=_anims[id],
+							  pos=po,
+							  hflip=false,
+							  pos_ren=p(po.x,po.y),
+							  pos_lst=p(po.x,po.y)
+							 }
+end
+
 function add_mob(id,p)
- local e = ent(id,210,p)
+ local e = ent(id,p)
  local frames = {}
+ local anim_id = _anims[id]
  for i=0,1 do
-  add(frames,id+i)
+  add(frames,anim_id+i)
  end
  
  e.anim = anim(frames,3,1)
+ e.hp = _hp[id]
+ e.atk = _atk[id]
  add_ent(e)
  return e
 end
@@ -399,7 +407,12 @@ end
 
 function on_atk(atk,ent,at,d)
  bump_at(atk,d)
- del(_ents,ent)
+ 
+ ent.hp-=atk.atk
+ if(ent.hp <= 0) then
+	 del(_ents,ent)
+ end
+ 
  sfx(4)
 end
 
