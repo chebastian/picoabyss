@@ -54,8 +54,9 @@ function start()
 	_atk = {1,1,1}
 	_anims = {240,210,194}
 	_atks = {}
+	_ents = {}
 	
-	_plyr = add_mob(1,p(4,3))--ent(240,p(4,2))
+	_plyr = add_mob(1,p(4,3))
 	_pl = anim_pl(4)
 	_plyr.ease = ease_lerp
 	_tile_sfx = {
@@ -67,8 +68,6 @@ function start()
 
 	
 	_slime_anim = anim({210,211},3,1)
-	_ents = {}
-	add_ent(_plyr)
  add_mob(2,p(9,10))
  add_mob(2,p(9,11))
  add_mob(3,p(5,5))
@@ -499,6 +498,12 @@ function bump_at(ent,d)
  ent.pos_lst.x,
  ent.pos_lst.y=ent.pos.x+d.x*1.5
      ,ent.pos.y+d.y*1.5
+end
+-->8
+--items
+
+function add_itm(id,po)
+
 end
 __gfx__
 00000000666066600000000000000000000000000000000000000000000000000055550000888800000000000000000000000000000000000000000000000000
