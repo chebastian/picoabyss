@@ -129,6 +129,7 @@ end
 function upd_game()
 	buff_input()
 	
+
 	if(btnp(❎))then
 	 add_win(0,0,40,10,{"heuooo"})
 	end
@@ -148,6 +149,8 @@ end
 
 
 function drw_game()
+	camera((_plyr.pos_ren.x-8)*8.0,
+	(_plyr.pos_ren.y-6)*8)
 	map()
 	_pl.frame_cnt+=1
  _updt = min(_updt+1/60,1)
