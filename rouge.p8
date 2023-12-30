@@ -47,16 +47,19 @@ end
 -->8
 --game
 function start()
-	_t = 0
+	_t⧗ = 0
  _pid = 1
- 	
+ _updt = 0 -- a global 1s timer which can be used to update idle anim
 	_hp = {10,1,5}
 	_atk = {1,1,1}
 	_anims = {240,210,194}
-	_atks = {}
-	_ents = {}
-	
+ _upds = {noop,noop,wobble_upd}
+	_txts = {} -- floating text
+	_ents = {} -- all entities, inc player
+ _itms = {} -- all pickups etc
+ 	
 	_plyr = add_mob(1,p(4,3))
+	_plyr.upd = upd_plyr
 	_pl = anim_pl(4)
 	_plyr.ease = ease_lerp
 	_tile_sfx = {
@@ -71,6 +74,11 @@ function start()
  add_mob(2,p(9,10))
  add_mob(2,p(9,11))
  add_mob(3,p(5,5))
+ 
+ -- <test>
+ add_itm(88,p(13,4))
+ add_itm(88,p(5,3))
+ -- </test>
 end
 
 function chk_tile(p,flag)
@@ -111,34 +119,41 @@ function is_solid(p)
  return fget(tile,0)
 end
 
+function upd_plyr(ent)
+ ent.d = _d
+ move_ent(ent,ent.d)
+ ent.d = nil
+ _d = nil
+end
+
 function upd_game()
 	buff_input()
 	
 	if(btnp(❎))then
 	 add_win(0,0,40,10,{"heuooo"})
 	end
+	
+	local has_player_input = _d
  
-	if _d then
-	 _plyr.d = _d
-	 _d = nil
-	 _t = 0
+	if has_player_input then
+	 _t⧗ = 0
 	 for e in all(_ents) do
-	  if e.d == nil then
-	   e.d = next_d()
-	  end
-	  move_ent(e,e.d)
-	  e.d = nil
+   e:upd()
 	 end
 	 
 	 push_upd(upd_ease)
 	end
 end
 
+
+
 function drw_game()
 	map()
 	_pl.frame_cnt+=1
-	 
+ _updt = min(_updt+1/60,1)
+
  for e in all(_ents) do
+  e:upd_ren()
   e.sprid = upd_anim(_pl,e.anim)
 	 drw_ent(e,e.pos_ren)
  end
@@ -146,19 +161,20 @@ function drw_game()
  drw_dmg()
  drw_hud()
  
+ if(_updt >= 1) _updt=0
 end
 
 function drw_dmg()
-for dmg in all(_atks) do
+for dmg in all(_txts) do
   local dy = dmg.pos.y
   local off = 1-(dmg.t/dmg.ot)
   
   drw_txt8(dmg.txt,
            p(dmg.pos.x*8,
              8*dmg.pos.y-off*8),
-           7,8)
+           dmg.bg,dmg.fg)
   dmg.t-=1
-  if(dmg.t<=0)del(_atks,dmg)
+  if(dmg.t<=0)del(_txts,dmg)
  end
 end
 -- 
@@ -173,10 +189,10 @@ function ease_lerp(ent)
 
  return lerp(ent.pos_lst.x,
              ent.pos.x,
-            _t),
+            _t⧗),
         lerp(ent.pos_lst.y,
              ent.pos.y,
-             _t)
+             _t⧗)
 end
 
 function set_lst_pos(ent)
@@ -185,8 +201,8 @@ function set_lst_pos(ent)
 end
 
 function ease_bump(ent)
- local tme = _t
- if(_t<0.50) tme = 1-_t
+ local tme = _t⧗
+ if(_t⧗<0.50) tme = 1-_t⧗
  
  return lerp(ent.pos_lst.x,
              ent.pos.x,
@@ -198,8 +214,8 @@ end
 
 function upd_ease()
   buff_input()
- _t=min(_t+0.1,1)
- if(_t == 1) then
+ _t⧗=min(_t⧗+0.1,1)
+ if(_t⧗ == 1) then
   pop_upd()
   foreach(_ents,set_lst_pos)
   return
@@ -345,15 +361,29 @@ function show_msg(txt)
  return w
 end
 
-function prl(txt,t,pos)
- return {txt=txt,ot=t,t=t,pos=pos}
+function prl(txt,t,pos,bg,fg)
+ return {txt=txt,
+         ot=t,
+         t=t,
+         pos=pos,
+         bg=bg,
+         fg=fg}
 end
 
 function add_atk(ent,def)
- add(_atks,
+ add(_txts,
     prl("-"..ent.atk
        ,40
-       ,p(def.pos.x,def.pos.y)))
+       ,p(def.pos.x,def.pos.y),
+       7,8))
+end
+
+function add_hp(ent,hp)
+ add(_txts,
+   prl("+"..hp
+      ,40
+      ,p(ent.pos.x,ent.pos.y),
+      7,11))
 end
 
 function drw_win()
@@ -418,6 +448,8 @@ function ent(id,po)
 							  sprid=_anims[id],
 							  pos=po,
 							  hflip=false,
+							  upd_ren=noop,
+							  ease=ease_lerp,
 							  pos_ren=p(po.x,po.y),
 							  pos_lst=p(po.x,po.y)
 							 }
@@ -434,12 +466,26 @@ function add_mob(id,p)
  e.anim = anim(frames,3,1)
  e.hp = _hp[id]
  e.atk = _atk[id]
+ e.upd = rand_wlk
+ e.upd_ren = noop
  add_ent(e)
  return e
 end
 
 function add_ent(ent)
  add(_ents,ent)
+end
+
+function noop(e)
+ 
+end
+
+function rand_wlk(e)
+	if e.d == nil then
+  e.d = next_d()
+ end
+ move_ent(e,e.d)
+ e.d = nil
 end
 
 function move_ent(ent,d)
@@ -453,7 +499,11 @@ function move_ent(ent,d)
   return
  elseif(ent2)then
   ent.ease=ease_bump
-  on_atk(ent,ent2,np,d)
+  if(ent2.itm)then
+   on_pickup(ent,ent2,np,d)
+  else
+   on_atk(ent,ent2,np,d)
+  end
   return
  end
  
@@ -462,6 +512,12 @@ function move_ent(ent,d)
  ent.ease=ease_lerp
 end
 
+function on_pickup(ent,itm,po,d)
+ bump_at(ent,d)
+ ent.hp+=1
+ del(_ents,itm)
+ add_hp(ent,1)
+end
 function on_atk(atk,ent,at,d)
  bump_at(atk,d)
  
@@ -503,7 +559,24 @@ end
 --items
 
 function add_itm(id,po)
+ local ent = ent(id,po)
+ ent.anim = anim({88},1,1)
+ ent.upd = noop
+ ent.upd_ren = wobble_upd
+ ent.ease = ease_sin
+ ent.itm = true
+ add(_ents,ent)
+end
 
+function wobble_upd(ent)
+ ent.pos_ren.x,
+ ent.pos_ren.y = ease_sin(ent)
+end
+
+_updt = 0
+function ease_sin(ent)
+ return ent.pos.x,
+        ent.pos.y+(sin(_updt)*.15)
 end
 __gfx__
 00000000666066600000000000000000000000000000000000000000000000000055550000888800000000000000000000000000000000000000000000000000
@@ -642,9 +715,9 @@ __map__
 0000000101010101010101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 000000011111111111110f010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000102020b0101000d010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-0000000101090101010202020167530100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000101090101010202020102020100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000111001100010000000900020100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000010000580b010d0f0d0100000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000000010000020b010d0f0d0100000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000101010d01010101010101090100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000001111010d0f0d0d0f0d1111000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000010d0f0d0d0d0d0f0d0f0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
