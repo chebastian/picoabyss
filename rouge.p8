@@ -57,11 +57,14 @@ function start()
 	_txts = {} -- floating text
 	_ents = {} -- all entities, inc player
  _itms = {} -- all pickups etc
- 	
 	_plyr = add_mob(1,p(4,3))
 	_plyr.upd = upd_plyr
 	_pl = anim_pl(4)
 	_plyr.ease = ease_lerp
+	
+ _cam = ent(99,p(_plyr.pos.x,
+ 																_plyr.pos.y))
+
 	_tile_sfx = {
 	[9]=sfx_door,
 	[13]=sfx_lmp,
@@ -124,6 +127,9 @@ function upd_plyr(ent)
  move_ent(ent,ent.d)
  ent.d = nil
  _d = nil
+ _cam.pos.x = ent.pos.x
+ _cam.pos.y = ent.pos.y
+ set_lst_pos(_cam)
 end
 
 function upd_game()
@@ -149,8 +155,8 @@ end
 
 
 function drw_game()
-	camera((_plyr.pos_ren.x-8)*8.0,
-	(_plyr.pos_ren.y-6)*8)
+	camera((_cam.pos_ren.x-8)*8.0,
+	(_cam.pos_ren.y-6)*8)
 	map()
 	_pl.frame_cnt+=1
  _updt = min(_updt+1/60,1)
@@ -162,6 +168,7 @@ function drw_game()
  end
  
  drw_dmg()
+ camera(0,0)
  drw_hud()
  
  if(_updt >= 1) _updt=0
@@ -228,6 +235,9 @@ function upd_ease()
   e.pos_ren.x,
   e.pos_ren.y = e.ease(e)
  end
+ 
+ _cam.pos_ren.x,
+ _cam.pos_ren.y = ease_lerp(_cam)
 end
 -->8
 --utils
