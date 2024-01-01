@@ -289,6 +289,10 @@ function next_p(_p)
  return p(_p.x+d.x,_p.y+d.y),d
 end
 
+function p_sfx(id,ent)
+ if(is_player(ent)) sfx(id)
+end
+
 
 -- drawing
 function drw_ent(ent,at)
@@ -532,7 +536,7 @@ function move_ent(ent,d)
   return
  end
  
- if(is_player(ent)) sfx(sfx_wlk)
+ p_sfx(sfx_wlk,ent)
  move_t(ent.pos,d)
  ent.ease=ease_lerp
 end
@@ -580,7 +584,7 @@ function on_bump(tile,at,ent,d)
    bump_at(ent,d)
   end
   
-  if(is_player(ent)) sfx(_tile_sfx[tile])
+  p_sfx(_tile_sfx[tile],ent)
 end
 
 -- ★ move code?
@@ -608,7 +612,7 @@ function on_pickup(itm,ent,po,d)
  ent.hp+=1
  del(_ents,itm)
  add_hp(ent,1)
- sfx(5)
+ p_sfx(5,ent)
 end
 
 function wobble_upd(ent)
