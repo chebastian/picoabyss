@@ -155,14 +155,16 @@ function upd_game()
 	end
 	
 	local has_player_input = _d
- 
+  
 	if has_player_input then
 	 _t⧗ = 0
+	
 	 for e in all(_ents) do
    e:upd()
 	 end
 	 
-	 push_upd(upd_ease)
+  push_upd(upd_ease)
+
 	end
 end
 
@@ -530,7 +532,7 @@ function move_ent(ent,d)
   return
  end
  
- sfx(sfx_wlk)
+ if(is_player(ent)) sfx(sfx_wlk)
  move_t(ent.pos,d)
  ent.ease=ease_lerp
 end
@@ -578,7 +580,7 @@ function on_bump(tile,at,ent,d)
    bump_at(ent,d)
   end
   
-  sfx(_tile_sfx[tile])
+  if(is_player(ent)) sfx(_tile_sfx[tile])
 end
 
 -- ★ move code?
