@@ -168,9 +168,6 @@ function upd_game()
 	end
 end
 
-
-
-
 function ease_lerp(ent)
  --update positions
 
@@ -216,153 +213,120 @@ function upd_ease()
  _cam.pos_ren.x,
  _cam.pos_ren.y = ease_lerp(_cam)
 end
--->8
---utils
-
--- types
-function p(x,y)
-	return {x=x,y=y}
-end
-
-
--- functions
-function is_player(ent)
- return ent.id == _pid
-end
-
-function lerp(a,b,d)
-	if(d >= 1.0) return b
- return a+(b-a)*d
-end
-
-function add_t(po,d)
- return p(po.x+d.x,po.y+d.y)
-end
-
-function move_t(po,d)
- po.x += d.x
- po.y += d.y
-end
-
-function next_d()
- return dirs[flr(rnd(4))+1]
-end
-
-function next_p(_p)
- local d = next_d()
- return p(_p.x+d.x,_p.y+d.y),d
-end
-
-function p_sfx(id,ent)
- if(is_player(ent)) sfx(id)
-end
-
--- animations
-function anim(f,fps,loop)
- return {f=f,fps=fps,loop=loop}
-end
-
-function anim_pl(fps)
- return
- {
-  fps=fps,
-  frame_cnt=0,
-  frame_i=1,
- }
-end
-
-function upd_anim(pl,anim)
- if(pl.frame_cnt >= 60/pl.fps) then
-  pl.frame_i+=1
-  pl.frame_cnt=0
- end
- 
- return anim.f[pl.frame_i%#anim.f+1]
-end
 
 -->8
---ui 
 
-function add_win(x,y,w,h,txt)
- local win = {x=x,y=y,w=w,h=h,txt=txt} 
- add(_wnd,win)
- push_upd(upd_win)
- return win
+-- drawing
+
+--drawing
+
+function drw_ent(ent,at)
+	palt(0,false)
+	local flash=ent.flash
+	if(flash and flash > 0) then
+	 pal(9,7)
+	 ent.flash -= 1
+	end
+	spr(ent.sprid,
+				 at.x*8,
+				 at.y*8,
+				 1,1,ent.hflip)
+	pal()
+	palt(0,false)
 end
 
-function ok_msg(txt)
- local l = #txt[1]
- for msg in all(txt) do
-   msg = " " .. msg .. " " 
-   l = max(#msg,l)
+function drw_rectf(x,y,w,h,c)
+ rectfill(x,y,x+w-1,y+h-1,c)
+end
+
+function drw_box(x,y,w,h,fg,bg)
+ drw_rectf(x,y,w,h,fg)
+ drw_rectf(x+1,y+1,w-2,h-2,bg)
+end
+
+function drw_txt8(txt,pos,fg,bg)
+	for di in all(dir8) do
+  local tx = pos.x
+  local ty = pos.y
+  print(txt,tx+di.x
+     ,di.y+ty,bg)
  end
  
- local len=l/2
- local w = add_win(64-len*4,64
-           ,(l+1)*4
-           ,max(10,7*#txt)
-           ,txt)
-           
- return w
+ print(txt,pos.x
+      ,pos.y,fg)   
 end
 
-function show_msg(txt)
- 	local msg = " " .. txt.. " "
- local len=#msg/2
- local w = add_win(64-len*4,64
-           ,(#msg+1)*4
-           ,10
-           ,{msg})
-           
- return w
-end
-
-function prl(txt,t,pos,bg,fg)
- return {txt=txt,
-         ot=t,
-         t=t,
-         pos=pos,
-         bg=bg,
-         fg=fg}
-end
-
-function add_atk(ent,def)
- add(_txts,
-    prl("-"..ent.atk
-       ,40
-       ,p(def.pos.x,def.pos.y),
-       7,8))
-end
-
-function add_hp(ent,hp)
- add(_txts,
-   prl("+"..hp
-      ,40
-      ,p(ent.pos.x,ent.pos.y),
-      7,11))
-end
-
-function upd_win()
- if btnp(❎) then
-  local w = _wnd[#_wnd]
-  if(w.t == nil) then 
-   w.t = .3
-  else
-   w.t = min(w.t,.3)
-  end
- end
-
- for w in all(_wnd) do
+function drw_win()
+	for w in all(_wnd) do
+  local wh,wy = w.h,w.y
   if w.t then
-   w.t -= 1/99;
+   local si = abs(sin(w.t))
+   
+   if w.t < 0.2 then
+	   wh = si*w.h	   
+	  elseif w.t >= 0.8 then
+	   wh = si*w.h
+	  end
+	  local df = w.h-wh
+	  wy += df*.5
+	 end
+	
+	 drw_box(w.x,wy,
+	 w.w,wh,
+	 6,0)
+ 
+	 clip(w.x,wy,w.w-2,wh-2)
+	 for i=1,#w.txt do
+	  local txt=w.txt[i]
+	  print(txt,
+	  w.x+2
+	  ,wy+2+(i-1)*6
+	  ,6)
   end
-  
-  if w.t and w.t <= 0 then del(_wnd,w) end
+  clip()
+ end
+end
+
+-- game
+
+function drw_game()
+	camera((_cam.pos_ren.x-8)*8.0,
+	(_cam.pos_ren.y-6)*8)
+	map()
+	_pl.frame_cnt+=1
+ _updt = min(_updt+1/60,1)
+
+ for e in all(_ents) do
+  e:upd_ren()
+  e.sprid = upd_anim(_pl,e.anim)
+	 drw_ent(e,e.pos_ren)
  end
  
- if #_wnd == 0 then
-  pop_upd()
+ drw_dmg()
+ camera(0,0)
+ drw_hud()
+ 
+ if(_updt >= 1) _updt=0
+end
+
+function drw_dmg()
+for dmg in all(_txts) do
+  local dy = dmg.pos.y
+  local off = 1-(dmg.t/dmg.ot)
+  
+  drw_txt8(dmg.txt,
+           p(dmg.pos.x*8,
+             8*dmg.pos.y-off*8),
+           dmg.bg,dmg.fg)
+  dmg.t-=1
+  if(dmg.t<=0)del(_txts,dmg)
  end
+end
+-- 
+function drw_hud()
+  drw_rectf(0,0,128,10,1)
+  drw_txt8("♥ ".._plyr.hp..
+           " カ " .. _plyr.atk,p(8,2),3,7)
 end
 -->8
 --ent
@@ -485,6 +449,90 @@ function bump_at(ent,d)
      ,ent.pos.y+d.y*1.5
 end
 -->8
+-- ui
+
+function add_win(x,y,w,h,txt)
+ local win = {x=x,y=y,w=w,h=h,txt=txt} 
+ add(_wnd,win)
+ push_upd(upd_win)
+ return win
+end
+
+function ok_msg(txt)
+ local l = #txt[1]
+ for msg in all(txt) do
+   msg = " " .. msg .. " " 
+   l = max(#msg,l)
+ end
+ 
+ local len=l/2
+ local w = add_win(64-len*4,64
+           ,(l+1)*4
+           ,max(10,7*#txt)
+           ,txt)
+           
+ return w
+end
+
+function show_msg(txt)
+ 	local msg = " " .. txt.. " "
+ local len=#msg/2
+ local w = add_win(64-len*4,64
+           ,(#msg+1)*4
+           ,10
+           ,{msg})
+           
+ return w
+end
+
+function prl(txt,t,pos,bg,fg)
+ return {txt=txt,
+         ot=t,
+         t=t,
+         pos=pos,
+         bg=bg,
+         fg=fg}
+end
+
+function add_atk(ent,def)
+ add(_txts,
+    prl("-"..ent.atk
+       ,40
+       ,p(def.pos.x,def.pos.y),
+       7,8))
+end
+
+function add_hp(ent,hp)
+ add(_txts,
+   prl("+"..hp
+      ,40
+      ,p(ent.pos.x,ent.pos.y),
+      7,11))
+end
+
+function upd_win()
+ if btnp(❎) then
+  local w = _wnd[#_wnd]
+  if(w.t == nil) then 
+   w.t = .3
+  else
+   w.t = min(w.t,.3)
+  end
+ end
+
+ for w in all(_wnd) do
+  if w.t then
+   w.t -= 1/99;
+  end
+  
+  if w.t and w.t <= 0 then del(_wnd,w) end
+ end
+ 
+ if #_wnd == 0 then
+  pop_upd()
+ end
+end
+-->8
 --items
 
 function add_itm(id,po)
@@ -517,116 +565,69 @@ function ease_sin(ent)
         ent.pos.y+(sin(_updt)*.15)
 end
 -->8
---drawing
+--utils
 
-function drw_ent(ent,at)
-	palt(0,false)
-	local flash=ent.flash
-	if(flash and flash > 0) then
-	 pal(9,7)
-	 ent.flash -= 1
-	end
-	spr(ent.sprid,
-				 at.x*8,
-				 at.y*8,
-				 1,1,ent.hflip)
-	pal()
-	palt(0,false)
+-- types
+function p(x,y)
+	return {x=x,y=y}
 end
 
-function drw_rectf(x,y,w,h,c)
- rectfill(x,y,x+w-1,y+h-1,c)
+
+-- functions
+function is_player(ent)
+ return ent.id == _pid
 end
 
-function drw_box(x,y,w,h,fg,bg)
- drw_rectf(x,y,w,h,fg)
- drw_rectf(x+1,y+1,w-2,h-2,bg)
+function lerp(a,b,d)
+	if(d >= 1.0) return b
+ return a+(b-a)*d
 end
 
-function drw_txt8(txt,pos,fg,bg)
-	for di in all(dir8) do
-  local tx = pos.x
-  local ty = pos.y
-  print(txt,tx+di.x
-     ,di.y+ty,bg)
+function add_t(po,d)
+ return p(po.x+d.x,po.y+d.y)
+end
+
+function move_t(po,d)
+ po.x += d.x
+ po.y += d.y
+end
+
+function next_d()
+ return dirs[flr(rnd(4))+1]
+end
+
+function next_p(_p)
+ local d = next_d()
+ return p(_p.x+d.x,_p.y+d.y),d
+end
+
+function p_sfx(id,ent)
+ if(is_player(ent)) sfx(id)
+end
+
+-- animations
+function anim(f,fps,loop)
+ return {f=f,fps=fps,loop=loop}
+end
+
+function anim_pl(fps)
+ return
+ {
+  fps=fps,
+  frame_cnt=0,
+  frame_i=1,
+ }
+end
+
+function upd_anim(pl,anim)
+ if(pl.frame_cnt >= 60/pl.fps) then
+  pl.frame_i+=1
+  pl.frame_cnt=0
  end
  
- print(txt,pos.x
-      ,pos.y,fg)   
+ return anim.f[pl.frame_i%#anim.f+1]
 end
 
-function drw_win()
-	for w in all(_wnd) do
-  local wh,wy = w.h,w.y
-  if w.t then
-   local si = abs(sin(w.t))
-   
-   if w.t < 0.2 then
-	   wh = si*w.h	   
-	  elseif w.t >= 0.8 then
-	   wh = si*w.h
-	  end
-	  local df = w.h-wh
-	  wy += df*.5
-	 end
-	
-	 drw_box(w.x,wy,
-	 w.w,wh,
-	 6,0)
- 
-	 clip(w.x,wy,w.w-2,wh-2)
-	 for i=1,#w.txt do
-	  local txt=w.txt[i]
-	  print(txt,
-	  w.x+2
-	  ,wy+2+(i-1)*6
-	  ,6)
-  end
-  clip()
- end
-end
-
--- game
-
-function drw_game()
-	camera((_cam.pos_ren.x-8)*8.0,
-	(_cam.pos_ren.y-6)*8)
-	map()
-	_pl.frame_cnt+=1
- _updt = min(_updt+1/60,1)
-
- for e in all(_ents) do
-  e:upd_ren()
-  e.sprid = upd_anim(_pl,e.anim)
-	 drw_ent(e,e.pos_ren)
- end
- 
- drw_dmg()
- camera(0,0)
- drw_hud()
- 
- if(_updt >= 1) _updt=0
-end
-
-function drw_dmg()
-for dmg in all(_txts) do
-  local dy = dmg.pos.y
-  local off = 1-(dmg.t/dmg.ot)
-  
-  drw_txt8(dmg.txt,
-           p(dmg.pos.x*8,
-             8*dmg.pos.y-off*8),
-           dmg.bg,dmg.fg)
-  dmg.t-=1
-  if(dmg.t<=0)del(_txts,dmg)
- end
-end
--- 
-function drw_hud()
-  drw_rectf(0,0,128,10,1)
-  drw_txt8("♥ ".._plyr.hp..
-           " カ " .. _plyr.atk,p(8,2),3,7)
-end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000055550000888800000000000000000000000000000000000000000000000000
 00000000555555500000000000000000000000000000000000000000000000000550055008800880000000000000000000000000000000000000000000000000
