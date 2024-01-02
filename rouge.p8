@@ -663,7 +663,6 @@ function add_itm(id,po)
  ent.anim = anim({64+(id)},1,1)
  ent.upd = noop
  ent.upd_ren = wobble_upd
- ent.ease = ease_sin
  ent.itm = true
  ent.on_ent = on_pickup
  ent.on_use = _itm_uses[id+1] --on_use_potion
