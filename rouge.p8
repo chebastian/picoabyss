@@ -35,7 +35,7 @@ function initmap()
   for x=1,65 do
    if mget(x,y) == 1 then
     local tbx,tby=x,y+1
-    if mget(tbx,tby) != 1 then
+    if mget(tbx,tby) == 0 then
      mset(tbx,tby,17)
     end
    end
