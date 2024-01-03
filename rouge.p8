@@ -89,7 +89,7 @@ function start()
              [0x51] = 3}
     								    
 	_lo_itms = {
-		[0] = crt_itm("potion,",on_use_potion),
+		[0] = crt_itm("potion",on_use_potion),
 		[1] = crt_itm("mana", on_use_mana),
 		[2] = crt_itm("grt potion",on_use_grt_ptn),
 		[3] = crt_itm("elixir",on_use_potion),
@@ -303,10 +303,14 @@ function drw_win()
 	 clip(w.x,wy,w.w-2,wh-2)
 	 for i=1,#w.txt do
 	  local txt=w.txt[i]
-	  print(txt,
+	  if w.sel and w.sel == i then
+	  	txt = txt .."🅾️"
+	  end
+  	print(txt,
 	  w.x+2
 	  ,wy+2+(i-1)*6
 	  ,6)
+	  
   end
   clip()
  end
@@ -503,7 +507,6 @@ function on_menu_sel(idx)
   add_inv_win(_eqp,on_eqp_sel)
  elseif idx == 2 then
   add_inv_win(_bpack,on_inv_sel)
- elseif idx == 3 then
  end
 end
 
@@ -529,15 +532,6 @@ end
 
 function upd_inv(win)
  local inv = win.txt
- for i=1,#inv do
-   if inv[i][1] == ">" then
-    inv[i] = 
-        sub(win.txt[i],2)
-   end
-   if win.sel and win.sel == i then
-    inv[i] = ">"..inv[i]
-   end
- end
  
  if btnp(⬇️) and win.sel+1 <= #win.txt then
   win.sel+=1
@@ -653,8 +647,6 @@ function crt_eqp(name,atkp,onuse)
  itm.atkp = atkp
  return itm
 end
-
-
 
 function add_itm(id,po)
  local ent = ent(id,po)
