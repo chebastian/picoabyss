@@ -663,7 +663,6 @@ function add_itm(id,po)
  ent.upd_ren = wobble_upd
  ent.itm = true
  ent.on_ent = on_pickup
- printh(id)
  ent.on_use = _lo_itms[id].on_use --on_use_potion
  add(_ents,ent)
 end
