@@ -438,6 +438,7 @@ function move_ent(ent,d)
   ent.ease=ease_bump
   on_bump(tile,np,ent,d)
   return
+ -- ★ use item bugfix
  elseif(ent2 and ent2 != ent)then
   ent.ease=ease_bump
   ent2:on_ent(ent,np,d)
