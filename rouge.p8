@@ -184,15 +184,22 @@ function upd_game()
 	local has_player_input = _d
   
 	if has_player_input then
-	 _t⧗ = 0
-	
-	 for e in all(_ents) do
-   e:upd()
-	 end
-	 
-  push_upd(upd_ease)
-
+	 nxt_turn()
 	end
+end
+
+function nxt_turn()
+ if _d == nil then
+  _d = p(0,0)
+ end
+	_t⧗ = 0
+	
+ for e in all(_ents) do
+  e:upd()
+ end
+ 
+ push_upd(upd_ease)
+
 end
 
 function ease_lerp(ent)
@@ -431,7 +438,7 @@ function move_ent(ent,d)
   ent.ease=ease_bump
   on_bump(tile,np,ent,d)
   return
- elseif(ent2)then
+ elseif(ent2 and ent2 != ent)then
   ent.ease=ease_bump
   ent2:on_ent(ent,np,d)
   return
@@ -553,10 +560,13 @@ end
 
 function on_eqp_sel(idx)
 	eqp_item(idx,_plyr)
+ nxt_turn()
 end
 
 function on_inv_sel(idx)
+
  use_item(idx,_plyr)
+ nxt_turn()
 end
 
 function upd_inv(win)
