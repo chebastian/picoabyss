@@ -308,21 +308,18 @@ function drw_win()
 	 6,0)
  
 	 clip(w.x-8,wy-8,w.w+6,wh+6)
---	 if #w.txt == 0 then
---	  print("empty",
---	  w.x+2
---	  ,wy+2
---	  ,6)
---	 end
-	 
 	 for i=1,#w.txt do
 	  local txt=w.txt[i]
- 
-  	print(txt,
-	  w.x+2
-	  ,wy+2+(i-1)*6
-	  ,6)
 	  
+	  if w.chk_idx and w.chk_idx == i then
+	   txt = txt .. "●"
+	  end
+	  
+	  print(txt,
+		  w.x+2
+		  ,wy+2+(i-1)*6
+		  ,6)
+  
 	  if w.sel and w.sel == i then
     if w.t == nil then
      spr(175,w.x-4+(1.3*sin(.6*_updt)),
@@ -530,7 +527,7 @@ function on_menu_sel(idx)
  	if #_eqp == 0 then
  	 show_msg("nothing to equip")
  	else
- 	 add_inv_win(_eqp,on_eqp_sel)
+ 	 add_inv_win(_eqp,on_eqp_sel,_plyr.chk_idx)
  	end
  elseif idx == 2 then
   if #_bpack == 0 then
@@ -541,7 +538,7 @@ function on_menu_sel(idx)
  end
 end
 
-function add_inv_win(inv,sel_cbk)
+function add_inv_win(inv,sel_cbk,chk_idx)
  local str = {}
  for i in all(inv) do
   add(str,"".._lo_itms[i.id].name)
@@ -551,6 +548,7 @@ function add_inv_win(inv,sel_cbk)
  win.on_sel = sel_cbk
  win.sel = 1
  win.t = nil
+ win.chk_idx = chk_idx
 end
 
 function on_eqp_sel(idx)
@@ -730,6 +728,7 @@ function eqp_item(idx,ent)
  end
  local eqp = _eqp[idx]
  ent.atk = _lo_itms[eqp.id].atkp
+ ent.chk_idx = idx
  sfx(3)
 end
 
