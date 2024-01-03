@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 41
 __lua__
---rouge
+-- rouge
 function _init()
  _st_upd = {}
  _dbg = {}
@@ -71,7 +71,7 @@ end
 
 
 -->8
---game
+-- game
 function start()
 	_t⧗ = 0
  _pid = 1
@@ -80,20 +80,24 @@ function start()
 	_atk = {1,1,1}
 	_anims = {240,210,194}
  _upds = {noop,noop,wobble_upd}
-	_txts = {} -- floating text
-	_ents = {} -- all entities, inc player
- _itms = {} -- all pickups etc
+	_txts = {}  -- floating text
+	_ents = {}  -- all entities, inc player
+ _itms = {}  -- all pickups etc
  _bpack = {} -- player backpack
- _itms_nme = {"potion"
-     								,"mana",
-     								 "grt ptn",
-     								 "elixir"}
- _eqp_nme = {
- "rst swrd",
- "irn swrd",
- "sil swrd",
- "gld swrd",
- }   								 
+ _eqp = {}   -- player equipment
+ _eqp_atk = {[0x50] = 2,
+             [0x51] = 3}
+    								    
+	_lo_itms = {
+		[0] = crt_itm("potion,",on_use_potion),
+		[1] = crt_itm("mana", on_use_mana),
+		[2] = crt_itm("grt potion",on_use_grt_ptn),
+		[3] = crt_itm("elixir",on_use_potion),
+		[16] = crt_eqp("swd",2,on_equip),
+		[17] = crt_eqp("grt swd",3,on_equip),
+		[18] = crt_eqp("slv swd",4,on_equip),
+	}
+								 
 	_plyr = add_mob(1,p(4,3))
 	_plyr.upd = upd_plyr
 	_pl = anim_pl(4)
@@ -238,10 +242,7 @@ function upd_ease()
 end
 
 -->8
-
 -- drawing
-
---drawing
 
 function drw_ent(ent,at)
 	palt(0,false)
@@ -353,17 +354,8 @@ function drw_hud()
            " カ " .. _plyr.atk,p(8,2),3,7)
 end
 
-
-function drw_inv(itms)
- local str = {}
- for i in all(itms) do
-  add(str,"hest")
---  add(str,_itm_nme[i.id])
- end
- add_win(0,0,40,10*#str,str)
-end
 -->8
---ent
+-- ent
 
 function ent(id,po)
 	return {id=id,
@@ -464,7 +456,7 @@ function on_bump(tile,at,ent,d)
    mset(at.x,at.y,tile-1)
    if(flr(rnd(10)) > 1)then
     local itm = flr(rnd(4))
-    add_itm(itm,p(at.x,at.y))
+    add_itm(17,p(at.x,at.y))
    end
   end
 
@@ -508,22 +500,27 @@ end
 
 function on_menu_sel(idx)
  if idx == 1 then
+  add_inv_win(_eqp,on_eqp_sel)
  elseif idx == 2 then
-  add_inv_win(_bpack)
+  add_inv_win(_bpack,on_inv_sel)
  elseif idx == 3 then
  end
 end
 
-function add_inv_win(inv)
+function add_inv_win(inv,sel_cbk)
  local str = {}
  for i in all(inv) do
-  add(str,"".._itms_nme[i.id+1])
+  add(str,"".._lo_itms[i.id].name)
  end
  local win = add_win(0,10,40,10*#inv,str) 
  win.upd = upd_inv
- win.on_sel = on_inv_sel
+ win.on_sel = sel_cbk
  win.sel = 1
  win.t = nil
+end
+
+function on_eqp_sel(idx)
+	eqp_item(idx,_plyr)
 end
 
 function on_inv_sel(idx)
@@ -547,7 +544,6 @@ function upd_inv(win)
  elseif btnp(⬆️) and win.sel-1>0 then
   win.sel-=1
  elseif btnp(🅾️) then
-  --use_item(win.sel,_plyr)
   win.on_sel(win.sel)
   win.t=0.2
  end
@@ -646,33 +642,41 @@ function upd_win()
  end
 end
 -->8
---items
+-- items
+
+function crt_itm(name,onuse)
+	 return {name=name,on_use=onuse}
+end
+
+function crt_eqp(name,atkp,onuse)
+ local itm = crt_itm(name,onuse)
+ itm.atkp = atkp
+ return itm
+end
 
 
 
 function add_itm(id,po)
-
-	local _itm_uses = {
-	[1] = on_use_potion,
-	[2] = on_use_mana,
-	[3] = on_use_grt_ptn,
-	[4] = on_use_potion
-	}
-	
  local ent = ent(id,po)
  ent.anim = anim({64+(id)},1,1)
  ent.upd = noop
  ent.upd_ren = wobble_upd
  ent.itm = true
  ent.on_ent = on_pickup
- ent.on_use = _itm_uses[id+1] --on_use_potion
+ printh(id)
+ ent.on_use = _lo_itms[id].on_use --on_use_potion
  add(_ents,ent)
 end
 
 function on_pickup(itm,ent,po,d)
  bump_at(ent,d)
  del(_ents,itm)
- add(_bpack,itm)
+ 
+ if(itm.id >= 0 and itm.id < 0x10) then
+	 add(_bpack,itm)
+ elseif (itm.id >= 0x10 and itm.id < 0x20) then
+  add(_eqp,itm)
+ end
  p_sfx(5,ent)
 end
 
@@ -683,7 +687,7 @@ function on_use_potion()
 end
 
 function on_use_mana()
--- _plyr.hp+=1
+--★ fix mp _plyr.hp+=1
  add_mp(_plyr,1)
  p_sfx(5,_plyr)
 end
@@ -692,6 +696,16 @@ function on_use_grt_ptn()
  _plyr.hp+=3
  add_hp(_plyr,3)
  p_sfx(5,_plyr)
+end
+
+function on_equip()
+ sfx(2)
+end
+
+function eqp_item(idx,ent)
+ local eqp = _eqp[idx]
+ ent.atk = _lo_itms[eqp.id].atkp
+ sfx(3)
 end
 
 function use_item(idx,ent)
@@ -714,7 +728,7 @@ function ease_sin(ent)
         ent.pos.y+(sin(_updt)*.15)
 end
 -->8
---utils
+-- utils
 
 -- types
 function p(x,y)
@@ -912,10 +926,10 @@ __gff__
 __map__
 0018000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000101010101010101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000010000000000000f010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000001000d000000000f010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000102020b0101000d010101010100000000010101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-0000000101090101010202000100000101010101010000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-0000000100000000010000000900020100000000010000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000000010109010101020d000100000101010101010000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000000010000000001000d000900020100000000010000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 000000010000020b010d0f0d0100000100000000090000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000101010d01010101010101090100000000010901010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000010d0f0d0d0f0d0000000100000001010000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
