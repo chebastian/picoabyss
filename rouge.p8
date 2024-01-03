@@ -87,7 +87,7 @@ function start()
  _eqp = {}   -- player equipment
  _eqp_atk = {[0x50] = 2,
              [0x51] = 3}
-    								    
+ _srch_tiles = {}		    
 	_lo_itms = {
 		[0] = crt_itm("potion",on_use_potion),
 		[1] = crt_itm("mana", on_use_mana),
@@ -128,6 +128,10 @@ end
 function chk_tile(p,flag)
  local tile = mget(p.x,p.y)
  return fget(tile,flag),tile
+end
+
+function chk_solid(po)
+ return chk_tile(po,0)
 end
 
 function ent_at(p)
@@ -199,7 +203,7 @@ function nxt_turn()
  end
  
  push_upd(upd_ease)
-
+ _srch_tiles = flood_fill(_plyr.pos,{{po=_plyr.pos,dst=0}})
 end
 
 function ease_lerp(ent)
@@ -354,6 +358,9 @@ function drw_game()
 	 drw_ent(e,e.pos_ren)
  end
  
+ for dtil in all(_srch_tiles) do
+  print(dtil.dst,dtil.po.x*8,dtil.po.y*8)
+ end
  drw_dmg()
  camera(0,0)
  drw_hud()
@@ -408,7 +415,8 @@ function add_mob(id,p)
  e.anim = anim(frames,3,1)
  e.hp = _hp[id]
  e.atk = _atk[id]
- e.upd = rand_wlk
+ e.upd = wlk_to_plyr
+-- e.upd = rand_wlk
  e.upd_ren = noop
  add_ent(e)
  return e
@@ -427,6 +435,62 @@ function rand_wlk(e)
  end
  move_ent(e,e.d)
  e.d = nil
+end
+
+function cmp_p(a,b)
+ return a.x == b.po.x and a.y == b.po.y
+end
+
+function flood_fill(po,nxt)
+ local dst = 1
+ local dpth = 1
+ local queue = {}
+ while(dpth <= 10) do
+	 for ite in all(nxt) do
+		 local nxtd = #nxt
+		 for d in all(dirs) do
+		  local it = ite.po
+		  local np = p(it.x+d.x,it.y+d.y)
+		  if(chk_solid(np) == false
+		  and arr_cont(nxt,np,cmp_p) == false
+		  and arr_cont(queue,np,cmp_p) == false) then
+		   add(queue,{po=np,dst=dpth})
+		  end
+		 end
+	 end
+	 
+	 dpth+=1
+	 for q in all(queue) do
+	  add(nxt,q)
+	 end
+	 
+	 if #queue == 0 then
+	  return nxt
+	 end
+ end
+ 
+ return nxt
+end
+
+function wlk_in_d(enta,entb)
+ local mini,mind = 0,999
+ for i=1,#dirs do
+  local nx = enta.pos.x+dirs[i].x
+  local ny = enta.pos.y+dirs[i].y
+  local ndist = dist(p(nx,ny),entb.pos)
+  if ndist < mind then
+   mini = i
+   mind = ndist
+  end
+ end
+ 
+ enta.d = dirs[mini]
+ move_ent(enta,dirs[mini])
+ enta.d = nil
+end
+
+function wlk_to_plyr(ent)
+ wlk_in_d(ent,_plyr)
 end
 
 function move_ent(ent,d)
@@ -772,8 +836,26 @@ end
 
 
 -- functions
+function dist(a,b)
+ local abx,aby = a.x-b.x, a.y-b.y
+ return sqrt(abx*abx+aby*aby)
+end
+
+function p_len(a)
+ return dist(a,p(0,0))
+end
+
 function is_player(ent)
  return ent.id == _pid
+end
+
+function arr_cont(arr,a,cmp)
+ for it in all(arr) do
+  if cmp(a,it) then
+   return true
+  end
+ end
+ return false
 end
 
 function lerp(a,b,d)
