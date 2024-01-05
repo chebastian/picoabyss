@@ -6,6 +6,7 @@ function _init()
  _st_upd = {}
  _dbg = {}
 	_wnd = {}
+	_drw_dbg = true
 	_upd = upd_game
 	_drw = drw_game
 	push_upd(upd_game)
@@ -48,9 +49,11 @@ function _draw()
  _drw()
  drw_win()
  
- cursor(100,20)
- for i=1,10 do
---  print(_dbg[#_dbg-i])
+ if _drw_dbg then
+	 cursor(0,20)
+	 for i=1,10 do
+	  print(_dbg[#_dbg-i])
+	 end
  end
  
 -- _dbg ={}
@@ -203,11 +206,11 @@ function nxt_turn()
  end
  
  push_upd(upd_ease)
--- dbg(#_srch_tiles)
  _srch_tiles =
    flood_fill(
    _plyr.pos,
    {{po=p(_plyr.pos.x,_plyr.pos.y),dst=0}})
+ dbg(#_srch_tiles)
 end
 
 function ease_lerp(ent)
@@ -362,9 +365,12 @@ function drw_game()
 	 drw_ent(e,e.pos_ren)
  end
  
- for dtil in all(_srch_tiles) do
---  print(d	 queue = {}til.dst,dtil.po.x*8,dtil.po.y*8)
+ if _drw_dbg then
+  for dtil in all(_srch_tiles) do
+  	print(dtil.dst,dtil.po.x*8,dtil.po.y*8)
+  end
  end
+
  drw_dmg()
  camera(0,0)
  drw_hud()
@@ -446,39 +452,45 @@ function cmp_p(a,b)
 end
 
 function flood_fill(po,nxt)
+ dbg("called")
  local dst = 1
  local dpth = 1
  local queue = {}
- while(dpth <= 10) do
+ local found = {}
+ while(dpth <= 7) do
 	 for ite in all(nxt) do
-		 local nxtd = #nxt
 		 for d in all(dirs) do
 		  local it = ite.po
 		  local np = p(it.x+d.x,it.y+d.y)
 		  if(chk_solid(np) == false
-		  and arr_cont(nxt,np,cmp_p) == false
-		  and arr_cont(queue,np,cmp_p) == false) then
-		   add(queue,{po=np,dst=dpth})
+		  and arr_cont(found,np,cmp_p) == false
+		  and arr_cont(queue,np,cmp_p) == false
+		  )then
+		   add(queue,{po=p(np.x,np.y),dst=dpth})
 		  end
 		 end
 	 end
 	 
 	 dpth+=1
+	 nxt = {}
 	 for q in all(queue) do
 	  add(nxt,
 	  {po=p(q.po.x,q.po.y),
 	   dst=q.dst})
+	  add(found,
+	   {po=p(q.po.x,q.po.y),
+	    dst=q.dst})
 	 end
 	 	 
 	 if #queue == 0 then
-	  return nxt
+	  return found
 	 end
 	 
 	 queue = {}
 
  end
  
- return nxt
+ return found
 end
 
 function wlk_in_d(enta,entb)
