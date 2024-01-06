@@ -511,7 +511,7 @@ function wlk_in_d(enta,entb)
 end
 
 function ptoi(po)
--- arbitrary w, fix
+--★ arbitrary w, fix
  return po.x+po.y*128
 end
 
