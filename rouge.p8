@@ -7,7 +7,7 @@ function _init()
  _dbg = {}
 	_wnd = {}
 	
-	_drw_dbg = true
+	_drw_dbg = false
 	_upd = upd_game
 	_drw = drw_game
 	push_upd(upd_game)
@@ -457,6 +457,8 @@ function flood_fill(po,nxt)
  local dpth = 0
  local queue = {}
  local found = {nxt[1]}
+ local visited = {}
+ visited[ptoi(_plyr.pos)] = true
  while(dpth <= 7) do
  	dpth+=1
 	 for ite in all(nxt) do
@@ -464,9 +466,9 @@ function flood_fill(po,nxt)
 		  local it = ite.po
 		  local np = p(it.x+d.x,it.y+d.y)
 		  if(chk_solid(np) == false
-		  and arr_cont(found,np,cmp_p) == false
-		  and arr_cont(queue,np,cmp_p) == false
-		  )then
+		  and visited[ptoi(np)] == nil)
+		  then
+		   visited[ptoi(np)] = true
 		   add(queue,{po=p(np.x,np.y),dst=dpth})
 		  end
 		 end
