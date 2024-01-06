@@ -6,6 +6,7 @@ function _init()
  _st_upd = {}
  _dbg = {}
 	_wnd = {}
+	
 	_drw_dbg = true
 	_upd = upd_game
 	_drw = drw_game
@@ -243,7 +244,7 @@ end
 
 function upd_ease()
   buff_input()
- _t⧗=min(_t⧗+0.1,1)
+ _t⧗=min(_t⧗+1/10,1)
  if(_t⧗ == 1) then
   pop_upd()
   foreach(_ents,set_lst_pos)
@@ -452,12 +453,12 @@ function cmp_p(a,b)
 end
 
 function flood_fill(po,nxt)
- dbg("called")
  local dst = 1
- local dpth = 1
+ local dpth = 0
  local queue = {}
- local found = {}
+ local found = {nxt[1]}
  while(dpth <= 7) do
+ 	dpth+=1
 	 for ite in all(nxt) do
 		 for d in all(dirs) do
 		  local it = ite.po
@@ -471,7 +472,6 @@ function flood_fill(po,nxt)
 		 end
 	 end
 	 
-	 dpth+=1
 	 nxt = {}
 	 for q in all(queue) do
 	  add(nxt,
