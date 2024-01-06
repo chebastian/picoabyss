@@ -7,7 +7,7 @@ function _init()
  _dbg = {}
 	_wnd = {}
 	
-	_drw_dbg = false
+	_drw_dbg = true
 	_upd = upd_game
 	_drw = drw_game
 	push_upd(upd_game)
@@ -207,10 +207,20 @@ function nxt_turn()
  end
  
  push_upd(upd_ease)
+ local ent_idx = {}
+ for en in all(_ents) do
+--  if i.id != p_id then
+	  ent_idx[ptoi(en.pos)] = true
+--  end
+ end 
  _srch_tiles =
    flood_fill(
    _plyr.pos,
-   {{po=p(_plyr.pos.x,_plyr.pos.y),dst=0}})
+   {
+    {po=p(_plyr.pos.x,
+     _plyr.pos.y),dst=0}
+    },
+    ent_idx)
  dbg(#_srch_tiles)
 end
 
@@ -446,51 +456,6 @@ function rand_wlk(e)
  end
  move_ent(e,e.d)
  e.d = nil
-end
-
-function cmp_p(a,b)
- return a.x == b.po.x and a.y == b.po.y
-end
-
-function flood_fill(po,nxt)
- local dpth,queue,visited = 0,{},{}
- visited[ptoi(_plyr.pos)] = true
-
- local found = {nxt[1]}
- while dpth <= 7 do
- 	dpth+=1
-	 for ite in all(nxt) do
-		 for d in all(dirs) do
-		  local it = ite.po
-		  local np = p(it.x+d.x,it.y+d.y)
-		  if(chk_solid(np) == false
-		  and visited[ptoi(np)] == nil)
-		  then
-		   visited[ptoi(np)] = true
-		   add(queue,{po=p(np.x,np.y),dst=dpth})
-		  end
-		 end
-	 end
-	 
-	 nxt = {}
-	 for q in all(queue) do
-	  add(nxt,
-	  {po=p(q.po.x,q.po.y),
-	   dst=q.dst})
-	  add(found,
-	   {po=p(q.po.x,q.po.y),
-	    dst=q.dst})
-	 end
-	 	 
-	 if #queue == 0 then
-	  return found
-	 end
-	 
-	 queue = {}
-
- end
- 
- return found
 end
 
 function wlk_in_d(enta,entb)
@@ -912,6 +877,19 @@ function is_player(ent)
  return ent.id == _pid
 end
 
+function arr_select(arr,sel)
+ local res = {}
+ for it in all(arr) do
+  add(res,sel(it))
+ end
+ return res
+end
+
+-- projections
+function ent_to_idx(ent)
+ return ptoi(ent.pos)
+end
+
 --function arr_cont(arr,a,cmp)
 -- return arr_find(arr,a,cmp) != nil
 --end
@@ -973,6 +951,53 @@ function upd_anim(pl,anim)
  end
  
  return anim.f[pl.frame_i%#anim.f+1]
+end
+
+function cmp_p(a,b)
+ return a.x == b.po.x and a.y == b.po.y
+end
+
+function flood_fill(po,nxt,ocp)
+ local dpth,queue,visited = 0,{},{}
+ visited[ptoi(_plyr.pos)] = true
+ 
+ local found = {nxt[1]}
+ while dpth <= 7 do
+ 	dpth+=1
+	 for ite in all(nxt) do
+		 for d in all(dirs) do
+		  local it = ite.po
+		  local pi ptoi(it)
+		  local np = p(it.x+d.x,it.y+d.y)
+		  if(chk_solid(np) == false
+					  and ocp[pi] == nil
+					  and visited[ptoi(np)] == nil)
+		  then
+		   visited[ptoi(np)] = true
+		   add(queue,{po=p(np.x,np.y),dst=dpth})
+		  end
+		 end
+	 end
+	 
+	 nxt = {}
+	 for q in all(queue) do
+	  add(nxt,
+	  {po=p(q.po.x,q.po.y),
+	   dst=q.dst})
+	  add(found,
+	   {po=p(q.po.x,q.po.y),
+	    dst=q.dst})
+	 end
+	 	 
+	 if #queue == 0 then
+	  return found
+	 end
+	 
+	 queue = {}
+
+ end
+ 
+ return found
 end
 
 __gfx__
