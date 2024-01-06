@@ -206,13 +206,8 @@ function nxt_turn()
   e:upd()
  end
  
- push_upd(upd_ease)
- local ent_idx = {}
- for en in all(_ents) do
---  if i.id != p_id then
-	  ent_idx[ptoi(en.pos)] = true
---  end
- end 
+ push_upd(upd_ease) 
+ 
  _srch_tiles =
    flood_fill(
    _plyr.pos,
@@ -220,7 +215,7 @@ function nxt_turn()
     {po=p(_plyr.pos.x,
      _plyr.pos.y),dst=0}
     },
-    ent_idx)
+    {})
  dbg(#_srch_tiles)
 end
 
@@ -458,7 +453,7 @@ function rand_wlk(e)
  e.d = nil
 end
 
-function wlk_in_d(enta,entb)
+function wlk_in_d(enta)
  local mini,mind = 0,999
  for i=1,#dirs do
   local nx = enta.pos.x+dirs[i].x
@@ -493,6 +488,15 @@ function wlk_to_plyr(ent)
  local mini,mind = -1,999
  local curpt = ptoi(ent.pos)
  local curd = lookup[curpt]
+ 
+ local ocp = {}
+ for e in all(_ents) do
+ 	if is_player(e) == false then
+ 		ocp[ptoi(e.pos)] = true
+ 	end
+ end
+ 
+ 
  if curd then
   mind = curd
  end
@@ -502,7 +506,7 @@ function wlk_to_plyr(ent)
   
   local ndist = 999
   local ptile = lookup[ptoi(p(nx,ny))]
-  if ptile then
+  if ptile and ocp[ptoi(p(nx,ny))] == nil then
    ndist = ptile
   end
   
