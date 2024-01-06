@@ -912,24 +912,18 @@ function is_player(ent)
  return ent.id == _pid
 end
 
-function arr_cont(arr,a,cmp)
+--function arr_cont(arr,a,cmp)
+-- return arr_find(arr,a,cmp) != nil
+--end
+--
+--function arr_find(arr,a,cmp)
 -- for it in all(arr) do
 --  if cmp(a,it) then
---   return true
+--   return it
 --  end
 -- end
--- return false
- return arr_find(arr,a,cmp) != nil
-end
-
-function arr_find(arr,a,cmp)
- for it in all(arr) do
-  if cmp(a,it) then
-   return it
-  end
- end
- return nil
-end
+-- return nil
+--end
 
 function lerp(a,b,d)
 	if(d >= 1.0) return b
