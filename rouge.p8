@@ -453,13 +453,11 @@ function cmp_p(a,b)
 end
 
 function flood_fill(po,nxt)
- local dst = 1
- local dpth = 0
- local queue = {}
- local found = {nxt[1]}
- local visited = {}
+ local dpth,queue,visited = 0,{},{}
  visited[ptoi(_plyr.pos)] = true
- while(dpth <= 7) do
+
+ local found = {nxt[1]}
+ while dpth <= 7 do
  	dpth+=1
 	 for ite in all(nxt) do
 		 for d in all(dirs) do
