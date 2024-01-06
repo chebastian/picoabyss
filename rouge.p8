@@ -967,11 +967,11 @@ function flood_fill(po,nxt,ocp)
 	 for ite in all(nxt) do
 		 for d in all(dirs) do
 		  local it = ite.po
-		  local pi ptoi(it)
 		  local np = p(it.x+d.x,it.y+d.y)
+		  local pi = ptoi(np)
 		  if(chk_solid(np) == false
 					  and ocp[pi] == nil
-					  and visited[ptoi(np)] == nil)
+					  and visited[pi] == nil)
 		  then
 		   visited[ptoi(np)] = true
 		   add(queue,{po=p(np.x,np.y),dst=dpth})
