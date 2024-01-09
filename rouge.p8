@@ -7,7 +7,7 @@ function _init()
  _dbg = {}
 	_wnd = {}
 	
-	_drw_dbg = false
+	_drw_dbg = true
 	_upd = upd_game
 	_drw = drw_game
 	push_upd(upd_game)
@@ -97,11 +97,12 @@ function start()
 		[1] = crt_itm("mana", on_use_mana),
 		[2] = crt_itm("grt potion",on_use_grt_ptn),
 		[3] = crt_itm("elixir",on_use_potion),
-		[16] = crt_eqp("swd",2,on_equip),
-		[17] = crt_eqp("grt swd",3,on_equip),
-		[18] = crt_eqp("slv swd",4,on_equip),
-		[19] = crt_eqp("gld swd",5,on_equip),
+		[16] = crt_eqp("swd",2,2,on_equip),
+		[17] = crt_eqp("grt swd",3,2,on_equip),
+		[18] = crt_eqp("slv swd",4,3,on_equip),
+		[19] = crt_eqp("gld swd",5,1,on_equip),
 	}
+	
 	_lo_chst = {-1,
 																0,0,0,
 																16,16,16,16,
@@ -403,6 +404,14 @@ function drw_game()
   for dtil in all(_srch_tiles) do
   	print(dtil.dst,dtil.po.x*8,dtil.po.y*8)
   end
+  
+  if _plyr.dx then
+	  for pt in all(atk_ptrn(_plyr,_plyr.atkptr)) do
+	   print("★",pt.x*8,
+	   											pt.y*8,
+	   											6)
+	  end
+  end
  end
 
  drw_dmg()
@@ -444,7 +453,9 @@ function ent(id,po)
 							  ease=ease_lerp,
 							  on_ent=on_dmg,
 							  pos_ren=p(po.x,po.y),
-							  pos_lst=p(po.x,po.y)
+							  pos_lst=p(po.x,po.y),
+							  dx=0,
+							  dy=0
 							 }
 end
 
@@ -552,20 +563,50 @@ function wlk_to_plyr(ent)
  ent.d = nil
 end
 
+-- 
+-- x
+--aaa  
+--
+--  a
+-- xa
+--  a
+--
+-- xaa 
+--
+-- x
+-- a
+-- a
 function move_ent(ent,d)
 	ent.hflip = d.x < 0 or (ent.hflip and d.x == 0)
+ ent.dx = ent.d.x
+ ent.dy = ent.d.y
  local np = add_t(ent.pos,d) 
  local sld,tile = chk_tile(np,0)
- local ent2 = ent_at(np)
+ 
  if(sld)then
   ent.ease=ease_bump
   on_bump(tile,np,ent,d)
   return
- -- ★ use item bugfix
- elseif(ent2 and ent2 != ent)then
+ end
+ -- pickup item
+ local itm = ent_at(np)
+ if itm and itm.itm then
   ent.ease=ease_bump
-  ent2:on_ent(ent,np,d)
+  itm:on_ent(ent,np,d)
   return
+ end
+ 
+ -- atk with weapon
+ local atk_tiles = atk_ptrn(ent,ent.atkptr)
+ for atk in all(atk_tiles) do
+  local ent2 = ent_at(atk)
+	 -- ★ atk self bugfix on use item
+	 if(ent2 and not ent2.itm and ent2 != ent)then
+	  ent.ease=ease_bump
+	  ent2:on_ent(ent,np,d) --★ 223
+	  return
+	 end
+	 
  end
  
  p_sfx(sfx_wlk,ent)
@@ -605,8 +646,7 @@ function on_bump(tile,at,ent,d)
   or tile == 15)
   and is_player(ent) then
    mset(at.x,at.y,tile-1)
-   -- spawn item
-   
+   -- ★ add rnd potion 
   end
 
   if tile == 11 and is_player(ent) then
@@ -809,9 +849,10 @@ function crt_itm(name,onuse)
 	 return {name=name,on_use=onuse}
 end
 
-function crt_eqp(name,atkp,onuse)
+function crt_eqp(name,atkp,atkptr,onuse)
  local itm = crt_itm(name,onuse)
  itm.atkp = atkp
+ itm.atkptr = atkptr
  return itm
 end
 
@@ -866,8 +907,10 @@ function eqp_item(idx,ent)
   return
  end
  local eqp = _eqp[idx]
- ent.atk = _lo_itms[eqp.id].atkp
- ent.chk_idx = idx
+ local itm = _lo_itms[eqp.id]
+ ent.atk = itm.atkp
+ ent.atkptr = itm.atkptr --★ 222
+ ent.chk_idx = idx --★ 111
  sfx(3)
 end
 
@@ -890,6 +933,32 @@ function ease_sin(ent)
  return ent.pos.x,
         ent.pos.y+(sin(_updt)*.15)
 end
+
+-- weapons
+function atk_ptrn(ent,wp)
+ local drx,dry =vec_right(ent.dx,ent.dy) 
+ local dlx,dly = -drx,-dry
+ local dux,duy = ent.dx,ent.dy
+ local lr = {
+ 	drx,dry,dlx,dly,0,0,dux,duy
+ }
+ 
+ local res = {}
+ for i=1,#lr-1,2 do
+ 	add(res,p(ent.pos.x+ent.dx+lr[i],
+ 										 ent.pos.y+ent.dy+lr[i+1]))
+ end
+ 
+ if wp == 1 then
+ 	return {res[3]}
+ elseif wp == 2 then
+ 	return {res[3],res[4]}
+ elseif wp == 3 then
+  return res
+ end
+ 
+ return {res[3]}
+end
 -->8
 -- utils
 
@@ -898,6 +967,13 @@ function p(x,y)
 	return {x=x,y=y}
 end
 
+function vec_right(x,y)
+ return y*-1,x	
+end
+
+function vec_reflect(x,y)
+	return -x,-y
+end
 
 -- functions
 function dist(a,b)
@@ -1039,7 +1115,25 @@ end
 -->8
 -- todo
 
--- [] 
+-- [x] spawn items only to chests
+-- [] potion drop when destroying pots
+-- [] slime idle patterns
+-- [] slime sight
+-- [] fow
+-- [] rand room layout
+-- [] rand rooms
+-- [] atk adjecent
+-- [] atk dst
+-- [] trigger trap dmg
+-- [] 111 menu checked set on player for viewing selection in ui
+-- [] 222 atk and atk pattern set on entity directly
+-- [] 223 onent used for both atk and pickup, does not work when atk multiple tiles
+
+-- weapons
+-- 
+-- swd, single tile atks: 1,2,3,4
+-- spear, 2 tiles fwd atks: 1,2,3,4
+-- axe, fwd, left, right atks: 1,2,3,4
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000055550000888800000000000000000000000000000000000000000000000000
 00000000555555500000000000000000000000000000000000000000000000000550055008800880000000000000000000000000000000000000000000000000
@@ -1304,8 +1398,8 @@ __gff__
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __map__
 0018000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-0000000101010b0b0b0101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000010000000000000f010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000000010b0b0b0b0b0b01010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000100000000000b0f010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000102020b0b0b000d010101010100000000010101010101010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000101090101010200000100000101090101010000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000100000000010000000000020900000000010000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
