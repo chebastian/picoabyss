@@ -954,7 +954,7 @@ function atk_ptrn(ent,wp)
  elseif wp == 2 then
  	return {res[3],res[4]}
  elseif wp == 3 then
-  return res
+  return {res[1],res[2],res[3]}
  end
  
  return {res[3]}
