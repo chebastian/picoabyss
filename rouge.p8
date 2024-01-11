@@ -7,7 +7,7 @@ function _init()
  _dbg = {}
 	_wnd = {}
 	
-	_drw_dbg = true
+	_drw_dbg = false
 	_upd = upd_game
 	_drw = drw_game
 	push_upd(upd_game)
@@ -413,6 +413,8 @@ function drw_game()
 	  end
   end
  end
+ 
+ blackout()
 
  drw_dmg()
  camera(0,0)
@@ -441,6 +443,30 @@ function drw_hud()
            " カ " .. _plyr.atk,p(8,2),3,7)
 end
 
+function blackout()
+ local mw = 15
+ local mh = 15
+	local los = {}
+ for x=0,mw do
+	 for y=0,mh do
+	  if not line_of_sight(_plyr.pos,p(x,y)) then
+	  else
+    los[ptoi(p(x,y))]=true
+	  	for d in all(dirs) do
+     los[ptoi(p(x+d.x,y+d.y))] = true
+	  	end
+	  end
+ 	end
+ end
+ 
+ for x=0,mw do
+	 for y=0,mh do
+	  if not los[ptoi(p(x,y))] then
+   	drw_rectf(x*8,y*8,8,8,1)
+	  end
+		end
+	end
+end
 -->8
 -- ent
 
@@ -1002,18 +1028,18 @@ function ent_to_idx(ent)
  return ptoi(ent.pos)
 end
 
---function arr_cont(arr,a,cmp)
--- return arr_find(arr,a,cmp) != nil
---end
---
---function arr_find(arr,a,cmp)
--- for it in all(arr) do
---  if cmp(a,it) then
---   return it
---  end
--- end
--- return nil
---end
+function arr_cont(arr,a,cmp)
+ return arr_find(arr,a,cmp) != nil
+end
+
+function arr_find(arr,a,cmp)
+ for it in all(arr) do
+  if cmp(a,it) then
+   return it
+  end
+ end
+ return nil
+end
 
 function lerp(a,b,d)
 	if(d >= 1.0) return b
@@ -1065,8 +1091,17 @@ function upd_anim(pl,anim)
  return anim.f[pl.frame_i%#anim.f+1]
 end
 
+-- note this expects 
+-- b to wrap a point in po
 function cmp_p(a,b)
+assert(a != nil, "a is nil")
+assert(b != nil, "b is nil")
  return a.x == b.po.x and a.y == b.po.y
+end
+
+-- straight poitn compare
+function cmp_po(a,b)
+ return a.x == b.x and a.y == b.y
 end
 
 function flood_fill(po,nxt,ocp)
@@ -1112,6 +1147,61 @@ function flood_fill(po,nxt,ocp)
  return found
 end
 
+function pline(x1,y1,x2,y2)
+ local dx,dy = abs(x2-x1),
+ 													 abs(y2 - y1)
+ local signx,signy = 1,1
+ local derr = dx*0.5
+ local px,py = x1,y1
+ if( dy > dx)  derr = -dy * 0.5
+ 
+ if( x2 < x1 ) signx = -1 
+ if (y2 < y1)  signy = -1
+
+ 
+ local points = {
+ }
+ while true do
+ 	add(points,{x=px,y=py})
+ 	
+ 	if px == x2 and py == y2 then
+ 	  return points
+ 	end
+ 	
+ 	if derr > -dx then
+ 		derr -= dy
+ 		px += signx
+ 	end
+ 	
+ 	-- check again, what happens without
+ 	if px == x2 and py == y2 then
+   	add(points,{x=px,y=py})
+ 	  return points
+ 	end
+	
+	 if derr < dy then
+	  derr += dx
+	  py += signy
+	 end
+		
+ 		-- check again, what happens without
+ 	if px == x2 and py == y2 then
+	  	add(points,{x=px,y=py})
+ 	  return points
+ 	end
+ end
+end
+
+function line_of_sight(a,b)
+ local l = pline(a.x,a.y,b.x,b.y)
+ for _p in all(l) do
+  if chk_tile(_p,2) then
+   return false
+  end  
+ end
+ 
+ return true
+end
 -->8
 -- todo
 
@@ -1401,7 +1491,7 @@ __label__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 
 __gff__
-0001000000000000000300030003000300000000000000000000000300030000000101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0005000000000000000700030003000300000000000000000000000300030000000101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __map__
 0018000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
