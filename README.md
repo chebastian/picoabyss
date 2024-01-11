@@ -1,4 +1,4 @@
 # picoabyss
 a, work in progress, roguelike for the pico8
 
-![rouge_37](https://github.com/chebastian/picoabyss/assets/1180191/05ed9416-2b0e-415c-b797-f10afb9a8f64)
+![rouge_36](https://github.com/chebastian/picoabyss/assets/1180191/909ad816-b03c-4839-ab18-2fc8549c8b1c)
