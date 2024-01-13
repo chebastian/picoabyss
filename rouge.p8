@@ -456,10 +456,8 @@ function drw_hud()
            " カ " .. _plyr.atk,p(8,2),3,7)
 end
 
-_prev_los = {}
 _los = {}
 function updatefow()
- _prev_los = _los
 	_los = {}
 	for wt in all(_srch_tiles) do
 	 local x = wt.po.x
