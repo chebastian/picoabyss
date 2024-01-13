@@ -91,7 +91,6 @@ function start()
  _eqp = {}   -- player equipment
  _eqp_atk = {[0x50] = 2,
              [0x51] = 3}
--- _srch_tiles = {}		    
 	_lo_itms = {
 		[0] = crt_itm("potion",on_use_potion),
 		[1] = crt_itm("mana", on_use_mana),
