@@ -8,7 +8,7 @@ function _init()
 	_wnd = {}
 	
 	_px,_py = 0,0
-	_drw_dbg = true
+	_drw_dbg = false
 	_upd = upd_game
 	_drw = drw_game
 	push_upd(upd_game)
@@ -17,19 +17,78 @@ function _init()
 	dir8 = {p(-1,0),p(-1,1),p(-1,-1),
 	        p(0,1),p(0,-1),
 	        p(1,0), p(1,1), p(1,-1)}
-
-	l1 = myline(0,0,10,4)
-	lines =
-	{
---		myline(0,0,4,4), -- \
---		myline(6,6,8,0), -- /
---		myline(0,6,5,5),  -- -
---		myline(12,12,0,8),  -- -
-	}
 end
 
 function dbg(str)
  add(_dbg,str)
+end
+
+function rct(x,y,w,h)
+ return {x=x,y=y,w=w,h=h}
+end
+
+function spl_rct(r,hor)
+-- local hor = r.w >= r.h
+-- local sp = rnd()
+ local sp = max(.4,rnd())
+ local nw,nh = flr(r.w*sp),flr(r.h*sp)
+ if hor then
+  return rct(r.x,r.y,nw,r.h),
+  							rct(r.x+nw,r.y,r.w-nw,r.h)
+ else
+  return rct(r.x,r.y,r.w,r.h),
+  							rct(r.x,r.y+nh,
+  							r.w,r.h-nh)
+ end
+end
+
+function pr_r(rc)
+ return "x:"..rc.x.." ,y:"..rc.y
+    				.." ,w:"..rc.w.." ,h:"..rc.h
+end
+
+_rcts = {}
+
+function regen()
+  local sz = 60
+  local w,h = sz,sz
+  local rc = rct(40,10,max(5,w),max(5,h))
+  local iters = 5
+  local rs = {rc}
+  
+  while iters > 0 do
+  	local nxt = {}
+   for ir in all(rs) do
+    local hr = iters%2==0
+    local nl,nr = spl_rct(ir,hr)
+    add(nxt,nl)
+    add(nxt,nr)
+   end
+   
+   rs = {}
+   for n in all(nxt) do
+   	add(rs,n)
+   end
+   iters-=1
+   if iters <= 0 then
+    return nxt
+   end
+  end
+end
+
+function drw_rct(r,c)
+ rectfill(r.x,r.y,
+ 									r.x+r.w,r.y+r.h,c)
+end
+
+function drw_rcts(rs)
+	local cs = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
+	local c = 0
+	for r in all(rs) do
+		c+=1
+		c%=#cs
+	 drw_rct(r,cs[c])
+	end
 end
 
 function _draw()
@@ -42,9 +101,23 @@ function _draw()
 --		end
 --	end
 	reload(0x1000, 0x1000, 0x2000)
+ 
+ drw_rcts(_rcts)
+ drw_rcts(_gen_rct)
 
  if btnp(⬅️) then
- 	_px -= 1
+  	local x1,w1,x2,w2 = splt(0,10)
+  _dbg[3] = x1 .. ":" ..w1.. ","..x2 ..":"..w2
+  _dbg[4] = rnd() 
+   local w,h = 10,10
+   --   local w,h = flr(rnd(10)),flr(rnd(10))
+   local rc = rct(0,0,w,h)
+   local r1,r2 = spl_rct(rc)
+   _dbg[5]=pr_r(r1)
+   _dbg[6]=pr_r(r2)
+   _gen_rct = regen()
+   
+   _dbg[7] = "gen: ".. #_gen_rct
  elseif btnp(➡️) then
  	_px += 1
  elseif btnp(⬆️) then
@@ -52,26 +125,11 @@ function _draw()
  elseif btnp(⬇️) then
   _py += 1
  end
- local pl = myline(_px,_py,8,8)
- local ob = false
- for p in all(pl) do
- 	local tp = 1
- 	if(ob or mget(p.x,p.y) == 34) then
- 	 tp = 2
- 	 ob = true
- 	end
- 	mset(p.x,p.y,tp)
- end
  
- for l in all(lines) do
-	 for p in all(l) do
-	 	mset(p.x,p.y,1)
-	 end 
- end
  if _drw_dbg then
 	 cursor(0,20)
 	 for i=1,10 do
---	  print(_dbg[#_dbg-i])
+	  print(_dbg[i])
 	 end
  end
  
@@ -94,6 +152,10 @@ end
 -->8
 -- test
 
+function splt(x,s)
+ local rw = max(.2,rnd(s))
+ return x,rw,x+rw,s-rw
+end
 
 function myline(x1,y1,x2,y2)
  local dx,dy = abs(x2-x1),
