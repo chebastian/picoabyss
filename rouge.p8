@@ -284,13 +284,7 @@ end
 function upd_ease()
   buff_input()
  _t⧗=min(_t⧗+_trn_spd,1)
- if(_t⧗ == 1) then
-  pop_upd()
-  set_lst_pos(_cam)
-  foreach(_ents,set_lst_pos)
-  _on_turn_done()
-  return
- end
+ 
  
  for e in all (_ents) do
   e.pos_ren.x,
@@ -299,6 +293,13 @@ function upd_ease()
  
  _cam.pos_ren.x,
  _cam.pos_ren.y = ease_lerp(_cam)
+ if(_t⧗ == 1) then
+  pop_upd()
+  set_lst_pos(_cam)
+  foreach(_ents,set_lst_pos)
+  _on_turn_done()
+  return
+ end
 end
 
 -->8
