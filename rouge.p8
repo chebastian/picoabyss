@@ -130,8 +130,6 @@ function start()
  add_mob(3,p(5,5))
  
  -- <test>
- add_itm(1,p(13,4))
- add_itm(0,p(5,3))
  -- </test>
  
  -- init fov and search tiles
@@ -203,7 +201,6 @@ function upd_game()
 	buff_input()
 	
 	if(btnp(❎))then
---	 add_inv_win(_bpack)
   add_menu_win()
 	end
 	
