@@ -232,12 +232,19 @@ function plr_turn()
  updatefow()
 end
 
+function is_visible(e)
+ return _los[ptoi(e.pos)] != nil
+end
+
 function ai_turn()
 	_t⧗ = 0
-	_trn_spd = 1/6
+	_trn_spd = 1/2
  for e in all(_ents) do
  	if not is_player(e) then
  	 e:upd()
+ 	 if is_visible(e) then
+ 	 	_trn_spd = 1/6
+ 	 end
  	end
  end
  
