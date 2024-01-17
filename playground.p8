@@ -59,9 +59,8 @@ function _draw()
  map()
  camera(_camx,_camy)
  
- for it in all(_gen_rct) do
-  map_rct(it)
- end
+ foreach(_gen_rct,map_rct)
+
  map_doors()
  drw_rcts(_gen_rct)
  
@@ -154,6 +153,7 @@ function regen(iter,sz)
    for ir in all(rs) do
     local hr = iters%2==0
     local valid = false
+    local retry = 10
     local nl,nr = {},{}
     while(not valid) do
 	    nl,nr = spl_rct(ir,hr)
@@ -166,7 +166,10 @@ function regen(iter,sz)
 	                 p(nl.x+nl.w,nl.y+nl.h)
 	     valid = _ps[ptoi(a)] == nil and _ps[ptoi(b)] == nil
 	    end
-	    
+	    retry -= 1
+	    if retry < 0 then
+	     break
+	    end
     end
     cnt += 1
     add_door(nl,hr,_ps)
@@ -179,10 +182,9 @@ function regen(iter,sz)
    	add(rs,n)
    end
    iters-=1
-   if iters <= 0 then
-    return nxt
-   end
   end
+  
+  return rs
 end
 
 -- utils
