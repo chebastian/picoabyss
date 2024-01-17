@@ -19,7 +19,7 @@ function _init()
 	        p(1,0), p(1,1), p(1,-1)}
 -- _rcts = {}
  _ps = {}
- _iterations = 1
+ _iterations = 3
  _gen_rct= regen()
 end
 
@@ -27,40 +27,17 @@ function dbg(str)
  add(_dbg,str)
 end
 
-function rct(x,y,w,h)
- return {x=x,y=y,w=w,h=h}
-end
-
-function spl_rct(r,hor)
-
- local sp = in_rng(rnd(),.34,.66)
- local nw,nh = flr(r.w*sp),flr(r.h*sp)
- if hor then
-  return rct(r.x,r.y,nw,r.h),
-  							rct(r.x+nw,r.y,r.w-nw,r.h)
- else
-  return rct(r.x,r.y,r.w,nh),
-  							rct(r.x,r.y+nh,
-  							r.w,r.h-nh)
- end
-end
-
-function pr_r(rc)
- return "x:"..rc.x.." ,y:"..rc.y
-    				.." ,w:"..rc.w.." ,h:"..rc.h
-end
-
-
 fr = true
 ox = 10
 oy = 10
 function drw_rct(r,c)
+	local x,y,w,h = r.x,r.y,r.w,r.h
  if fr then
-  rectfill(ox+r.x,oy+r.y,
- 									ox+r.x+r.w,oy+r.y+r.h,c)
+  rectfill(ox+x,oy+y,
+ 									ox+x+w,oy+y+h,c)
  else
-  rect(ox+r.x,oy+r.y,
- 									ox+r.x+r.w,oy+r.y+r.h,c)
+  rect(ox+x,oy+y,
+ 									ox+x+w,oy+y+h,c)
  end
 end
 
@@ -72,26 +49,6 @@ function drw_rcts(rs)
 		c%=max(1,#cs)
 	 drw_rct(r,cs[c])
 	end
-end
-
-function map_rct(r)
- local x,y,w,h = r.x,r.y,r.w,r.h
- 
- for i=0,w,1 do
-  mset(x+i,y,1)
-  mset(x+i,y+h,1)
- end
- 
- for i=0,h,1 do
-  mset(x,y+i,1)
-  mset(x+w,y+i,1)
- end
-end
-
-function map_doors()
- for k,v in pairs(_ps) do
-  mset(v.x,v.y,0)
- end
 end
 
 function _draw()
@@ -416,6 +373,50 @@ function flood_fill(po,nxt,ocp)
  return found
 end
 
+-->8
+-- mapgen
+
+function rct(x,y,w,h)
+ return {x=x,y=y,w=w,h=h}
+end
+
+function spl_rct(r,hor)
+	local x,y,w,h = r.x,r.y,r.w,r.h
+ 
+ local sp = in_rng(rnd(),.34,.66)
+ local nw,nh = flr(w*sp),
+ 														flr(h*sp)
+ if hor then
+  return rct(x,y,nw,h),
+  							rct(x+nw,y,w-nw,h)
+ else
+  return rct(x,y,w,nh),
+  							rct(x,y+nh,
+  							w,h-nh)
+ end
+end
+
+-- map things to tilemap
+function map_rct(r)
+ local x,y,w,h = r.x,r.y,r.w,r.h
+ 
+ for i=0,w,1 do
+  mset(x+i,y,1)
+  mset(x+i,y+h,1)
+ end
+ 
+ for i=0,h,1 do
+  mset(x,y+i,1)
+  mset(x+w,y+i,1)
+ end
+end
+
+
+function map_doors()
+ for k,v in pairs(_ps) do
+  mset(v.x,v.y,0)
+ end
+end
 __gfx__
 00000000555555559999999988888888cccccccc0000000000000000000000000055550000888800000000000000000000000000000000000000000000000000
 00000000555555559999999988888888cccccccc0000000000000000000000000550055008800880000000000000000000000000000000000000000000000000
