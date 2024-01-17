@@ -84,7 +84,8 @@ function _draw()
 	  _camy -= camsp
 	 elseif btn(⬇️) then
 	  _camy += camsp
-	 elseif btn(⬅️) then
+	 end
+	 if btn(⬅️) then
 		 _camx -= camsp
 		elseif btn(➡️) then
 			_camx += camsp
