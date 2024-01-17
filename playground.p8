@@ -20,7 +20,9 @@ function _init()
 -- _rcts = {}
  _ps = {}
  _iterations = 3
- _gen_rct= regen()
+ _size = 15
+ _camx,_camy = 0,0
+ _gen_rct= regen(_iterations,_size)
 end
 
 function dbg(str)
@@ -28,6 +30,7 @@ function dbg(str)
 end
 
 fr = true
+_cam_mode = false
 ox = 10
 oy = 10
 function drw_rct(r,c)
@@ -54,6 +57,7 @@ end
 function _draw()
 	cls()
  map()
+ camera(_camx,_camy)
  
  for it in all(_gen_rct) do
   map_rct(it)
@@ -69,15 +73,32 @@ function _draw()
   fr = not fr
  end
  
- if btnp(⬆️) then
-  _iterations += 1
- elseif btnp(⬇️) then
-  _iterations -= 1
+ local camsp = 1
+ if btn(🅾️) then
+ 	if btn(⬆️) then
+	  _camy -= camsp
+	 elseif btn(⬇️) then
+	  _camy += camsp
+	 elseif btn(⬅️) then
+		 _camx -= camsp
+		elseif btn(➡️) then
+			_camx += camsp
+	 end
+ else
+	 if btnp(⬆️) then
+	  _iterations += 1
+	 elseif btnp(⬇️) then
+	  _iterations -= 1
+		elseif btnp(⬅️) then
+		 _size -= 1
+		elseif btnp(➡️) then
+			_size += 1
+	 end
  end
  
 
- if btnp(⬅️) then
-  _gen_rct = regen()
+ if btnp(❎) then
+  _gen_rct = regen(_iterations,_size)
  end
  if _drw_dbg then
 	 cursor(0,20)
@@ -120,12 +141,11 @@ function add_door(r,hr,existing)
  existing[ptoi(np)] = np
 end
 
-function regen()
+function regen(iter,sz)
 	 reload(0x1000, 0x1000, 0x2000)
-  local sz = 15
   local w,h = sz,sz
   local rc = rct(0,0,w,h)
-  local iters = _iterations
+  local iters = iter
   local rs = {rc}	
   local cnt = 0
   _ps = {}
@@ -165,56 +185,53 @@ function regen()
   end
 end
 
+-- utils
 
 function in_rng(n,_min,_max)
  return min(_max,max(_min,n))
 end
 
-function myline(x1,y1,x2,y2)
- local dx,dy = abs(x2-x1),
- 													 abs(y2 - y1)
- local signx,signy = 1,1
- local derr = dx*0.5
- local px,py = x1,y1
- if( dy > dx)  derr = -dy * 0.5
- 
- if( x2 < x1 ) signx = -1 
- if (y2 < y1)  signy = -1
+-- rect
 
+function rct(x,y,w,h)
+ return {x=x,y=y,w=w,h=h}
+end
+
+function spl_rct(r,hor)
+	local x,y,w,h = r.x,r.y,r.w,r.h
  
- local points = {
- }
- while true do
- 	add(points,{x=px,y=py})
- 	
- 	if px == x2 and py == y2 then
- 	  return points
- 	end
- 	
- 	if derr > -dx then
- 		derr -= dy
- 		px += signx
- 	end
- 	
- 	-- check again, what happens without
- 	if px == x2 and py == y2 then
-   	add(points,{x=px,y=py})
- 	  return points
- 	end
-	
-	 if derr < dy then
-	  derr += dx
-	  py += signy
-	 end
-		
- 		-- check again, what happens without
- 	if px == x2 and py == y2 then
-	  	add(points,{x=px,y=py})
- 	  return points
- 	end
+ local sp = in_rng(rnd(),.34,.66)
+ local nw,nh = flr(w*sp),
+ 														flr(h*sp)
+ if hor then
+  return rct(x,y,nw,h),
+  							rct(x+nw,y,w-nw,h)
+ else
+  return rct(x,y,w,nh),
+  							rct(x,y+nh,
+  							w,h-nh)
+ end
+end
+
+-- map things to tilemap
+function map_rct(r)
+ local x,y,w,h = r.x,r.y,r.w,r.h
+ 
+ for i=0,w,1 do
+  mset(x+i,y,1)
+  mset(x+i,y+h,1)
  end
  
- 
+ for i=0,h,1 do
+  mset(x,y+i,1)
+  mset(x+w,y+i,1)
+ end
+end
+
+function map_doors()
+ for k,v in pairs(_ps) do
+  mset(v.x,v.y,0)
+ end
 end
 -->8
 -- utils
@@ -373,50 +390,53 @@ function flood_fill(po,nxt,ocp)
  return found
 end
 
--->8
--- mapgen
-
-function rct(x,y,w,h)
- return {x=x,y=y,w=w,h=h}
-end
-
-function spl_rct(r,hor)
-	local x,y,w,h = r.x,r.y,r.w,r.h
+function myline(x1,y1,x2,y2)
+ local dx,dy = abs(x2-x1),
+ 													 abs(y2 - y1)
+ local signx,signy = 1,1
+ local derr = dx*0.5
+ local px,py = x1,y1
+ if( dy > dx)  derr = -dy * 0.5
  
- local sp = in_rng(rnd(),.34,.66)
- local nw,nh = flr(w*sp),
- 														flr(h*sp)
- if hor then
-  return rct(x,y,nw,h),
-  							rct(x+nw,y,w-nw,h)
- else
-  return rct(x,y,w,nh),
-  							rct(x,y+nh,
-  							w,h-nh)
- end
-end
+ if( x2 < x1 ) signx = -1 
+ if (y2 < y1)  signy = -1
 
--- map things to tilemap
-function map_rct(r)
- local x,y,w,h = r.x,r.y,r.w,r.h
  
- for i=0,w,1 do
-  mset(x+i,y,1)
-  mset(x+i,y+h,1)
+ local points = {
+ }
+ while true do
+ 	add(points,{x=px,y=py})
+ 	
+ 	if px == x2 and py == y2 then
+ 	  return points
+ 	end
+ 	
+ 	if derr > -dx then
+ 		derr -= dy
+ 		px += signx
+ 	end
+ 	
+ 	-- check again, what happens without
+ 	if px == x2 and py == y2 then
+   	add(points,{x=px,y=py})
+ 	  return points
+ 	end
+	
+	 if derr < dy then
+	  derr += dx
+	  py += signy
+	 end
+		
+ 		-- check again, what happens without
+ 	if px == x2 and py == y2 then
+	  	add(points,{x=px,y=py})
+ 	  return points
+ 	end
  end
  
- for i=0,h,1 do
-  mset(x,y+i,1)
-  mset(x+w,y+i,1)
- end
+ 
 end
 
-
-function map_doors()
- for k,v in pairs(_ps) do
-  mset(v.x,v.y,0)
- end
-end
 __gfx__
 00000000555555559999999988888888cccccccc0000000000000000000000000055550000888800000000000000000000000000000000000000000000000000
 00000000555555559999999988888888cccccccc0000000000000000000000000550055008800880000000000000000000000000000000000000000000000000
