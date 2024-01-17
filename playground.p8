@@ -22,7 +22,8 @@ function _init()
  _iterations = 3
  _size = 15
  _camx,_camy = 0,0
- _gen_rct= regen(_iterations,_size)
+ _gen_rct= {}
+ gen()
 end
 
 function dbg(str)
@@ -54,14 +55,18 @@ function drw_rcts(rs)
 	end
 end
 
+
+function gen()
+ _gen_rct = regen(_iterations,_size)	
+ foreach(_gen_rct,map_rct)
+ map_doors()
+end
+
 function _draw()
 	cls()
  map()
  camera(_camx,_camy)
  
- foreach(_gen_rct,map_rct)
-
- map_doors()
  drw_rcts(_gen_rct)
  
  for po in all(_ps) do
@@ -97,7 +102,7 @@ function _draw()
  
 
  if btnp(❎) then
-  _gen_rct = regen(_iterations,_size)
+ 	gen()
  end
  if _drw_dbg then
 	 cursor(0,20)
