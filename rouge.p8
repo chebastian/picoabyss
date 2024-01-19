@@ -157,10 +157,11 @@ function chk_solid(po)
  return chk_tile(po,0)
 end
 
-function ent_at(p)
+function sld_ent_at(p)
  for ent in all(_ents) do
   if ent.pos.x == p.x
-  and ent.pos.y == p.y then
+  and ent.pos.y == p.y 
+  and not ent.can_walk then
    return ent
   end
  end
@@ -694,7 +695,7 @@ function move_ent(ent,d)
   return
  end
  -- pickup item
- local itm = ent_at(np)
+ local itm = sld_ent_at(np)
  if itm and itm.can_pickup then
   ent.ease=ease_bump
   itm:on_ent(ent,np,d)
@@ -704,7 +705,7 @@ function move_ent(ent,d)
  -- atk with weapon
  local atk_tiles = atk_ptrn(ent,ent.atkptr)
  for atk in all(atk_tiles) do
-  local ent2 = ent_at(atk)
+  local ent2 = sld_ent_at(atk)
 	 -- ★ atk self bugfix on use item
 	 if(ent2 and ent2.can_dmg and ent2 != ent)then
 	  ent.ease=ease_bump
@@ -1311,7 +1312,7 @@ end
 -- [] ★111 menu checked set on player for viewing selection in ui
 -- [] ★222 atk and atk pattern set on entity directly
 -- [] ★223 onent used for both atk and pickup, does not work when atk multiple tiles
--- [] ★224 ent_at slow?
+-- [] ★224 sld_ent_at slow?
 
 -- █ ideas
 
