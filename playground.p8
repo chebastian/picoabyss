@@ -8,7 +8,7 @@ function _init()
 	_wnd = {}
 	srand(4)
 	_px,_py = 0,0
-	_drw_dbg = true
+	_drw_dbg = false
 	_upd = upd_game
 	_drw = drw_game
 	push_upd(upd_game)
@@ -31,9 +31,13 @@ function _init()
 	find()
 end
 
+srcx = 14
+srcy = 14
 function find()
- _path = path_between(p(1,1),p(6,6),{})
+ _path = path_between(
+ 								p(1,1),p(srcx,srcy),{})
 	_dbg[3] = #_path
+	_dj_map = arr_to_tbl(_path)
 end
 
 function dbg(str)
@@ -79,7 +83,7 @@ function _draw()
  map()
  camera(_camx,_camy)
  
- drw_rcts(_gen_rct)
+-- drw_rcts(_gen_rct)
  
  for po in all(_ps) do
   pset(ox+po.x,oy+po.y,16)
@@ -124,7 +128,30 @@ function _draw()
 	 end
  end
  
+ -- draw dijkstramap
+-- for tl in all(_path) do
+--  print(tl.dst,
+--  					2+tl.po.x*8,2+tl.po.y*8,
+--  					1)
+-- end
+ -- draw goal
+ print("★",srcx*8,srcy*8,9)
+ 
+ -- draw best path
+ local px,py = 14,14
+ local nd,d = min_d_on_map(
+ 											_dj_map,
+ 											p(px,py),{}) 												
+ print_t("❎"..d,px+nd.x,py+nd.y)
+ local pth = go_to_o(_dj_map,p(px,py),{})
+ for pt in all(pth) do
+  print_t("웃",pt.x,pt.y)
+ end
 -- _dbg ={}
+end
+
+function print_t(c,x,y)
+ print(c,2+x*8,2+y*8,2)
 end
 
 function _update60()
@@ -382,6 +409,63 @@ function chk_solid(po)
 	return fget(til,0)
 end
 
+function arr_to_tbl(arr)
+ local tbl = {}
+ for ti in all(arr) do
+  tbl[ptoi(ti.po)] = ti.dst
+ end
+ return tbl
+end
+
+function go_to_o(lookup,pos,ocp)
+ local cp,cd = min_d_on_map(lookup,pos,ocp)
+ local path = {p(pos.x+cp.x,pos.y+cp.y)}
+ local nxtp = path[1]
+ while cd > 0 do
+ 	cp,cd = min_d_on_map(lookup,nxtp,ocp)
+ 	local np = p(nxtp.x+cp.x,nxtp.y+cp.y)
+ 	add(path,p(np.x,np.y))
+ 	nxtp = np
+ end
+ 
+ return path
+end
+
+function min_d_on_map(lookup,pos,ocp)
+-- local lookup = arr_to_tbl(nodes)
+ local mini,mind = -1,999
+ local curd = lookup[ptoi(pos)]
+ 
+ -- if we are on map our min is our current dist
+ if curd then
+  mind = curd
+ end
+ 
+ for i=1,#dirs do
+  local nx = pos.x+dirs[i].x
+  local ny = pos.y+dirs[i].y
+  
+  local ndist = 999
+  local look_d = lookup[ptoi(p(nx,ny))]
+  -- if lookd_d is on path  
+  -- and aint occupied
+  -- and is new low
+  if look_d 
+  and ocp[ptoi(p(nx,ny))] == nil
+  and look_d < mind
+  then
+			mini = i
+			mind = look_d
+  end
+ end
+ 
+ if mini == -1 then
+  return
+ end
+ 
+ return dirs[mini],mind
+end
+
 function path_between(_a,_b,ocp)
 	local dpth,queue,visited = 0,{},{}
  visited[ptoi(_a)] = true
@@ -425,14 +509,22 @@ function path_between(_a,_b,ocp)
 	 end
 	 	 
 	 if #queue == 0 then
+	  _dbg[5] = "not found"
+
 	  return found
 	 end
 	 
 	 queue = {}
 
  end
- 
  return found
+end
+
+function path_to_o(nodes,st)
+	local arrived = false
+	while not arrived do
+	 
+	end
 end
 
 function flood_fill(po,nxt,ocp)
@@ -525,15 +617,58 @@ function myline(x1,y1,x2,y2)
  
 end
 
+-->8
+-- tmp
+
+function wlk_to_o(nodes,pos,ocp)
+ local lookup = arr_to_tbl(nodes)
+ local mini,mind = -1,999
+ local curpt = ptoi(pos)
+ local curd = lookup[curpt]
+ 
+-- local ocp = {}
+-- for e in all(_ents) do
+-- 	if not e.can_walk and is_player(e) == false then
+-- 		ocp[ptoi(e.pos)] = true
+-- 	end
+-- end
+ 
+ if curd then
+  mind = curd
+ end
+ for i=1,#dirs do
+  local nx = pos.x+dirs[i].x
+  local ny = pos.y+dirs[i].y
+  
+  local ndist = 999
+  local ptile = lookup[ptoi(p(nx,ny))]
+  if ptile and ocp[ptoi(p(nx,ny))] == nil then
+   ndist = ptile
+  end
+  
+  if ndist < mind then
+   mini = i
+   mind = ndist
+  end
+ end
+ 
+ if mini == -1 then
+  return
+ end
+ 
+ ent.d = dirs[mini]
+ move_ent(ent,dirs[mini])
+ ent.d = nil
+end
 __gfx__
-0000000055555555900000094000000460000006c000000ce000000e000000000055550000888800000000000000000000000000000000000000000000000000
+000000005555555590000000a000000060000000c0000000e0000000000000000055550000888800000000000000000000000000000000000000000000000000
 00000000555555550000000000000000000000000000000000000000000000000550055008800880000000000000000000000000000000000000000000000000
-00700700555555550088000000888000008800000808000000088800000000005500005588000088000000000888888000000000088888800000000000000000
-00077000555555550008000000008000000080000888000000080000000000005000000580088008055555508888888800000000008888000000000008888880
-00077000555555550008000000888000000800000008000000008000000000005000000580888808550000558880088805550550088088800550000008888808
-00700700555555550088800000800000000080000008000000000800000000005000000580088808500000050000000055000055880888885550000508888088
-00000000555555550000000000888000008800000000000000088000000000005000000580888808555005558880088800055050088088800000500000880880
-0000000055555555900000094000000460000006c000000ce000000e000000000000000000000000555555558888888800055000000880000005500000088800
+007007005555555590000000a000000060000000c0000000e0000000000000005500005588000088000000000888888000000000088888800000000000000000
+00077000555555550000000000000000000000000000000000000000000000005000000580088008055555508888888800000000008888000000000008888880
+000770005555555590000000a000000060000000c0000000e0000000000000005000000580888808550000558880088805550550088088800550000008888808
+00700700555555550000000000000000000000000000000000000000000000005000000580088808500000050000000055000055880888885550000508888088
+000000005555555590000000a000000060000000c0000000e0000000000000005000000580888808555005558880088800055050088088800000500000880880
+0000000055555555090909090a0a0a0a060606060c0c0c0c0e0e0e0e000000000000000000000000555555558888888800055000000880000005500000088800
 00000000550055050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800008000000000000000000000000000000000
 00000000505505500000000000000000000000000000000000000000000000000000000000000000000000000888888000000000088888800000000000000000
