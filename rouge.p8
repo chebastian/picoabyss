@@ -1285,15 +1285,7 @@ function line_of_sight(a,b)
  return true
 end
 -->8
--- todo
-
--- [x] move blackout to screenspace
--- [x] spawn items only to chests
--- [x] fow
--- [x] atk adjecent
--- [x] atk dst
--- [x] turn order
--- [x] enemies turn is 2 frames in none visible
+-- █ todo
 
 -- [] poison tiles
 -- [] poison slime trail
@@ -1302,22 +1294,29 @@ end
 -- [] slime sight
 -- [] rand room layout
 -- [] rand rooms
-
 -- [] trigger trap dmg
--- [] 111 menu checked set on player for viewing selection in ui
--- [] 222 atk and atk pattern set on entity directly
--- [] 223 onent used for both atk and pickup, does not work when atk multiple tiles
 
--- weapons
--- 
--- swd, single tile atks: 1,2,3,4
--- spear, 2 tiles fwd atks: 1,2,3,4
--- axe, fwd, left, right atks: 1,2,3,4
+-- █ done
+-- [x] move blackout to screenspace
+-- [x] spawn items only to chests
+-- [x] fow
+-- [x] atk adjecent
+-- [x] atk dst
+-- [x] turn order
+-- [x] enemies turn is 2 frames in none visible
 
+
+-- ★★★ defects ★★★
+
+-- [] ★111 menu checked set on player for viewing selection in ui
+-- [] ★222 atk and atk pattern set on entity directly
+-- [] ★223 onent used for both atk and pickup, does not work when atk multiple tiles
+-- [] ★224 ent_at slow?
+
+-- █ ideas
 
 -- exploding barells
 -- could be stationary enemies with 1:hp and eplosion on kill
-
 -- bow n arrow, unlim range til hit enemy
 
 __gfx__
