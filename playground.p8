@@ -27,17 +27,19 @@ function _init()
  _size = 15
  _camx,_camy = 0,0
  _gen_rct= {}
+ srcx = _size-1
+	srcy = _size-1
  gen()
 	find()
 end
 
-srcx = 14
-srcy = 14
+
 function find()
  _path = path_between(
  								p(1,1),p(srcx,srcy),{})
 	_dbg[3] = #_path
 	_dj_map = arr_to_tbl(_path)
+ _golden_path = go_to_o(_dj_map,p(srcx,srcy),{})
 end
 
 function dbg(str)
@@ -117,6 +119,8 @@ function _draw()
 	 end
  end
  
+ srcx,srcy=_size-1,_size-1
+ 
 
  if btnp(❎) then
  	gen()
@@ -138,13 +142,9 @@ function _draw()
  print("★",srcx*8,srcy*8,9)
  
  -- draw best path
- local px,py = 14,14
- local nd,d = min_d_on_map(
- 											_dj_map,
- 											p(px,py),{}) 												
- print_t("❎"..d,px+nd.x,py+nd.y)
- local pth = go_to_o(_dj_map,p(px,py),{})
- for pt in all(pth) do
+ local px,py = srcx,srcy
+-- local pth = go_to_o(_dj_map,p(px,py),{})
+ for pt in all(_golden_path) do
   print_t("웃",pt.x,pt.y)
  end
 -- _dbg ={}
@@ -419,6 +419,9 @@ end
 
 function go_to_o(lookup,pos,ocp)
  local cp,cd = min_d_on_map(lookup,pos,ocp)
+ if not cp then
+  return
+ end
  local path = {p(pos.x+cp.x,pos.y+cp.y)}
  local nxtp = path[1]
  while cd > 0 do
