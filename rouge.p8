@@ -26,6 +26,14 @@ function _init()
 	sfx_door=3
 	initmap()
 	start()
+ genmap()
+end
+
+function genmap()
+ _gen_rct = regen(4,30)	
+ _room_idx = 0
+ foreach(_gen_rct,map_rct)
+ map_doors()
 end
 
 function dbg(str)
@@ -478,7 +486,7 @@ function drw_game()
   end
  end
  
- blackout()
+-- blackout()
  drw_dmg()
  camera(0,0)
  drw_hud()
@@ -515,7 +523,7 @@ function updatefow()
 	 if not line_of_sight(_plyr.pos,p(x,y)) then
   else
    _los[ptoi(p(x,y))]=true
-  	for d in all(dirs) do
+  	for d in all(dir8) do
     _los[ptoi(p(x+d.x,y+d.y))] = true
   	end
   end
@@ -1192,7 +1200,7 @@ function flood_fill(po,nxt,ocp)
  visited[ptoi(_plyr.pos)] = true
  
  local found = {nxt[1]}
- while dpth <= 7 do
+ while dpth <= 2 do
  	dpth+=1
 	 for ite in all(nxt) do
 		 for d in all(dirs) do
@@ -1285,6 +1293,238 @@ function line_of_sight(a,b)
  
  return true
 end
+-->8
+-- gen
+
+function go_to_o(lookup,pos,ocp)
+ local cp,cd = min_d_on_map(lookup,pos,ocp)
+ if not cp then
+  return
+ end
+ local path = {p(pos.x+cp.x,pos.y+cp.y)}
+ local nxtp = path[1]
+ while cd > 0 do
+ 	cp,cd = min_d_on_map(lookup,nxtp,ocp)
+ 	local np = p(nxtp.x+cp.x,nxtp.y+cp.y)
+ 	add(path,p(np.x,np.y))
+ 	nxtp = np
+ end
+ 
+ return path
+end
+
+function min_d_on_map(lookup,pos,ocp)
+-- local lookup = arr_to_tbl(nodes)
+ local mini,mind = -1,999
+ local curd = lookup[ptoi(pos)]
+ 
+ -- if we are on map our min is our current dist
+ if curd then
+  mind = curd
+ end
+ 
+ for i=1,#dirs do
+  local nx = pos.x+dirs[i].x
+  local ny = pos.y+dirs[i].y
+  
+  local ndist = 999
+  local look_d = lookup[ptoi(p(nx,ny))]
+  -- if lookd_d is on path  
+  -- and aint occupied
+  -- and is new low
+  if look_d 
+  and ocp[ptoi(p(nx,ny))] == nil
+  and look_d < mind
+  then
+			mini = i
+			mind = look_d
+  end
+ end
+ 
+ if mini == -1 then
+  return
+ end
+ 
+ return dirs[mini],mind
+end
+
+function path_between(_a,_b,ocp)
+	local dpth,queue,visited = 0,{},{}
+ visited[ptoi(_a)] = true
+ local nxt = {{po=_a,dst=0}}
+ local found = {{po=_a,dst=0}}
+ local goal_rch = false
+ while not goal_rch do
+ 	dpth+=1
+ 	_dbg[2] = "t:"..dpth
+		 _dbg[4] = "nxt: "..#nxt
+	 for ite in all(nxt) do
+	 	
+		 for d in all(dirs) do
+		 	local nxtp= ite.po
+		  local np = p(nxtp.x+d.x
+		  											,nxtp.y+d.y)
+		  local pi = ptoi(np)
+		  if(chk_solid(np) == false
+					  and ocp[pi] == nil
+					  and visited[pi] == nil)
+		  then
+		   visited[ptoi(np)] = true
+		   add(queue,{po=p(np.x,np.y),dst=dpth})
+		  end
+		 end
+	 end
+	 
+	 nxt = {}
+	 for q in all(queue) do
+	  add(nxt,
+	  {po=p(q.po.x,q.po.y),
+	   dst=q.dst})
+	  add(found,
+	   {po=p(q.po.x,q.po.y),
+	    dst=q.dst})
+	  if (q.po.x == _b.x 
+	  and q.po.y == _b.y) then
+	  	_dbg[5] = "✽ound" .. #found
+	   return found
+	  end
+	 end
+	 	 
+	 if #queue == 0 then
+	  _dbg[5] = "not found"
+
+	  return found
+	 end
+	 
+	 queue = {}
+
+ end
+ return found
+end
+
+-- generate
+
+function add_door(r,hr,existing)
+ local ranx = rnd()
+ local np = {}
+ if not hr then
+     np =
+         p(in_rng(r.x+flr(ranx*r.w),r.x+1,r.x+r.w-1),
+     									r.y+r.h)
+    else
+      np = p(r.x+r.w,
+           in_rng(r.y+flr(ranx*r.h),
+                  r.y+1,r.y+r.h-1))
+    end
+ existing[ptoi(np)] = np
+end
+
+function regen(iter,sz)
+	 reload(0x1000, 0x1000, 0x2000)
+  local w,h = sz,sz
+  local rc = rct(0,0,w,h)
+  local iters = iter
+  local rs = {rc}	
+  local cnt = 0
+  _ps = {}
+  while iters > 0 do
+  	local nxt = {}
+   for ir in all(rs) do
+    local hr = iters%2==0
+    local valid = false
+    local retry = 10
+    local nl,nr = {},{}
+    while(not valid) do
+	    nl,nr = spl_rct(ir,hr)
+	    if not hr then
+	     local a,b = p(nl.x,nl.y+nl.h),
+	                 p(nl.x+nl.w,nl.y+nl.h)
+	     valid = _ps[ptoi(a)] == nil and _ps[ptoi(b)] == nil
+	    else
+	      local a,b = p(nl.x+nl.w,nl.y),
+	                 p(nl.x+nl.w,nl.y+nl.h)
+	     valid = _ps[ptoi(a)] == nil and _ps[ptoi(b)] == nil
+	    end
+	    retry -= 1
+	    if retry < 0 then
+	     break
+	    end
+    end
+    cnt += 1
+    add_door(nl,hr,_ps)
+    add(nxt,nl)
+    add(nxt,nr)
+   end
+   
+   rs = {}
+   for n in all(nxt) do
+   	add(rs,n)
+   end
+   iters-=1
+  end
+  
+  return rs
+end
+
+-- utils
+
+function in_rng(n,_min,_max)
+ return min(_max,max(_min,n))
+end
+
+-- rect
+
+function rct(x,y,w,h)
+ return {x=x,y=y,w=w,h=h}
+end
+
+function spl_rct(r,hor)
+	local x,y,w,h = r.x,r.y,r.w,r.h
+ 
+ local sp = in_rng(rnd(),.34,.66)
+ local nw,nh = flr(w*sp),
+ 														flr(h*sp)
+ if hor then
+  return rct(x,y,nw,h),
+  							rct(x+nw,y,w-nw,h)
+ else
+  return rct(x,y,w,nh),
+  							rct(x,y+nh,
+  							w,h-nh)
+ end
+end
+
+-- map things to tilemap
+function map_rct(r)
+ local x,y,w,h = r.x,r.y,r.w,r.h
+ local idx = 1
+ local flrid = 2+_room_idx
+ for i=0,w,1 do
+  mset(x+i,y,idx)
+  mset(x+i,y+h,idx)
+ end
+ 
+ for i=0,h,1 do
+  mset(x,y+i,idx)
+  mset(x+w,y+i,idx)
+  if i != 0 and i != h then
+	  for mx=1,w-1,1 do
+	  	mset(x+mx,y+i,flrid)
+	  end
+  end
+
+ end
+ 
+ _room_idx+=1
+ _room_idx%=5
+end
+
+function map_doors()
+ for k,v in pairs(_ps) do
+  mset(v.x,v.y,9)
+ end
+end
+
 -->8
 -- █ todo
 
