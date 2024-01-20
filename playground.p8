@@ -523,13 +523,6 @@ function path_between(_a,_b,ocp)
  return found
 end
 
-function path_to_o(nodes,st)
-	local arrived = false
-	while not arrived do
-	 
-	end
-end
-
 function flood_fill(po,nxt,ocp)
  local dpth,queue,visited = 0,{},{}
  visited[ptoi(_plyr.pos)] = true
@@ -620,49 +613,6 @@ function myline(x1,y1,x2,y2)
  
 end
 
--->8
--- tmp
-
-function wlk_to_o(nodes,pos,ocp)
- local lookup = arr_to_tbl(nodes)
- local mini,mind = -1,999
- local curpt = ptoi(pos)
- local curd = lookup[curpt]
- 
--- local ocp = {}
--- for e in all(_ents) do
--- 	if not e.can_walk and is_player(e) == false then
--- 		ocp[ptoi(e.pos)] = true
--- 	end
--- end
- 
- if curd then
-  mind = curd
- end
- for i=1,#dirs do
-  local nx = pos.x+dirs[i].x
-  local ny = pos.y+dirs[i].y
-  
-  local ndist = 999
-  local ptile = lookup[ptoi(p(nx,ny))]
-  if ptile and ocp[ptoi(p(nx,ny))] == nil then
-   ndist = ptile
-  end
-  
-  if ndist < mind then
-   mini = i
-   mind = ndist
-  end
- end
- 
- if mini == -1 then
-  return
- end
- 
- ent.d = dirs[mini]
- move_ent(ent,dirs[mini])
- ent.d = nil
-end
 __gfx__
 000000005555555590000000a000000060000000c0000000e0000000000000000055550000888800000000000000000000000000000000000000000000000000
 00000000555555550000000000000000000000000000000000000000000000000550055008800880000000000000000000000000000000000000000000000000
