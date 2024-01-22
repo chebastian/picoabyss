@@ -74,18 +74,10 @@ end
 
 function gen()
 	reload(0x1000, 0x1000, 0x2000)
-
- noize(_size,75)
- next_gen(_size,false)
-
  _gen_rct = regen(_iterations,_size)	
  _room_idx = 0
- foreach(_gen_rct,re_map_rct)
+ foreach(_gen_rct,map_rct)
  re_map_doors()
--- next_gen(_size,true)
--- next_gen(_size,true)
--- re_map_doors()
---  foreach(_gen_rct,re_map_rct)
 
 
 -- next_gen(_size,true)
@@ -209,13 +201,12 @@ function regen(iter,sz)
   _ps = {}
   while iters > 0 do
   	local nxt = {}
-   for ir in all(rs) do
-    local hr = iters%2==0
+	  for ir in all(rs) do
     local valid = false
     local retry = 10
     local nl,nr = {},{}
     while(not valid) do
-	    nl,nr = spl_rct(ir,hr)
+	    nl,nr,hr = spl_rct(ir,hr)
 	    if not hr then
 	     local a,b = p(nl.x,nl.y+nl.h),
 	                 p(nl.x+nl.w,nl.y+nl.h)
@@ -264,13 +255,13 @@ function spl_rct(r,hor)
  local sp = in_rng(rnd(),.34,.66)
  local nw,nh = flr(w*sp),
  														flr(h*sp)
- if hor then
+ if w>h then
   return rct(x,y,nw,h),
-  							rct(x+nw,y,w-nw,h)
+  							rct(x+nw,y,w-nw,h),true
  else
   return rct(x,y,w,nh),
   							rct(x,y+nh,
-  							w,h-nh)
+  							w,h-nh),false
  end
 end
 
@@ -303,30 +294,6 @@ function mset_ig(x,y,t,ig)
  if not ig or not chk_flg(p(x,y),ig) then
   mset(x,y,t)
  end
-end
-
-function re_map_rct(r)
- local x,y,w,h = r.x,r.y,r.w,r.h
- local idx = 1
- local flrid = 2+_room_idx
- for i=0,w,1 do
-  mset_ig(x+i,y,idx,_dirt_f)
-  mset_ig(x+i,y+h,idx,_dirt_f)
- end
- 
- for i=0,h,1 do
-  mset_ig(x,y+i,idx,_dirt_f)
-  mset_ig(x+w,y+i,idx,_dirt_f)
-  if i != 0 and i != h then
---	  for mx=1,w-1,1 do
---	  	mset(x+mx,y+i,flrid)
---	  end
-  end
-
- end
- 
- _room_idx+=1
- _room_idx%=5
 end
 
 function map_doors()
