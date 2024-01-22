@@ -75,7 +75,7 @@ end
 function gen()
 	reload(0x1000, 0x1000, 0x2000)
 
- noize(_size,79)
+ noize(_size,75)
  next_gen(_size,false)
 
  _gen_rct = regen(_iterations,_size)	
@@ -300,7 +300,7 @@ function map_rct(r)
 end
 
 function mset_ig(x,y,t,ig)
- if not chk_flg(x,y,ig) then
+ if not ig or not chk_flg(p(x,y),ig) then
   mset(x,y,t)
  end
 end
@@ -310,13 +310,13 @@ function re_map_rct(r)
  local idx = 1
  local flrid = 2+_room_idx
  for i=0,w,1 do
-  mset(x+i,y,idx)
-  mset(x+i,y+h,idx)
+  mset_ig(x+i,y,idx,_dirt_f)
+  mset_ig(x+i,y+h,idx,_dirt_f)
  end
  
  for i=0,h,1 do
-  mset(x,y+i,idx)
-  mset(x+w,y+i,idx)
+  mset_ig(x,y+i,idx,_dirt_f)
+  mset_ig(x+w,y+i,idx,_dirt_f)
   if i != 0 and i != h then
 --	  for mx=1,w-1,1 do
 --	  	mset(x+mx,y+i,flrid)
@@ -704,6 +704,28 @@ function noize(sz,r)
   end
  end
 end
+-->8
+-- tile rules
+
+-- 0, wall
+--    l: 0,1,2,3,5,6
+--    r: 0,1,2,3,5,6
+--    d: 0,1,2,3,5,6
+--    u: 0,1,2,3,5,6
+-- 1, floor
+--    l: 0,1,2,3,4,5,6
+--    r: 0,1,2,3,4,5,6
+--    u: 0,1,2,3,4,5,6
+--    d: 0,1,2,3,4,5,6
+-- 2, door
+--    l:0
+--    r:0
+--    u:0,5
+--    d:0,5
+-- 3, sand
+-- 4, chest
+-- 5, pot
+-- 6, enemy
 __gfx__
 000000005555555590000000a000000060000000c0000000e0000000000000000055550000888800000000000000000000000000000000000000000000000000
 00000000555555550000000000000000000000000000000000000000000000000550055008800880000000000000000000000000000000000000000000000000
