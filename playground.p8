@@ -8,7 +8,7 @@ function _init()
 	_wnd = {}
 	srand(4)
 	_px,_py = 0,0
-	_drw_dbg = false
+	_drw_dbg = true
 	_upd = upd_game
 	_drw = drw_game
 	push_upd(upd_game)
@@ -76,8 +76,9 @@ function gen()
 	reload(0x1000, 0x1000, 0x2000)
  _gen_rct = regen(_iterations,_size)	
  _room_idx = 0
+-- foreach(_gen_rct,map_rct_rnd)
  foreach(_gen_rct,map_rct)
- re_map_doors()
+-- re_map_doors()
 
 
 -- next_gen(_size,true)
@@ -263,6 +264,39 @@ function spl_rct(r,hor)
   							rct(x,y+nh,
   							w,h-nh),false
  end
+end
+
+function rnd_rng(_min,_max)
+ local r = max(_min,ceil(rnd()*_max))
+ return min(r,_max)
+end 
+
+function map_rct_rnd(r)
+ local nw =	rnd_rng(2,r.w)
+ local nh =	rnd_rng(2,r.h)
+ local nx = r.x+ flr(nw/2)
+ local x,y,w,h = nx,r.y,
+ 																flr(nw/2),nh
+ local idx = 1
+ local flrid = 2+_room_idx
+ for i=0,w,1 do
+  mset(x+i,y,idx)
+  mset(x+i,y+h,idx)
+ end
+ 
+ for i=0,h,1 do
+  mset(x,y+i,idx)
+  mset(x+w,y+i,idx)
+  if i != 0 and i != h then
+	  for mx=1,w-1,1 do
+	  	mset(x+mx,y+i,flrid)
+	  end
+  end
+
+ end
+ 
+ _room_idx+=1
+ _room_idx%=5
 end
 
 -- map things to tilemap
