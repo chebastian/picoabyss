@@ -7,7 +7,7 @@ function _init()
  _dbg = {}
 	_wnd = {}
 	
-	_drw_dbg = false
+	_drw_dbg = true
 	_upd = upd_game
 	_drw = drw_game
 	push_upd(upd_game)
@@ -17,9 +17,11 @@ function _init()
 	_➡️ = p(1,0)
 	buttons = {⬅️,➡️,⬆️,⬇️}
 	dirs = {_⬅️,_➡️,_⬆️,_⬇️}
-	dir8 = {p(-1,0),p(-1,1),p(-1,-1),
-	        p(0,1),p(0,-1),
-	        p(1,0), p(1,1), p(1,-1)}
+	dir8 = {p(-1,0),p(-1,-1),
+	    				p(0,-1),
+	        p(1,-1),p(1,0),
+	        p(1,1), p(0,1),
+	        p(-1,1)}
 	sfx_wkl=0
 	sfx_bmp=1
 	sfx_lmp=2
@@ -57,6 +59,7 @@ function _draw()
 	cls()
  _drw()
  drw_win()
+ _dbg[1] = tile_sig(_plyr.pos)
  
  if _drw_dbg then
 	 cursor(0,20)
@@ -1523,6 +1526,20 @@ function map_doors()
  for k,v in pairs(_ps) do
   mset(v.x,v.y,9)
  end
+end
+
+function tile_sig(po)
+ local sig = 0
+ for d in all(dir8) do
+  if chk_solid(add_t(po,d)) then
+   sig += 1
+   sig = shl(sig,1)
+  else
+   sig = shl(sig,1)
+  end
+ end
+ 
+ return sig
 end
 
 -->8
