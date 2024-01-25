@@ -1530,15 +1530,15 @@ end
 
 function tile_sig(po)
  local sig = 0
- for d in all(dir8) do
+ for i=1,8 do
+  local d = dir8[i]
   if chk_solid(add_t(po,d)) then
    sig += 1
-   sig = shl(sig,1)
-  else
-   sig = shl(sig,1)
+  end
+  if(i < 8) then
+  	sig = shl(sig,1)
   end
  end
- 
  return sig
 end
 
