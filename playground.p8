@@ -175,6 +175,10 @@ _mode = 1
 function mode()
  return _modes[_mode]
 end
+
+function log(st,y)
+ _dbg[y] = st
+end
  
 function _draw()
 	cls()
@@ -194,13 +198,9 @@ function _draw()
   _mode += 1
   end
   
-  _mode %= #_modes+1
-	 print(mode(),10,10)
- end
- 
- 
- local camsp = 1
- if mode() == "cam" then
+ _mode = max(1,_mode%(#_modes+1))
+ elseif mode() == "cam" then
+  local camsp = 1
  	if btn(⬆️) then
 	  _camy -= camsp
 	 elseif btn(⬇️) then
@@ -251,13 +251,21 @@ function _draw()
  
  palt(14,true)
  spr(49,_curx,_cury)
+ 
+ drw_hud()
+end
 
+function drw_hud()
+camera(0,0)
+
+	log("" .. mode(),1)
  if _drw_dbg then
 	 cursor(0,20)
 	 for i=1,10 do
-	  print(_dbg[i],6)
+	  print(_dbg[i],8)
 	 end
  end
+camera(_camx,_camy)
 end
 
 function print_t(c,x,y)
