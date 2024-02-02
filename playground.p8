@@ -147,17 +147,9 @@ function dig(po)
 end
 
 function dig_tunnel()
---	local pt = arr_choose(_digable)
--- local ndig = dig(pt)
--- local keepdigging = _ndig > 0
  local start = arr_choose(_digable)
  local ndig = dig(start)
  local keepdigging = #ndig > 0
-
--- printh("alts: ".. #ndig .. " nxt: "..tostr(pt))
--- stop()
---	_curx=pt.x*8
---	_cury=pt.y*8
 
 	local dug = {}
  while keepdigging do
@@ -182,11 +174,8 @@ function gen()
  _room_idx = 0
  foreach(_gen_rct,map_rct_rnd)
 
-
 -- set tiles digable when
 -- sourounded by walls
-	
-
 	set_digable_start()
 	
 	update_digables()
@@ -195,20 +184,6 @@ function gen()
 		update_digables()
 	end
 	
---		update_digables()		
---	end
---	local pt = _digable[flr(rnd(#_digable))]
--- local ndig = dig(pt)
--- local keepdigging = #ndig > 0
---
--- while keepdigging do
---		local pdig = arr_choose(ndig)
--- 	ndig = dig(pdig)
--- 	_curx=pdig.x*8
--- 	_cury=pdig.y*8
--- 	keepdigging = #ndig > 0 	
--- end
--- 
  set_digable_start()
 end
 
