@@ -114,6 +114,71 @@ function drw_rcts(rs)
 	end
 end
 
+function update_digables()
+	_digable = {}
+	mapsig(function(x,y,sig)
+								 if sig == sig_dig then
+											mset(x,y,t_dig)
+											add(_digable,{x=x,y=y})
+									end								
+								end)
+end
+
+function is_carvable(a)
+	for i=1,#sig_dir do
+	 if sig_match(a,sig_dir[i],sig_msk[i]) then
+	 	return true
+	 end
+	end
+	return false
+end
+
+function dig(po)
+	printh("digging: " .. po.x ..":"..po.y)
+ local px,py,dx,dy = po.x,po.y,0,1
+	mset(px,py,0)
+	local nextdig = {}
+	for dr in all(dirs) do
+		if not chk_solid(po) and is_carvable(tile_sig(add_t(po,dr))) then
+			add(nextdig,add_t(po,dr))
+		end
+	end	
+	
+--	printh("c:"..#nextdig)
+	return nextdig
+end
+
+function dig_tunnel()
+--	local pt = arr_choose(_digable)
+-- local ndig = dig(pt)
+-- local keepdigging = _ndig > 0
+ local start = arr_choose(_digable)
+ local ndig = dig(start)
+ local keepdigging = #ndig > 0
+
+-- printh("alts: ".. #ndig .. " nxt: "..tostr(pt))
+-- stop()
+--	_curx=pt.x*8
+--	_cury=pt.y*8
+
+	local dug = {}
+ while keepdigging do
+		local pdig = arr_choose(ndig)
+		if dug[ptoi(pdig)] then
+			printh("hello")
+			stop()
+			break
+		end
+		dug[ptoi(pdig)] = true
+ 	ndig = dig(pdig)
+ 	printh("alts: ".. #ndig .. " nxt: "..tostr(pt))
+  printh("sig: " ..tile_sig(pdig) .. "solid: " .. tostr(chk_solid(pdig)))
+ 	_curx=pdig.x*8
+ 	_cury=pdig.y*8
+ 	keepdigging = #ndig > 0 	
+ end
+end
+
 function gen()
 	reload(0x1000, 0x1000, 0x2000)
  fill_map(1)
@@ -125,49 +190,35 @@ function gen()
 -- set tiles digable when
 -- sourounded by walls
 	
-	local digable = {}
-	mapsig(function(x,y,sig)
-								 if sig == sig_dig then
-											mset(x,y,t_dig)
-											add(digable,{x=x,y=y})
-									end								
-								end)
 
 	set_digable_start()
-						
-	_dbg[4] = #digable
-	local pt = digable[flr(rnd(#digable))]
- 
- printh("dig############")
- local ndig = dig(pt)
--- stop()
- local keepdigging = #ndig > 0
- while keepdigging do
-		local pdig = arr_choose(ndig)
---  printh("dig: " .. pdig.x ..":"..pdig.y)
--- 	ndig = dig(pdig)
- 	_curx=pdig.x*8
- 	_cury=pdig.y*8
- 	keepdigging=false
- 	
- 	--
- 	-- try to step over keep digging to see what happend
- 	-- perhaps rand is not the issue
- 	-- 
- 	
- 
- 	set_digable_start()
- end
- 
- set_digable_start()
- rnd_sanity()
-
-end
-
-function rnd_sanity()
-	for i=0,5 do
-		printh("t: "..arr_choose({1,2}))
+	
+	update_digables()
+	while #_digable>1 do
+		local st = dig_tunnel()
+		update_digables()
+		printh(#_digable..": diggables")
+		stop()
 	end
+
+	printh("⬇️🅾️♪░")
+	stop()
+	
+--		update_digables()		
+--	end
+--	local pt = _digable[flr(rnd(#_digable))]
+-- local ndig = dig(pt)
+-- local keepdigging = #ndig > 0
+--
+-- while keepdigging do
+--		local pdig = arr_choose(ndig)
+-- 	ndig = dig(pdig)
+-- 	_curx=pdig.x*8
+-- 	_cury=pdig.y*8
+-- 	keepdigging = #ndig > 0 	
+-- end
+-- 
+ set_digable_start()
 end
 
 function rnd_int(n)
@@ -201,12 +252,10 @@ function sig_match(a,b,mask)
 end
 
 function is_digable(a)
-	for i=1,#sig_dir do
-	 if sig_match(a,sig_dir[i],sig_msk[i]) then
-	 	return true
-	 end
-	end
-	return sig_match(a,255,0)
+ if sig_match(a,255) then
+ 	return true
+ end
+	return false
 end
 
 function sig_matchx(a,b,masks)
@@ -224,21 +273,6 @@ sig_right= 255-8
 sig_up   = 255-32
 sig_left = 255-128
 
-
-
-function dig(po)
- local px,py,dx,dy = po.x,po.y,0,1
-	mset(px,py,0)
-	local nextdig = {}
-	for dr in all(dirs) do
-		if is_digable(tile_sig(add_t(po,dr))) then
-			add(nextdig,add_t(po,dr))
-		end
-	end	
-	
-	printh("c:"..#nextdig)
-	return nextdig
-end
 
 function mapt(func)
 	for y=0,_size do
