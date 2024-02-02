@@ -156,7 +156,7 @@ function dig_tunnel()
 		local pdig = arr_choose(ndig)
 		if dug[ptoi(pdig)] then
 			printh("backtracking lets break")
-			stop()
+			break
 		end
 		dug[ptoi(pdig)] = true
  	ndig = dig(pdig)
