@@ -25,36 +25,6 @@ function _init()
 									p(-1,-1), p(1,-1),
 								 p(1,1),p(-1,1)}
 	
-	sig_left  = 0b01111111
-	sig_up    = 0b10111111
-	sig_right = 0b11011111
-	sig_down  = 0b11101111
-	msk_diag  = 0b00001111
-	msk_card  = 0b11110000
-	
-	sig_dir = {
-	0b11111111,
-	0b01110110, -- left
-	0b10110011, -- up
-	0b11011001, -- right
-	0b11101100, -- down
-	}
-	
-	sig_msk = {
-	0b00000000,
-	0b00001001,
-	0b00001100,
-	0b00000110,
-	0b00000011,
-	}
-	
-	
-	sig_dirs = {
-	sig_dwn,
-	sig_right,
-	sig_up,
-	sig_left}
-	
 -- _rcts = {}
  _ps = {}
  _iterations = 3
@@ -77,9 +47,29 @@ function _init()
 	t_dig = 36
 	t_ndig = 1
 	
+	
+
+	init_dig()	
 	gen()
 end
 
+function init_dig()
+	sig_dir = {
+	0b11111111,
+	0b01110110, -- left
+	0b10110011, -- up
+	0b11011001, -- right
+	0b11101100, -- down
+	}
+	
+	sig_msk = {
+	0b00000000,
+	0b00001001,
+	0b00001100,
+	0b00000110,
+	0b00000011,
+	}
+end
 
 function find()
  _path = path_between(
@@ -112,152 +102,6 @@ function drw_rcts(rs)
 		c%=max(1,#cs)
 	 drw_rct(r,cs[c])
 	end
-end
-
-function update_digables()
-	_digable = {}
-	mapsig(function(x,y,sig)
-								 if chk_solid(p(x,y)) and sig == sig_dig then
-											mset(x,y,t_dig)
-											add(_digable,{x=x,y=y})
-									end								
-								end)
-end
-
-function is_carvable(a)
-	for i=1,#sig_dir do
-	 if sig_match(a,sig_dir[i],sig_msk[i]) then
-	 	return true
-	 end
-	end
-	return false
-end
-
-function dig(po)
- local px,py,dx,dy = po.x,po.y,0,1
-	mset(px,py,0)
-	local nextdig = {}
-	for dr in all(dirs) do
-		if not chk_solid(po) and is_carvable(tile_sig(add_t(po,dr))) then
-			add(nextdig,add_t(po,dr))
-		end
-	end	
-	
-	return nextdig
-end
-
-function dig_tunnel()
- local start = arr_choose(_digable)
- local ndig = dig(start)
- local keepdigging = #ndig > 0
-
-	local dug = {}
- while keepdigging do
-		local pdig = arr_choose(ndig)
-		if dug[ptoi(pdig)] then
-			printh("backtracking lets break")
-			break
-		end
-		dug[ptoi(pdig)] = true
- 	ndig = dig(pdig)
-
- 	_curx=pdig.x*8
- 	_cury=pdig.y*8
- 	keepdigging = #ndig > 0 	
- end
-end
-
-function gen()
-	reload(0x1000, 0x1000, 0x2000)
- fill_map(1)
- _gen_rct = regen(_iterations,_size)	
- _room_idx = 0
- foreach(_gen_rct,map_rct_rnd)
-
--- set tiles digable when
--- sourounded by walls
-	set_digable_start()
-	
-	update_digables()
-	while #_digable>1 do
-		local st = dig_tunnel()
-		update_digables()
-	end
-	
- set_digable_start()
-end
-
-function rnd_int(n)
-	return flr(rnd()*n)
-end
-
-function rnd_idx(n)
-	return rnd_int(n)+1
-end
-
-function arr_choose(myarr)
-	local mri = rnd_idx(#myarr)
-	return myarr[mri]
-end
-
-function set_digable_start()
-	mapsig(function(x,y,sig)
-								 if chk_solid(p(x,y)) then
-									 if is_digable(sig) then
-									 	mset(x,y,t_dig)
-									 	add(digs,p(x,y))
-									 else
-									 	mset(x,y,t_ndig)
-									 end
-								 end
-							end)
-end
-
-function sig_match(a,b,mask)
-	return bor(a,mask) == bor(b,mask)
-end
-
-function is_digable(a)
- if sig_match(a,255) then
- 	return true
- end
-	return false
-end
-
-function sig_matchx(a,b,masks)
-	for msk in all(masks) do
-		if sig_match(a,b,msk) then
-			return true
-		end
-	end
-	
-	return false
-end
-
-sig_dwn  = 255-2
-sig_right= 255-8
-sig_up   = 255-32
-sig_left = 255-128
-
-
-function mapt(func)
-	for y=0,_size do
-		for x=0,_size do
-			func(x,y,mget(x,y))
-		end
-	end
-end
-
-function mapsig(func)
-	for y=0,_size do
-		for x=0,_size do
-			func(x,y,tile_sig(p(x,y)))
-		end
-	end
-end
-
-function set_if(wh,to,x,y,sig)
-	
 end
 
 function upd_cursor()
@@ -970,6 +814,131 @@ end
 -- 4, chest
 -- 5, pot
 -- 6, enemy
+-->8
+-- gen and dig
+
+
+function update_digables()
+	_digable = {}
+	mapsig(function(x,y,sig)
+								 if chk_solid(p(x,y)) and sig == sig_dig then
+											mset(x,y,t_dig)
+											add(_digable,{x=x,y=y})
+									end								
+								end)
+end
+
+function is_carvable(a)
+	for i=1,#sig_dir do
+	 if sig_match(a,sig_dir[i],sig_msk[i]) then
+	 	return true
+	 end
+	end
+	return false
+end
+
+function dig(po)
+ local px,py,dx,dy = po.x,po.y,0,1
+	mset(px,py,0)
+	local nextdig = {}
+	for dr in all(dirs) do
+		if not chk_solid(po) and is_carvable(tile_sig(add_t(po,dr))) then
+			add(nextdig,add_t(po,dr))
+		end
+	end	
+	
+	return nextdig
+end
+
+function dig_tunnel()
+ local start = arr_choose(_digable)
+ local ndig = dig(start)
+ local keepdigging = #ndig > 0
+
+	local dug = {}
+ while keepdigging do
+		local pdig = arr_choose(ndig)
+		if dug[ptoi(pdig)] then
+			printh("backtracking lets break")
+			break
+		end
+		dug[ptoi(pdig)] = true
+ 	ndig = dig(pdig)
+
+ 	_curx=pdig.x*8
+ 	_cury=pdig.y*8
+ 	keepdigging = #ndig > 0 	
+ end
+end
+
+function gen()
+	reload(0x1000, 0x1000, 0x2000)
+ fill_map(1)
+ _gen_rct = regen(_iterations,_size)	
+ _room_idx = 0
+ foreach(_gen_rct,map_rct_rnd)
+
+-- set tiles digable when
+-- sourounded by walls
+	set_digable_start()
+	
+	update_digables()
+	while #_digable>1 do
+		local st = dig_tunnel()
+		update_digables()
+	end
+	
+ set_digable_start()
+end
+
+function set_digable_start()
+	mapsig(function(x,y,sig)
+								 if chk_solid(p(x,y)) then
+									 if is_digable(sig) then
+									 	mset(x,y,t_dig)
+									 	add(digs,p(x,y))
+									 else
+									 	mset(x,y,t_ndig)
+									 end
+								 end
+							end)
+end
+
+function sig_match(a,b,mask)
+	return bor(a,mask) == bor(b,mask)
+end
+
+function is_digable(a)
+ if sig_match(a,255) then
+ 	return true
+ end
+	return false
+end
+
+-- utils for rnd
+
+
+function rnd_int(n)
+	return flr(rnd()*n)
+end
+
+function rnd_idx(n)
+	return rnd_int(n)+1
+end
+
+function arr_choose(myarr)
+	local mri = rnd_idx(#myarr)
+	return myarr[mri]
+end
+
+function mapsig(func)
+	for y=0,_size do
+		for x=0,_size do
+			func(x,y,tile_sig(p(x,y)))
+		end
+	end
+end
+
 __gfx__
 000000001111111190000000a000000060000000c0000000e0000000000000000055550000888800000000000000000000000000000000000000000000000000
 00000000111111110000000000000000000000000000000000000000000000000550055008800880000000000000000000000000000000000000000000000000
