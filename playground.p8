@@ -134,7 +134,6 @@ function is_carvable(a)
 end
 
 function dig(po)
-	printh("digging: " .. po.x ..":"..po.y)
  local px,py,dx,dy = po.x,po.y,0,1
 	mset(px,py,0)
 	local nextdig = {}
@@ -144,7 +143,6 @@ function dig(po)
 		end
 	end	
 	
---	printh("c:"..#nextdig)
 	return nextdig
 end
 
@@ -165,14 +163,12 @@ function dig_tunnel()
  while keepdigging do
 		local pdig = arr_choose(ndig)
 		if dug[ptoi(pdig)] then
-			printh("hello")
+			printh("backtracking lets break")
 			stop()
-			break
 		end
 		dug[ptoi(pdig)] = true
  	ndig = dig(pdig)
- 	printh("alts: ".. #ndig .. " nxt: "..tostr(pt))
-  printh("sig: " ..tile_sig(pdig) .. "solid: " .. tostr(chk_solid(pdig)))
+
  	_curx=pdig.x*8
  	_cury=pdig.y*8
  	keepdigging = #ndig > 0 	
@@ -197,12 +193,7 @@ function gen()
 	while #_digable>1 do
 		local st = dig_tunnel()
 		update_digables()
-		printh(#_digable..": diggables")
-		stop()
 	end
-
-	printh("⬇️🅾️♪░")
-	stop()
 	
 --		update_digables()		
 --	end
