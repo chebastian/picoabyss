@@ -117,7 +117,7 @@ end
 function update_digables()
 	_digable = {}
 	mapsig(function(x,y,sig)
-								 if sig == sig_dig then
+								 if chk_solid(p(x,y)) and sig == sig_dig then
 											mset(x,y,t_dig)
 											add(_digable,{x=x,y=y})
 									end								
