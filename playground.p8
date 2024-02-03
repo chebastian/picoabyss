@@ -786,7 +786,6 @@ end
 -->8
 -- gen and dig
 
-
 function update_digables()
 	_digable = {}
 	mapsig(function(x,y,sig)

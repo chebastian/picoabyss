@@ -34,7 +34,7 @@ end
 function genmap()
  _gen_rct = regen(4,30)	
  _room_idx = 0
- foreach(_gen_rct,map_rct)
+ foreach(_gen_rct,map_rct_rnd)
  map_doors()
 end
 
@@ -59,8 +59,7 @@ function _draw()
 	cls()
  _drw()
  drw_win()
- _dbg[1] = tile_sig(_plyr.pos)
- 
+  
  if _drw_dbg then
 	 cursor(0,20)
 	 for i=0,10 do
@@ -1122,19 +1121,6 @@ function ent_to_idx(ent)
  return ptoi(ent.pos)
 end
 
---function arr_cont(arr,a,cmp)
--- return arr_find(arr,a,cmp) != nil
---end
---
---function arr_find(arr,a,cmp)
--- for it in all(arr) do
---  if cmp(a,it) then
---   return it
---  end
--- end
--- return nil
---end
-
 function lerp(a,b,d)
 	if(d >= 1.0) return b
  return a+(b-a)*d
@@ -1296,6 +1282,14 @@ function line_of_sight(a,b)
  
  return true
 end
+
+-- rnd
+
+function rnd_rng(_min,_max)
+ local r = max(_min,ceil(rnd()*_max))
+ return min(r,_max)
+end 
+
 -->8
 -- gen
 
@@ -1522,25 +1516,41 @@ function map_rct(r)
  _room_idx%=5
 end
 
+function map_rct_rnd(r)
+-- ★ hack to never gen rooms of size 1
+ local nw =	rnd_rng(r.w/2,r.w)
+ local nh =	rnd_rng(r.h/2,r.h)
+ local nx = r.x
+ local x,y,w,h = nx,r.y,
+ 																nw,nh
+ local idx = 1
+ local flrid = 2+_room_idx
+ for i=0,w,1 do
+  mset(x+i,y,idx)
+  mset(x+i,y+h,idx)
+ end
+ 
+ for i=0,h,1 do
+  mset(x,y+i,idx)
+  mset(x+w,y+i,idx)
+  if i != 0 and i != h then
+	  for mx=1,w-1,1 do
+	  	mset(x+mx,y+i,flrid)
+	  end
+  end
+
+ end
+ 
+ _room_idx+=1
+ _room_idx%=5
+end
+
 function map_doors()
  for k,v in pairs(_ps) do
   mset(v.x,v.y,9)
  end
 end
 
-function tile_sig(po)
- local sig = 0
- for i=1,8 do
-  local d = dir8[i]
-  if chk_solid(add_t(po,d)) then
-   sig += 1
-  end
-  if(i < 8) then
-  	sig = shl(sig,1)
-  end
- end
- return sig
-end
 
 -->8
 -- █ todo
