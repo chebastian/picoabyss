@@ -43,11 +43,6 @@ function _init()
 	_cam_mode = false
 	ox = 10
 	oy = 10
-	sig_dig = 255
-	t_dig = 36
-	t_ndig = 1
-	
-	
 
 	init_dig()	
 	gen()
@@ -76,6 +71,10 @@ function init_dig()
 	0b00000110,
 	0b00000011,
 	}
+	
+	sig_dig = 255
+	t_dig = 36
+	t_ndig = 1
 end
 
 function find()
@@ -741,21 +740,6 @@ function myline(x1,y1,x2,y2)
  	end
  end
  
- 
-end
-
-function tile_sig(po)
- local sig = 0
- for i=1,8 do
-  local d = dir8[i]
-  if chk_solid(add_t(po,d)) then
-   sig += 1
-  end
-  if(i < 8) then
-  	sig = shl(sig,1)
-  end
- end
- return sig
 end
 -->8
 -- automata
@@ -799,28 +783,6 @@ function noize(sz,r)
   end
  end
 end
--->8
--- tile rules
-
--- 0, wall
---    l: 0,1,2,3,5,6
---    r: 0,1,2,3,5,6
---    d: 0,1,2,3,5,6
---    u: 0,1,2,3,5,6
--- 1, floor
---    l: 0,1,2,3,4,5,6
---    r: 0,1,2,3,4,5,6
---    u: 0,1,2,3,4,5,6
---    d: 0,1,2,3,4,5,6
--- 2, door
---    l:0
---    r:0
---    u:0,5
---    d:0,5
--- 3, sand
--- 4, chest
--- 5, pot
--- 6, enemy
 -->8
 -- gen and dig
 
@@ -946,6 +908,22 @@ function mapsig(func)
 	end
 end
 
+
+-- signature funcs
+
+function tile_sig(po)
+ local sig = 0
+ for i=1,8 do
+  local d = dir8[i]
+  if chk_solid(add_t(po,d)) then
+   sig += 1
+  end
+  if(i < 8) then
+  	sig = shl(sig,1)
+  end
+ end
+ return sig
+end
 __gfx__
 000000001111111190000000a000000060000000c0000000e0000000000000000055550000888800000000000000000000000000000000000000000000000000
 00000000111111110000000000000000000000000000000000000000000000000550055008800880000000000000000000000000000000000000000000000000
