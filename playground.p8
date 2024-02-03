@@ -54,6 +54,13 @@ function _init()
 end
 
 function init_dig()
+	-- important that dir8 is in this order
+	dir8 = {p(-1,0),p(0,-1),
+									p(1,0),	p(0,1),
+									
+									p(-1,-1), p(1,-1),
+								 p(1,1),p(-1,1)}
+								 
 	sig_dir = {
 	0b11111111,
 	0b01110110, -- left
