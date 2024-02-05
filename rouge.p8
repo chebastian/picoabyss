@@ -1540,7 +1540,6 @@ end
 
 -- gen and dig
 function init_gen()
-	-- important that dir8 is in this order						 
 	sig_dir = {
 	0b11111111,
 	0b01110110, -- left
