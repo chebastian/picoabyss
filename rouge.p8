@@ -1690,6 +1690,23 @@ function fill_map(t)
 		end)
 end
 
+function flag_map()
+ local cf = 0
+ local mapf = {}
+ mapsig(
+ function(x,y,sig)
+ 		local idx = ptoi(p(x,y))
+   if mapf[idx] then
+   else
+   	flag_section(x,y,cf)
+   end
+ end
+ )
+end
+
+function flag_section(x,y,f)
+	flood_fill_x(p(x,y),{},{})
+end
 
 -- signature funcs
 
@@ -1705,6 +1722,57 @@ function tile_sig(po)
   end
  end
  return sig
+end
+
+-- 
+-- flood alt
+-- 
+
+function flood_fill_x(po,ocp)
+ local dpth,queue,visited = 0,{},{}
+ visited[ptoi(po)] = true
+ local nxt = {}
+ add(nxt,{po=p(po.x,p.y),dst=0})
+
+ local found = {nxt[1]}
+ while dpth <= 255 do
+ 	dpth+=1
+	 for ite in all(nxt) do
+		 for d in all(dirs) do
+		  local it = ite.po
+		  local np = p(it.x+d.x,it.y+d.y)
+		  local pi = ptoi(np)
+		  if(chk_solid(np) == false
+					  and ocp[pi] == nil
+					  and visited[pi] == nil)
+		  then
+		   visited[ptoi(np)] = true
+		   add(queue,{po=p(np.x,np.y),dst=dpth})
+		  end
+		 end
+	 end
+	 
+	 nxt = {}
+	 for q in all(queue) do
+	  add(nxt,
+	  {po=p(q.po.x,q.po.y),
+	   dst=q.dst})
+	  add(found,
+	   {po=p(q.po.x,q.po.y),
+	    dst=q.dst})
+	 end
+	 	 
+	 if #queue == 0 then
+	  return found
+	 end
+	 
+	 queue = {}
+
+ end
+ 
+ printh("maximum depth flooded")
+ stop()
+ return found
 end
 
 
