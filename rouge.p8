@@ -27,33 +27,12 @@ function _init()
 	sfx_bmp=1
 	sfx_lmp=2
 	sfx_door=3
-	initmap()
 	start()
- genmap()
-end
-
-function genmap()
- _gen_rct = regen(4,30)	
- _room_idx = 0
- foreach(_gen_rct,map_rct_rnd)
- map_doors()
+	gen()
 end
 
 function dbg(str)
  add(_dbg,str)
-end
-
-function initmap()
- for y=1,64 do
-  for x=1,65 do
-   if mget(x,y) == 1 then
-    local tbx,tby=x,y+1
-    if mget(tbx,tby) == 0 then
-     mset(tbx,tby,17)
-    end
-   end
-  end
- end
 end
 
 function _draw()
@@ -1552,6 +1531,189 @@ function map_doors()
  end
 end
 
+-- 
+-- ● gen maze
+--
+
+-- gen and dig
+function init_gen()
+	-- important that dir8 is in this order
+	dir8 = {p(-1,0),p(0,-1),
+									p(1,0),	p(0,1),
+									
+									p(-1,-1), p(1,-1),
+								 p(1,1),p(-1,1)}
+								 
+	sig_dir = {
+	0b11111111,
+	0b01110110, -- left
+	0b10110011, -- up
+	0b11011001, -- right
+	0b11101100, -- down
+	}
+	
+	sig_msk = {
+	0b00000000,
+	0b00001001,
+	0b00001100,
+	0b00000110,
+	0b00000011,
+	}
+	
+	_iterations = 3
+	_size = 30
+	sig_dig = 255
+	t_dig = 49
+	t_ndig = 1
+end
+
+
+function update_digables()
+	_digable = {}
+	mapsig(function(x,y,sig)
+								 if chk_solid(p(x,y)) and sig == sig_dig then
+											mset(x,y,t_dig)
+											add(_digable,{x=x,y=y})
+									end								
+								end)
+end
+
+function is_carvable(a)
+	for i=1,#sig_dir do
+	 if sig_match(a,sig_dir[i],sig_msk[i]) then
+	 	return true
+	 end
+	end
+	return false
+end
+
+function dig(po)
+ local px,py,dx,dy = po.x,po.y,0,1
+	mset(px,py,0)
+	local nextdig = {}
+	for dr in all(dirs) do
+		if not chk_solid(po) and is_carvable(tile_sig(add_t(po,dr))) then
+			add(nextdig,add_t(po,dr))
+		end
+	end	
+	
+	return nextdig
+end
+
+function dig_tunnel()
+ local start = arr_choose(_digable)
+ local ndig = dig(start)
+ local keepdigging = #ndig > 0
+
+	local dug = {}
+ while keepdigging do
+		local pdig = arr_choose(ndig)
+		if dug[ptoi(pdig)] then
+			printh("backtracking lets break")
+			break
+		end
+		dug[ptoi(pdig)] = true
+ 	ndig = dig(pdig)
+
+ 	_curx=pdig.x*8
+ 	_cury=pdig.y*8
+ 	keepdigging = #ndig > 0 	
+ end
+end
+
+function gen()
+	init_gen()
+ fill_map(1)
+ _gen_rct = regen(_iterations,_size)	
+ _room_idx = 0
+ foreach(_gen_rct,map_rct_rnd)
+
+-- set tiles digable when
+-- sourounded by walls
+	set_digable_start()
+	
+	update_digables()
+	while #_digable>1 do
+		local st = dig_tunnel()
+		update_digables()
+	end
+	
+ set_digable_start()
+end
+
+function set_digable_start()
+	mapsig(function(x,y,sig)
+								 if chk_solid(p(x,y)) then
+									 if is_digable(sig) then
+									 	mset(x,y,t_dig)
+									 	add(digs,p(x,y))
+									 else
+									 	mset(x,y,t_ndig)
+									 end
+								 end
+							end)
+end
+
+function sig_match(a,b,mask)
+	return bor(a,mask) == bor(b,mask)
+end
+
+function is_digable(a)
+ if sig_match(a,255) then
+ 	return true
+ end
+	return false
+end
+
+-- utils for rnd
+
+
+function rnd_int(n)
+	return flr(rnd()*n)
+end
+
+function rnd_idx(n)
+	return rnd_int(n)+1
+end
+
+function arr_choose(myarr)
+	local mri = rnd_idx(#myarr)
+	return myarr[mri]
+end
+
+function mapsig(func)
+	for y=0,_size do
+		for x=0,_size do
+			func(x,y,tile_sig(p(x,y)))
+		end
+	end
+end
+
+function fill_map(t)
+	for y=0,_size do
+ 	for x=0,_size do
+   mset(x,y,t)
+ 	end
+ end
+end
+
+
+-- signature funcs
+
+function tile_sig(po)
+ local sig = 0
+ for i=1,8 do
+  local d = dir8[i]
+  if chk_solid(add_t(po,d)) then
+   sig += 1
+  end
+  if(i < 8) then
+  	sig = shl(sig,1)
+  end
+ end
+ return sig
+end
+
 
 -->8
 -- █ todo
@@ -1848,7 +2010,7 @@ __label__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 
 __gff__
-0005000000000000000700030003000300000000000008000000000300030000000101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0005000000000000000700030003000300000000000008000000000300030000000101000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008080808000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __map__
 0102030505050505050505050505050505050505050505050505050505050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
