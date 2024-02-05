@@ -17,6 +17,8 @@ function _init()
 	_➡️ = p(1,0)
 	buttons = {⬅️,➡️,⬆️,⬇️}
 	dirs = {_⬅️,_➡️,_⬆️,_⬇️}
+	-- important to keep order
+	-- used in tilesig
 	dir8 = {p(-1,0),p(0,-1),
 									p(1,0),	p(0,1),
 									
@@ -1541,13 +1543,7 @@ end
 
 -- gen and dig
 function init_gen()
-	-- important that dir8 is in this order
-	dir8 = {p(-1,0),p(0,-1),
-									p(1,0),	p(0,1),
-									
-									p(-1,-1), p(1,-1),
-								 p(1,1),p(-1,1)}
-								 
+	-- important that dir8 is in this order						 
 	sig_dir = {
 	0b11111111,
 	0b01110110, -- left
