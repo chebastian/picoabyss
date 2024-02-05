@@ -744,6 +744,9 @@ function on_bump(tile,at,ent,d)
    mset(at.x,at.y,tile-1)
    -- ★ add rnd potion 
   end
+  
+  -- ★ tmp to dig walls
+  mset(at.x,at.y,0)
 
   if tile == 11 and is_player(ent) then
    local lo_idx = flr(max(1,rnd(#_lo_chst)))
