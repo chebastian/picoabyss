@@ -357,8 +357,7 @@ end
 
 function drw_txt8(txt,pos,fg,bg)
 	for di in all(dir8) do
-  local tx = pos.x
-  local ty = pos.y
+  local tx,ty = pos.x, pos.y
   print(txt,tx+di.x
      ,di.y+ty,bg)
  end
@@ -372,8 +371,7 @@ function drw_spr_8(ent,at,bg)
 		pal(i,bg)
 	end
 	for di in all(dirs) do
-  local tx = di.x
-  local ty = di.y
+  local tx,ty = di.x, di.y
   spr(ent.sprid,
 					 at.x*8+tx,
 					 at.y*8+ty,
@@ -569,9 +567,8 @@ function add_trap(id,p)
 end
 
 function add_mob(id,p)
- local e = ent(id,p)
- local frames = {}
- local anim_id = _anims[id]
+ local e,frames,anim_id 
+ = ent(id,p),{},_anims[id]
  for i=0,3 do
   add(frames,anim_id+i)
  end
@@ -607,9 +604,9 @@ end
 function wlk_in_d(enta)
  local mini,mind = 0,999
  for i=1,#dirs do
-  local nx = enta.pos.x+dirs[i].x
-  local ny = enta.pos.y+dirs[i].y
-  local ndist = dist(p(nx,ny),entb.pos)
+  local nx,ny,ndist = enta.pos.x+dirs[i].x
+																			  ,enta.pos.y+dirs[i].y
+																			  ,dist(p(nx,ny),entb.pos)
   if ndist < mind then
    mini = i
    mind = ndist
@@ -636,11 +633,11 @@ end
 
 function wlk_to_plyr(ent)
  local lookup = arr_to_tbl(_srch_tiles)
- local mini,mind = -1,999
- local curpt = ptoi(ent.pos)
- local curd = lookup[curpt]
- 
- local ocp = {}
+ local mini,mind,curpt,curd,ocp =
+  -1,999
+ ,ptoi(ent.pos)
+ ,lookup[curpt]
+ ,{}
  for e in all(_ents) do
  	if not e.can_walk and is_player(e) == false then
  		ocp[ptoi(e.pos)] = true
