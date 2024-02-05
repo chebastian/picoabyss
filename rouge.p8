@@ -1689,11 +1689,9 @@ function mapsig(func)
 end
 
 function fill_map(t)
-	for y=0,_size do
- 	for x=0,_size do
-   mset(x,y,t)
- 	end
- end
+	mapsig(function(x,y,sig)
+		mset(x,y,t)
+		end)
 end
 
 
