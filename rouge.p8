@@ -1671,13 +1671,8 @@ end
 
 -- utils for rnd
 
-
-function rnd_int(n)
-	return flr(rnd()*n)
-end
-
 function rnd_idx(n)
-	return rnd_int(n)+1
+	return flr(rnd()*n) + 1
 end
 
 function arr_choose(myarr)
