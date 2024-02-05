@@ -196,7 +196,7 @@ end
 function upd_game()
 	buff_input()
 	
-	if(btnp(❎))then
+	if btnp(❎) then
   add_menu_win()
 	end
 	
