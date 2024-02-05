@@ -302,7 +302,7 @@ function upd_ease()
  
  _cam.pos_ren.x,
  _cam.pos_ren.y = ease_lerp(_cam)
- if(_t⧗ == 1) then
+ if _t⧗ == 1 then
   pop_upd()
   set_lst_pos(_cam)
   foreach(_ents,set_lst_pos)
@@ -329,7 +329,7 @@ end
 function drw_ent(ent,at)
 	ini_pal()
 	local flash=ent.flash
-	if(flash and flash > 0) then
+	if flash and flash > 0 then
 	 pal(9,7)
 	 ent.flash -= 1
 	end
@@ -682,7 +682,7 @@ function move_ent(ent,d)
  local np = add_t(ent.pos,d) 
  local sld,tile = chk_tile(np,0)
  
- if(sld)then
+ if sld then
   ent.ease=ease_bump
   on_bump(tile,np,ent,d)
   return
@@ -700,7 +700,7 @@ function move_ent(ent,d)
  for atk in all(atk_tiles) do
   local ent2 = sld_ent_at(atk)
 	 -- ★ atk self bugfix on use item
-	 if(ent2 and ent2.can_dmg and ent2 != ent)then
+	 if ent2 and ent2.can_dmg and ent2 != ent then
 	  ent.ease=ease_bump
 	  ent2:on_ent(ent,np,d) --★ 223
 	  return
@@ -718,7 +718,7 @@ function on_dmg(ent,atk,at,d)
  ent.hp-=atk.atk
  ent.flash=10
  add_atk(atk,ent)
- if(ent.hp <= 0) then
+ if ent.hp <= 0  then
 	 del(_ents,ent)
  end
  
@@ -731,7 +731,7 @@ function on_atk(atk,ent,at,d)
  ent.hp-=atk.atk
  ent.flash=10
  add_atk(atk,ent)
- if(ent.hp <= 0) then
+ if ent.hp <= 0 then
 	 del(_ents,ent)
  end
  
@@ -918,7 +918,7 @@ end
 function upd_win()
  if btnp(❎) then
   local w = _wnd[#_wnd]
-  if(w.t == nil) then 
+  if w.t == nil then 
    w.t = .3
   else
    w.t = min(w.t,.3)
@@ -977,7 +977,7 @@ function on_pickup(itm,ent,po,d)
  bump_at(ent,d)
  del(_ents,itm)
  
- if(itm.id >= 0 and itm.id < 0x10) then
+ if itm.id >= 0 and itm.id < 0x10 then
 	 add(_bpack,itm)
  elseif (itm.id >= 0x10 and itm.id < 0x20) then
   add(_eqp,itm)
@@ -1149,7 +1149,7 @@ function anim_pl(fps)
 end
 
 function upd_anim(pl,anim)
- if(pl.frame_cnt >= 60/pl.fps) then
+ if pl.frame_cnt >= 60/pl.fps then
   pl.frame_i+=1
   pl.frame_cnt=0
  end
@@ -1182,9 +1182,9 @@ function flood_fill(po,nxt,ocp)
 		  local it = ite.po
 		  local np = p(it.x+d.x,it.y+d.y)
 		  local pi = ptoi(np)
-		  if(chk_solid(np) == false
+		  if chk_solid(np) == false
 					  and ocp[pi] == nil
-					  and visited[pi] == nil)
+					  and visited[pi] == nil
 		  then
 		   visited[ptoi(np)] = true
 		   add(queue,{po=p(np.x,np.y),dst=dpth})
@@ -1348,9 +1348,9 @@ function path_between(_a,_b,ocp)
 		  local np = p(nxtp.x+d.x
 		  											,nxtp.y+d.y)
 		  local pi = ptoi(np)
-		  if(chk_solid(np) == false
+		  if chk_solid(np) == false
 					  and ocp[pi] == nil
-					  and visited[pi] == nil)
+					  and visited[pi] == nil
 		  then
 		   visited[ptoi(np)] = true
 		   add(queue,{po=p(np.x,np.y),dst=dpth})
@@ -1717,7 +1717,7 @@ function tile_sig(po)
   if chk_solid(add_t(po,d)) then
    sig += 1
   end
-  if(i < 8) then
+  if i < 8 then
   	sig = shl(sig,1)
   end
  end
@@ -1742,9 +1742,9 @@ function flood_fill_x(po,ocp)
 		  local it = ite.po
 		  local np = p(it.x+d.x,it.y+d.y)
 		  local pi = ptoi(np)
-		  if(chk_solid(np) == false
+		  if chk_solid(np) == false
 					  and ocp[pi] == nil
-					  and visited[pi] == nil)
+					  and visited[pi] == nil
 		  then
 		   visited[ptoi(np)] = true
 		   add(queue,{po=p(np.x,np.y),dst=dpth})
