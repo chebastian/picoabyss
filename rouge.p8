@@ -1227,6 +1227,58 @@ function rnd_rng(_min,_max)
  return min(r,_max)
 end 
 
+-- 
+-- flood alt
+-- 
+
+function flood_fill(po,ocp,maxd)
+ local dpth,queue,visited = 0,{},{}
+ visited[ptoi(po)] = true
+ local nxt = {}
+ add(nxt,{po=p(po.x,po.y),dst=0})
+	maxd = maxd or 255
+ local found = {nxt[1]}
+ while dpth < maxd do
+ 	dpth+=1
+	 for ite in all(nxt) do
+		 for d in all(dirs) do
+		  local it = ite.po
+		  local np = p(it.x+d.x,it.y+d.y)
+		  local pi = ptoi(np)
+		  if chk_solid(np) == false
+					  and ocp[pi] == nil
+					  and visited[pi] == nil
+		  then
+		   visited[ptoi(np)] = true
+		   add(queue,{po=p(np.x,np.y),dst=dpth})
+		  end
+		 end
+	 end
+	 
+	 nxt = {}
+	 for q in all(queue) do
+	  add(nxt,
+	  {po=p(q.po.x,q.po.y),
+	   dst=q.dst})
+	  add(found,
+	   {po=p(q.po.x,q.po.y),
+	    dst=q.dst})
+	 end
+	 	 
+	 if #queue == 0 then
+	  return found
+	 end
+	 
+	 queue = {}
+
+ end
+ 
+-- printh("maximum depth flooded")
+-- stop()
+ return found
+end
+
+
 -->8
 -- gen
 
@@ -1683,57 +1735,6 @@ function tile_sig(po)
   end
  end
  return sig
-end
-
--- 
--- flood alt
--- 
-
-function flood_fill(po,ocp,maxd)
- local dpth,queue,visited = 0,{},{}
- visited[ptoi(po)] = true
- local nxt = {}
- add(nxt,{po=p(po.x,po.y),dst=0})
-	maxd = maxd or 255
- local found = {nxt[1]}
- while dpth < maxd do
- 	dpth+=1
-	 for ite in all(nxt) do
-		 for d in all(dirs) do
-		  local it = ite.po
-		  local np = p(it.x+d.x,it.y+d.y)
-		  local pi = ptoi(np)
-		  if chk_solid(np) == false
-					  and ocp[pi] == nil
-					  and visited[pi] == nil
-		  then
-		   visited[ptoi(np)] = true
-		   add(queue,{po=p(np.x,np.y),dst=dpth})
-		  end
-		 end
-	 end
-	 
-	 nxt = {}
-	 for q in all(queue) do
-	  add(nxt,
-	  {po=p(q.po.x,q.po.y),
-	   dst=q.dst})
-	  add(found,
-	   {po=p(q.po.x,q.po.y),
-	    dst=q.dst})
-	 end
-	 	 
-	 if #queue == 0 then
-	  return found
-	 end
-	 
-	 queue = {}
-
- end
- 
--- printh("maximum depth flooded")
--- stop()
- return found
 end
 
 function merge_areas()
