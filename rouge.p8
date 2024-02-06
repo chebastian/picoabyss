@@ -109,7 +109,7 @@ function start()
 	_plyr.upd = upd_plyr
 	_pl = anim_pl(4)
 	_plyr.ease = ease_lerp
-	
+	_plyr.srchd = 5
  _cam = ent(99,p(_plyr.pos.x,
  																_plyr.pos.y))
 	_tile_sfx = {
@@ -130,13 +130,7 @@ function start()
  
  -- init fov and search tiles
  _srch_tiles =
-   flood_fill(
-   _plyr.pos,
-   {
-    {po=p(_plyr.pos.x,
-     _plyr.pos.y),dst=0}
-    },
- {})
+   flood_fill(_plyr.pos,{},_plyr.srchd)
  updatefow()
 
 end
@@ -219,13 +213,7 @@ function plr_turn()
  push_upd(upd_ease)
  
  _srch_tiles =
-   flood_fill(
-   _plyr.pos,
-   {
-    {po=p(_plyr.pos.x,
-     _plyr.pos.y),dst=0}
-    },
-    {})
+   flood_fill(_plyr.pos,{},_plyr.srchd)
  updatefow()
 end
 
@@ -1172,49 +1160,6 @@ function cmp_po(a,b)
  return a.x == b.x and a.y == b.y
 end
 
-function flood_fill(po,nxt,ocp)
- local dpth,queue,visited = 0,{},{}
- visited[ptoi(_plyr.pos)] = true
- 
- local found = {nxt[1]}
- while dpth <= 2 do
- 	dpth+=1
-	 for ite in all(nxt) do
-		 for d in all(dirs) do
-		  local it = ite.po
-		  local np = p(it.x+d.x,it.y+d.y)
-		  local pi = ptoi(np)
-		  if chk_solid(np) == false
-					  and ocp[pi] == nil
-					  and visited[pi] == nil
-		  then
-		   visited[ptoi(np)] = true
-		   add(queue,{po=p(np.x,np.y),dst=dpth})
-		  end
-		 end
-	 end
-	 
-	 nxt = {}
-	 for q in all(queue) do
-	  add(nxt,
-	  {po=p(q.po.x,q.po.y),
-	   dst=q.dst})
-	  add(found,
-	   {po=p(q.po.x,q.po.y),
-	    dst=q.dst})
-	 end
-	 	 
-	 if #queue == 0 then
-	  return found
-	 end
-	 
-	 queue = {}
-
- end
- 
- return found
-end
-
 function pline(x1,y1,x2,y2)
  local dx,dy = abs(x2-x1),
  													 abs(y2 - y1)
@@ -1713,7 +1658,7 @@ function flag_map()
 end
 
 function flag_section(x,y,f,res)
-	local flooded = flood_fill_x(p(x,y),{})
+	local flooded = flood_fill(p(x,y),{})
 	printh("x:"..tostr(x).."y:"..tostr(y))
 	printh("sz " .. #flooded)
 	for po in all(flooded) do
@@ -1744,14 +1689,14 @@ end
 -- flood alt
 -- 
 
-function flood_fill_x(po,ocp)
+function flood_fill(po,ocp,maxd)
  local dpth,queue,visited = 0,{},{}
  visited[ptoi(po)] = true
  local nxt = {}
  add(nxt,{po=p(po.x,po.y),dst=0})
-
+	maxd = maxd or 255
  local found = {nxt[1]}
- while dpth <= 255 do
+ while dpth < maxd do
  	dpth+=1
 	 for ite in all(nxt) do
 		 for d in all(dirs) do
@@ -1786,11 +1731,22 @@ function flood_fill_x(po,ocp)
 
  end
  
- printh("maximum depth flooded")
- stop()
+-- printh("maximum depth flooded")
+-- stop()
  return found
 end
 
+function merge_areas()
+ mapsig(
+ function(x,y,sig)  
+	 if sig_match(sig,0b10100000,0b000111) 
+	 or sig_match(sig,0b01010000,0b000111)
+	 then
+	 	mset(x,y,5)
+	 end
+ end
+ )
+end
 
 -->8
 -- █ todo
