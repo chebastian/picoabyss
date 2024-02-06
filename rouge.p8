@@ -31,6 +31,7 @@ function _init()
 	sfx_door=3
 	start()
 	gen()
+	flag_map()
 end
 
 function dbg(str)
@@ -470,6 +471,10 @@ function drw_game()
  
  blackout()
  drw_dmg()
+ 
+ for k,v in pairs(_flagmap) do
+ 	print(v.f,v.po.x*8,v.po.y*8,2)
+ end
  camera(0,0)
  drw_hud()
  
@@ -1266,6 +1271,10 @@ function line_of_sight(a,b)
  return true
 end
 
+function sig_match(a,b,mask)
+	return bor(a,mask) == bor(b,mask)
+end
+
 -- rnd
 
 function rnd_rng(_min,_max)
@@ -1635,6 +1644,7 @@ function gen()
 	end
 	
  set_digable_start()
+ 
 end
 
 function set_digable_start()
@@ -1648,10 +1658,6 @@ function set_digable_start()
 									 end
 								 end
 							end)
-end
-
-function sig_match(a,b,mask)
-	return bor(a,mask) == bor(b,mask)
 end
 
 function is_digable(a)
@@ -1693,15 +1699,29 @@ function flag_map()
  function(x,y,sig)
  		local idx = ptoi(p(x,y))
    if mapf[idx] then
-   else
-   	flag_section(x,y,cf)
+   elseif not chk_solid(p(x,y)) then
+   	flag_section(x,y,cf,mapf)
+   	cf+=1
    end
  end
  )
+ 
+ _flagmap = {}
+ _flagmap = mapf
+ _dbg[3] = #_flagmap
+ _dbg[4] = cf
 end
 
-function flag_section(x,y,f)
-	flood_fill_x(p(x,y),{},{})
+function flag_section(x,y,f,res)
+	local flooded = flood_fill_x(p(x,y),{})
+	printh("x:"..tostr(x).."y:"..tostr(y))
+	printh("sz " .. #flooded)
+	for po in all(flooded) do
+--		add(res,{po=po.po, f=f})
+		res[ptoi(po.po)] = {po=po.po, f=f}
+		printh(tostr(po.po.x) .. ",".. tostr(po.po.y))
+	end
+--	stop()
 end
 
 -- signature funcs
@@ -1728,7 +1748,7 @@ function flood_fill_x(po,ocp)
  local dpth,queue,visited = 0,{},{}
  visited[ptoi(po)] = true
  local nxt = {}
- add(nxt,{po=p(po.x,p.y),dst=0})
+ add(nxt,{po=p(po.x,po.y),dst=0})
 
  local found = {nxt[1]}
  while dpth <= 255 do
