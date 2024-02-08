@@ -32,7 +32,10 @@ function _init()
 	start()
 	gen()
 	flag_map()
+	
+	merge_areas()
 end
+
 
 function dbg(str)
  add(_dbg,str)
@@ -460,8 +463,10 @@ function drw_game()
  blackout()
  drw_dmg()
  
- for k,v in pairs(_flagmap) do
- 	print(v.f,v.po.x*8,v.po.y*8,2)
+ if _drw_dbg then
+	 for k,v in pairs(_flagmap) do
+	 	print(v.f,v.po.x*8,v.po.y*8,2)
+	 end
  end
  camera(0,0)
  drw_hud()
@@ -519,8 +524,8 @@ function blackout()
 	  local idx = ptoi(pxy)
 	  local d = dist(pxy,_plyr.pos)
 	  if not _los[idx] then
-   	print("▒",x*8,y*8+1,1)
---   	drw_rectf(x*8,y*8,3,8,0)
+--   	print("▒",x*8,y*8+1,1)
+   	drw_rectf(x*8,y*8,8,8,0)
 	  end
 		end
 	end
@@ -614,6 +619,10 @@ end
 function ptoi(po)
 --★ arbitrary w, fix
  return po.x+po.y*128
+end
+
+function ptoix(x,y)
+	return x+y*128
 end
 
 function arr_to_tbl(arr)
@@ -1690,15 +1699,15 @@ function fill_map(t)
 end
 
 function flag_map()
- local cf = 0
+ _cf = 0
  local mapf = {}
  mapsig(
  function(x,y,sig)
  		local idx = ptoi(p(x,y))
    if mapf[idx] then
    elseif not chk_solid(p(x,y)) then
-   	flag_section(x,y,cf,mapf)
-   	cf+=1
+   	flag_section(x,y,_cf,mapf)
+   	_cf+=1
    end
  end
  )
@@ -1706,17 +1715,14 @@ function flag_map()
  _flagmap = {}
  _flagmap = mapf
  _dbg[3] = #_flagmap
- _dbg[4] = cf
+ _dbg[4] = _cf
 end
 
 function flag_section(x,y,f,res)
 	local flooded = flood_fill(p(x,y),{})
-	printh("x:"..tostr(x).."y:"..tostr(y))
-	printh("sz " .. #flooded)
 	for po in all(flooded) do
 --		add(res,{po=po.po, f=f})
 		res[ptoi(po.po)] = {po=po.po, f=f}
-		printh(tostr(po.po.x) .. ",".. tostr(po.po.y))
 	end
 --	stop()
 end
@@ -1737,18 +1743,64 @@ function tile_sig(po)
  return sig
 end
 
-function merge_areas()
- mapsig(
- function(x,y,sig)  
-	 if sig_match(sig,0b10100000,0b000111) 
-	 or sig_match(sig,0b01010000,0b000111)
-	 then
-	 	mset(x,y,5)
-	 end
- end
- )
+function inbound(x,y)
+	return x > 0 and x < _size and y > 0 and y < _size
 end
 
+function merge_areas()
+ _junction = {}
+ mapsig(
+	 function(x,y,sig)  
+		 if inbound(x,y-1)
+		 and inbound(x,y+1)
+		 and  sig_match(sig,0b10100000,0b000111) then
+		 	add(_junction,
+		 	{
+		 		x=x,
+		 		y=y,
+		 		a=_flagmap[ptoi(p(x,y-1))].f,
+		 		b=_flagmap[ptoi(p(x,y+1))].f
+	 		})
+		 elseif inbound(x-1,y)
+		 and inbound(x+1,y)
+		 and sig_match(sig,0b01010000,0b000111) then
+			 add(_junction,
+			 	{
+			 		x=x,
+			 		y=y,
+			 		a=_flagmap[ptoi(p(x-1,y))].f,
+			 		b=_flagmap[ptoi(p(x+1,y))].f
+		 		})
+		 end 
+	 end
+ )
+ 
+ for x in all(_junction) do
+ 	printh(tostr(x.a) .. " " .. tostr(x.b))
+ end
+ printh("junc: " .. #_junction)
+ stop()
+ passages = {}
+ for i=0,_cf do
+ 	local p = get_passage(_junction,i)
+ 	if(#p > 0) then
+	 	local opn = arr_choose(p)
+	 	mset(opn.x,opn.y,9) 
+ 	end
+	end
+
+end
+
+function get_passage(juncs,to)
+	local res = {}
+	for j in all(juncs) do
+		if j.a == to or j.b == to then
+			add(res,j)
+		end
+	end
+	printh("psg: " .. #res)
+	return res
+end
 -->8
 -- █ todo
 
