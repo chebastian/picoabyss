@@ -478,7 +478,7 @@ function drw_game()
   end
  end
  
--- blackout()
+ blackout()
  drw_dmg()
  
  if _drw_dbg then
