@@ -1914,8 +1914,6 @@ end
 
 -- █ ideas
 
--- exploding barells
--- could be stationary enemies with 1:hp and eplosion on kill
 -- bow n arrow, unlim range til hit enemy
 -- whirlpools that suck everybody in for each turn active
 -- thermal went traps
