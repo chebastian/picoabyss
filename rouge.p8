@@ -1927,16 +1927,20 @@ end
 -->8
 -- █ todo
 
--- [] poison tiles
+-- [] trigger trap general callback
+-- [] squid ink trap
+-- [] lower visibility in inktrap
 -- [] poison slime trail
 -- [] potion drop when destroying pots
 -- [] slime idle patterns
 -- [] slime sight
--- [] rand room layout
--- [] rand rooms
--- [] trigger trap dmg
 
 -- █ done
+-- [x] shells instead of pots
+-- [x] trigger trap dmg
+-- [x] poison tiles
+-- [x] rand room layout
+-- [x] rand rooms
 -- [x] move blackout to screenspace
 -- [x] spawn items only to chests
 -- [x] fow
@@ -1958,11 +1962,9 @@ end
 -- bow n arrow, unlim range til hit enemy
 -- whirlpools that suck everybody in for each turn active
 -- thermal went traps
--- smoke/squid ink trap, lower visibility
 -- bioluminance algea, step on to increase visibility
 -- toxic spore tiles, release poision clouds
 -- wave tiles, push the player in a direction
--- shells instead of pots
 -- open seashells that slam shut, trap
 -- jellyfish with a tail of dangerous tentacles
 -- moray trap, peeking out of walls and attacking if the player gets close
