@@ -74,6 +74,13 @@ end
 -->8
 -- game
 function start()
+	-- 
+	-- spr flags
+	--
+	_fsolid = 0
+	_fbump = 1 -- unused/remove
+	_flos_no = 2
+		
 	_t⧗ = 0
  _pid = 1
  _updt = 0 -- a global 1s timer which can be used to update idle anim
@@ -113,7 +120,7 @@ function start()
 	_plyr.upd = upd_plyr
 	_pl = anim_pl(4)
 	_plyr.ease = ease_lerp
-	_plyr.srchd = 5
+	_plyr.srchd = 6
  _cam = ent(99,p(_plyr.pos.x,
  																_plyr.pos.y))
 	_tile_sfx = {
@@ -140,7 +147,7 @@ function start()
 			{},
    _plyr.srchd,
 	  function(p)
-	  	return chk_tile(p,2)
+	  	return chk_tile(p,_flos_no)
 	  end
    )
  updatefow()
@@ -150,7 +157,7 @@ end
 function get_vis_ents()
 	local res = {}
 	for ent in all(_ents) do
-		if fget(ent.sprid,2) then
+		if fget(ent.sprid,_flos_no) then
 --			add(res,ptoi(ent.pos))
 			res[ptoi(ent.pos)] = true
 		end
@@ -165,7 +172,7 @@ function chk_tile(p,flag)
 end
 
 function chk_solid(po)
- return chk_tile(po,0)
+ return chk_tile(po,_fsolid)
 end
 
 function sld_ent_at(p)
@@ -199,7 +206,7 @@ end
 
 function is_solid(p)
  local tile = mget(p.x,p.y)
- return fget(tile,0)
+ return fget(tile,_fsolid)
 end
 
 function upd_plyr(ent)
@@ -244,7 +251,7 @@ function plr_turn()
    {},
    _plyr.srchd,
 	  function(p)
-	  	return chk_tile(p,2)
+	  	return chk_tile(p,_flos_no)
 	  end
    )
  updatefow()
@@ -527,6 +534,7 @@ end
 _los = {}
 function updatefow()
 	_los = {}
+	local losents = get_vis_ents()
 	for wt in all(_vis) do
 	 local x = wt.po.x
 	 local y = wt.po.y
@@ -534,7 +542,16 @@ function updatefow()
   else
    _los[ptoi(p(x,y))]=true
   	for d in all(dir8) do
-    _los[ptoi(p(x+d.x,y+d.y))] = true
+    local np = p(x+d.x,y+d.y)
+    
+    --
+    -- show walls and doors
+    -- and any entities flagged
+    --
+    if chk_tile(np,_flos_no)
+	   or losents[ptoi(np)] then
+	    _los[ptoi(np)] = true
+    end
   	end
   end
 	end
@@ -709,7 +726,7 @@ function move_ent(ent,d)
  ent.dx = ent.d.x
  ent.dy = ent.d.y
  local np = add_t(ent.pos,d) 
- local sld,tile = chk_tile(np,0)
+ local sld,tile = chk_tile(np,_fsolid)
  
  if sld then
   ent.ease=ease_bump
@@ -717,7 +734,7 @@ function move_ent(ent,d)
   return
  -- flag 2 set for visually obsructing
  -- tiles, e.g grass
- elseif chk_tile(np,2) then
+ elseif chk_tile(np,_flos_no) then
  	mset(np.x,np.y,tile-1)
  end
  -- pickup item
@@ -1251,8 +1268,11 @@ end
 
 function line_of_sight(a,b)
  local l = pline(a.x,a.y,b.x,b.y)
+ local vi_ent = get_vis_ents()
+ 
  for _p in all(l) do
-  if chk_tile(_p,2) then
+  if chk_tile(_p,_flos_no)
+  or vi_ent[ptoi(_p)] then
    return false
   end  
  end

@@ -44,8 +44,8 @@ function _init()
 	ox = 10
 	oy = 10
 
-	init_dig()	
-	gen()
+--	init_dig()	
+--	gen()
 end
 
 function init_dig()
@@ -130,7 +130,7 @@ function upd_cursor()
 end
 
 _modes = {"cam","mov","gen"}
-_mode = 1
+_mode = 2
 
 function mode()
  return _modes[_mode]
@@ -191,6 +191,11 @@ function _draw()
  if mode() != "mov" and btnp(❎) then
  	gen()
  elseif mode() == "move" and btnp(❎) then
+ end
+ 
+ local li = myline(_curx,_cury,8,8)
+ for pi in all(li) do
+ 	print(".", pi.x,pi.y,3)
  end
  
  
