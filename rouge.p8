@@ -82,7 +82,7 @@ function start()
 	_flos_no = 2 
 	
 	--
-	-- mob list
+	-- mob init
 	--
 	_mobplyr = 1
 	_mobslme = 2
@@ -100,11 +100,28 @@ function start()
 											214, --sqid
 											222, --smok
 											218} --snek
-
-		
+	_mobupd = {}
+	_mobupd[_mobsqid] = upd_sqid
+	_mobupd[_mobsnek] = wlk_to_plyr
+	_mobupd[_mobslme] = wlk_to_plyr	
+	_mobupd[_mobbird] = wlk_to_plyr	
+	--
+	-- trap init
+	-- 
+ _trapupd ={}
+ _trapupd[_mobsmok] = upd_smok
+ _trapupd[_mobacid] = trap_noop
+ _traplife = {}
+ _traplife[_mobsmok] = 5
+ _traplife[_mobacid] = -1
+ 
+ --
+ -- rest
+ --
 	_t⧗ = 0
  _pid = 1
  _updt = 0 -- a global 1s timer which can be used to update idle anim
+
 
  _upds = {noop,noop,wobble_upd}
 	_txts = {}  -- floating text
@@ -379,6 +396,7 @@ function drw_ent(ent,at)
 	local flash=ent.flash
 	if flash and flash > 0 then
 	 pal(9,7)
+	 pal(5,1)
 	 ent.flash -= 1
 	end
 	if ent.outline then
@@ -623,10 +641,23 @@ end
 function trap_noop(e)
 end
 
+function upd_smok(e)
+	if e.life <= 0 then
+		del(_ents,e)
+		updatefow()
+	else
+		e.life -= 1
+		if e.life <= 1 then
+			e.flash = 10
+		end
+	end
+end
+
 function add_trap(id,p,cbk)
 	cbk = cbk and cbk or on_atk
  local mob = add_mob(id,p)
- mob.upd = noop
+ mob.upd = _trapupd[id]
+ mob.life = _traplife[id]
  mob.can_dmg = false
  mob.can_pickup = false
  mob.can_walk = true
@@ -645,7 +676,7 @@ function add_mob(id,p)
  e.anim = anim(frames,3,1)
  e.hp = _hp[id]
  e.atk = _atk[id]
- e.upd = wlk_to_plyr
+ e.upd = _mobupd[id]
 -- e.upd = rand_wlk
  e.upd_ren = noop
  e.can_dmg = true
@@ -702,6 +733,21 @@ function arr_to_tbl(arr)
   tbl[ptoi(ti.po)] = ti.dst
  end
  return tbl
+end
+
+function upd_sqid(ent)
+	local doup = rnd()
+	if doup > .3 then
+		wlk_to_plyr(ent)
+	else
+		-- release squid
+		_dbg[1] = #dirs
+		for d in all(dirs) do
+		 add_trap(_mobsmok,p(ent.pos.x+d.x,ent.pos.y+d.y),trap_noop)
+		end
+	 add_trap(_mobsmok,p(ent.pos.x,ent.pos.y),trap_noop)
+		updatefow()
+	end
 end
 
 function wlk_to_plyr(ent)
@@ -1941,7 +1987,7 @@ function add_slimes()
 			elseif r > 25 and r < 100 then
 				mset(x,y,29)
 			elseif r <= 25  then
-			 add_mob(5,p(x,y))
+--			 add_mob(5,p(x,y))
 			end
 		end
 	 
@@ -1957,6 +2003,7 @@ end
 -- [] random slimes
 -- [] random birds
 -- [] order rendering of ents (smoke on top of enemies, slime bellow)
+-- [] clean, remov unused _upds
 -- [] lower visibility in inktrap
 -- [] poison slime trail
 -- [] potion drop when destroying pots
