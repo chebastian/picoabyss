@@ -186,6 +186,7 @@ function start()
 	  	return chk_tile(p,_flos_no)
 	  end
    )
+ _vis_lookup = arr_to_tbl(_vis)
  updatefow()
 
 end
@@ -296,6 +297,7 @@ function plr_turn()
 	  	return chk_tile(p,_flos_no)
 	  end
    )
+ _vis_lookup = arr_to_tbl(_vis)
  updatefow()
 end
 
@@ -523,7 +525,9 @@ function drw_game()
  for e in all(_ents) do
   e:upd_ren()
   e.sprid = upd_anim(_pl,e.anim)
-	 drw_ent(e,e.pos_ren)
+	 if _vis_lookup[ptoi(e.pos)] then 
+	 	drw_ent(e,e.pos_ren)
+	 end
  end
  
  if _drw_dbg then
