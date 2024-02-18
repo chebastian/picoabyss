@@ -761,7 +761,8 @@ function upd_sqid(ent)
 			end
 		end
 	 add_trap(_mobsmok,p(ent.pos.x,ent.pos.y),trap_noop)
-		updatefow()
+		
+--		_dbg[1] = "ents: " .. #_ents
 	end
 end
 
