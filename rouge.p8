@@ -654,7 +654,7 @@ end
 function upd_smok(e)
 	if e.life <= 0 then
 		del(_ents,e)
-		updatefow()
+--		updatefow()
 	else
 		e.life -= 1
 		if e.life <= 1 then
@@ -754,7 +754,11 @@ function upd_sqid(ent)
 		-- release squid
 		_dbg[1] = #dirs
 		for d in all(dirs) do
-		 add_trap(_mobsmok,p(ent.pos.x+d.x,ent.pos.y+d.y),trap_noop)
+		 local dx,dy = ent.pos.x+d.x,ent.pos.y+d.y
+			if not chk_solid(p(dx,dy))
+			and not sld_ent_at(p(dx,dy)) then
+				 add_trap(_mobsmok,p(ent.pos.x+d.x,ent.pos.y+d.y),trap_noop)
+			end
 		end
 	 add_trap(_mobsmok,p(ent.pos.x,ent.pos.y),trap_noop)
 		updatefow()
