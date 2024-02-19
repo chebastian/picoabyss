@@ -82,7 +82,20 @@ function start()
  -- spr ids
  -- 
  _idweed = 19
- _idclam = 29 
+ _idclam = 29
+ 
+ --
+ -- generators
+ --
+ _genweed =
+ {
+  id = _idweed,
+  r  = 400,
+  pred = function(sig)
+	  return sig_match(sig,0b1010000,0b00001111)
+				or sig_match(sig,0b0101000,0b00001111)
+  end
+ } 
 
 	-- 
 	-- spr flags
@@ -1997,23 +2010,50 @@ end
 
 function add_slimes()
 	mapsig(function(x,y,sig)
-		local r = rnd(1000)
+		local r1,r2,r3 = rnd(1000),
+																		rnd(1000),
+																		rnd(1000)
 		if not chk_solid(p(x,y)) then
-			if sig == 0 and r <= 100 then
-			 add_trap(6,p(x,y),trap_noop)
-			elseif sig_match(sig,0b1010000,0b00001111)
-			or sig_match(sig,0b0101000,0b00001111)
-			and r <= 100
-			then
-				mset(x,y,_idweed)
-			elseif r > 25 and r < 100 then
-				mset(x,y,_idclam)
-			elseif r <= 35  then
-			 add_mob(_mobsqid,p(x,y))
+			if     gen_traps(x,y,sig,r1) then
+			elseif gen_tiles(x,y,sig,r2) then
+			elseif gen_mobs(x,y,sig, r3) then
 			end
 		end
 	 
 	end)
+end
+
+function gen_traps(x,y,sig,r)
+	if not chk_solid(p(x,y)) then
+		if sig == 0 and r <= 100 then
+		 add_trap(_mobacid,p(x,y))
+	 	return true
+	 end
+ end
+	return false
+end
+
+function gen_tiles(x,y,sig,r)
+ if _genweed.pred(sig)
+	and r <= _genweed.r
+	then
+		mset(x,y,_idweed)
+		return true
+	elseif r > 25 and r < 100 then
+		mset(x,y,_idclam)
+		return true
+	end
+	
+	return false
+end
+
+function gen_mobs(x,y,sig,r)
+ if r <= 35  then
+	 add_mob(_mobsqid,p(x,y))
+ 	return true
+ end
+ 
+ return true
 end
 
 -->8
