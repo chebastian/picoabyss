@@ -95,8 +95,13 @@ function start()
 	  return sig_match(sig,0b1010000,0b00001111)
 				or sig_match(sig,0b0101000,0b00001111)
   end
- } 
-
+ }
+ _genclam =
+ {
+  id = _idclam,
+  r  = 100
+ }
+ 
 	-- 
 	-- spr flags
 	--
@@ -128,6 +133,19 @@ function start()
 	_mobupd[_mobsnek] = wlk_to_plyr
 	_mobupd[_mobslme] = wlk_to_plyr	
 	_mobupd[_mobbird] = wlk_to_plyr	
+	-- mob gen
+	_gensqid =
+ {
+  id = _mobsqid,
+  r = 35
+ }
+ _gensnek = 
+ {
+ 	id = _mobsnek,
+ 	r = 45
+ }
+
+	
 	--
 	-- trap init
 	-- 
@@ -2039,7 +2057,7 @@ function gen_tiles(x,y,sig,r)
 	then
 		mset(x,y,_idweed)
 		return true
-	elseif r > 25 and r < 100 then
+	elseif r < _genclam.r then
 		mset(x,y,_idclam)
 		return true
 	end
@@ -2048,8 +2066,11 @@ function gen_tiles(x,y,sig,r)
 end
 
 function gen_mobs(x,y,sig,r)
- if r <= 35  then
-	 add_mob(_mobsqid,p(x,y))
+ if r <= _gensqid.r  then
+	 add_mob(_gensqid.id,p(x,y))
+ 	return true
+ elseif r <= _gensnek.r then
+ 	add_mob(_gensnek.id,p(x,y))
  	return true
  end
  
