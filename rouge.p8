@@ -78,6 +78,12 @@ end
 -->8
 -- game
 function start()
+ --
+ -- spr ids
+ -- 
+ _idweed = 19
+ _idclam = 29 
+
 	-- 
 	-- spr flags
 	--
@@ -1999,10 +2005,10 @@ function add_slimes()
 			or sig_match(sig,0b0101000,0b00001111)
 			and r <= 100
 			then
-				mset(x,y,19)
+				mset(x,y,_idweed)
 			elseif r > 25 and r < 100 then
-				mset(x,y,29)
-			elseif r <= 25  then
+				mset(x,y,_idclam)
+			elseif r <= 35  then
 			 add_mob(_mobsqid,p(x,y))
 			end
 		end
