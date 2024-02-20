@@ -2083,6 +2083,7 @@ end
 -- [] only update visible (or once visible) entities
 --				major slowdowns if updating all ents and ink etc.
 
+-- [] enemy that explodes on kill
 -- [] squid ink trap
 -- [] add structure to traps callback and creation
 -- [x] trigger trap general callback
