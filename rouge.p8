@@ -1186,7 +1186,7 @@ function eqp_item(idx,ent)
  if #_eqp == 0 then
   return
  end
- local eqp = _eqp[idx]
+ local eqp,itm = _eqp[idx]
  local itm = _lo_itms[eqp.id]
  ent.atk = itm.atkp
  ent.atkptr = itm.atkptr --★ 222
