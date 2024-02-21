@@ -620,8 +620,8 @@ function updatefow()
 	_los = {}
 	_los[ptoi(_plyr.pos)] = true
  for dir in all(dirs) do
- 	_los[ptoi(p(_plyr.pos.x+dir.x,
- 								_plyr.pos.y+dir.y))] = true
+ 	_los[ptoix(_plyr.pos.x+dir.x,
+ 								_plyr.pos.y+dir.y)] = true
  end
 
 	local losents = get_vis_ents()
@@ -630,7 +630,7 @@ function updatefow()
 	 local y = wt.po.y
 	 if not line_of_sight(_plyr.pos,p(x,y)) then
   else
-   _los[ptoi(p(x,y))]=true
+   _los[ptoix(x,y)]=true
   	for d in all(dir8) do
     local np = p(x+d.x,y+d.y)
     
@@ -658,7 +658,7 @@ function blackout()
  for x=cpx,cpx+mw,1 do
 	 for y=cpy,cpy+mh,1 do
 	  local pxy = p(x,y)
-	  local idx = ptoi(pxy)
+	  local idx = ptoix(x,y)
 	  local d = dist(pxy,_plyr.pos)
 	  if not _los[idx] then
 --   	print("▒",x*8,y*8+1,1)
@@ -830,8 +830,8 @@ function wlk_to_plyr(ent)
   local ny = ent.pos.y+dirs[i].y
   
   local ndist = 999
-  local ptile = lookup[ptoi(p(nx,ny))]
-  if ptile and ocp[ptoi(p(nx,ny))] == nil then
+  local ptile = lookup[ptoix(nx,ny)]
+  if ptile and ocp[ptoix(nx,ny)] == nil then
    ndist = ptile
   end
   
@@ -1508,12 +1508,12 @@ function min_d_on_map(lookup,pos,ocp)
   local ny = pos.y+dirs[i].y
   
   local ndist = 999
-  local look_d = lookup[ptoi(p(nx,ny))]
+  local look_d = lookup[ptoix(nx,ny)]
   -- if lookd_d is on path  
   -- and aint occupied
   -- and is new low
   if look_d 
-  and ocp[ptoi(p(nx,ny))] == nil
+  and ocp[ptoix(nx,ny)] == nil
   and look_d < mind
   then
 			mini = i
@@ -1888,7 +1888,7 @@ function flag_map()
  local mapf = {}
  mapsig(
  function(x,y,sig)
- 		local idx = ptoi(p(x,y))
+ 		local idx = ptoix(x,y)
    if mapf[idx] then
    elseif not chk_solid(p(x,y)) then
    	flag_section(x,y,_cf,mapf)
@@ -1946,8 +1946,8 @@ function gen_junctions()
 		 	{
 		 		x=x,
 		 		y=y,
-		 		a=_flagmap[ptoi(p(x,y-1))].f,
-		 		b=_flagmap[ptoi(p(x,y+1))].f
+		 		a=_flagmap[ptoix(x,y-1)].f,
+		 		b=_flagmap[ptoix(x,y+1)].f
 	 		})
 		 elseif inbound(x-1,y)
 		 and inbound(x+1,y)
@@ -1959,8 +1959,8 @@ function gen_junctions()
 			 	{
 			 		x=x,
 			 		y=y,
-			 		a=_flagmap[ptoi(p(x-1,y))].f,
-			 		b=_flagmap[ptoi(p(x+1,y))].f
+			 		a=_flagmap[ptoix(x-1,y)].f,
+			 		b=_flagmap[ptoix(x+1,y)].f
 		 		})
 		 end 
 	 end
@@ -2125,6 +2125,7 @@ end
 -- [] ★222 atk and atk pattern set on entity directly
 -- [] ★223 onent used for both atk and pickup, does not work when atk multiple tiles
 -- [] ★224 sld_ent_at slow?
+-- [] ★xxx smoke interupts traps
 
 -- █ ideas
 
