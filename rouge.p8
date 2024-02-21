@@ -732,7 +732,6 @@ function add_mob(id,p)
  e.hp = _hp[id]
  e.atk = _atk[id]
  e.upd = _mobupd[id]
--- e.upd = rand_wlk
  e.upd_ren = noop
  e.can_dmg = true
  e.can_walk = false
