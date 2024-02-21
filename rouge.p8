@@ -618,6 +618,12 @@ end
 _los = {}
 function updatefow()
 	_los = {}
+	_los[ptoi(_plyr.pos)] = true
+ for dir in all(dirs) do
+ 	_los[ptoi(p(_plyr.pos.x+dir.x,
+ 								_plyr.pos.y+dir.y))] = true
+ end
+
 	local losents = get_vis_ents()
 	for wt in all(_vis) do
 	 local x = wt.po.x
