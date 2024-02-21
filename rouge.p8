@@ -131,7 +131,7 @@ function start()
 											218} --snek
 	_mobupd = {}
 	_mobupd[_mobsqid] = upd_sqid
-	_mobupd[_mobsnek] = wlk_to_plyr
+	_mobupd[_mobsnek] = upd_snek
 	_mobupd[_mobslme] = wlk_to_plyr	
 	_mobupd[_mobbird] = wlk_to_plyr	
 	-- mob gen
@@ -809,6 +809,52 @@ function upd_sqid(ent)
 	end
 end
 
+function upd_snek(ent)
+	-- if snek has no target
+	if not ent.target then
+		for dir in all(dirs) do
+			for i=1,10 do
+				local pn = p(ent.pos.x + (dir.x * i),
+																	ent.pos.y + (dir.y * i))
+				if _plyr.pos.x == pn.x and
+						 _plyr.pos.y == pn.y then
+				 -- set target
+					ent.target = _plyr.pos
+					ent.targetd = dir
+					break
+				end
+			end
+			
+			if ent.target then
+				break -- stop looking
+			end
+		end
+	end
+
+	-- player not found
+	-- do random walk
+	if not ent.target then
+		ent.d = arr_choose(dirs)
+		move_ent(ent,ent.d)
+		return
+	end
+
+	-- player fround
+	-- move toward target
+	local px,py = ent.pos.x, ent.pos.y
+	ent.d = ent.targetd
+	move_ent(ent,ent.targetd)
+
+	-- target reached, clear
+	if (ent.target.x == ent.pos.x
+	and ent.target.y == ent.pos.y)
+	or (ent.pos.x == px and ent.pos.y == py)
+	then
+		ent.target = nil
+		ent.targetd = nil
+	end
+end
+
 function wlk_to_plyr(ent)
  local lookup = arr_to_tbl(_srch_tiles)
  local mini,mind,curpt,curd,ocp =
@@ -845,6 +891,7 @@ function wlk_to_plyr(ent)
   return
  end
  
+ -- ★ 666 dirs hack
  ent.d = dirs[mini]
  move_ent(ent,dirs[mini])
  ent.d = nil
@@ -2120,7 +2167,7 @@ end
 -- [] ★223 onent used for both atk and pickup, does not work when atk multiple tiles
 -- [] ★224 sld_ent_at slow?
 -- [] ★xxx smoke interupts traps
-
+-- [] ★666 dirs hack, for interpolation perhaps? cant remember
 -- █ ideas
 
 -- spear gun, unlim range til hit enemy
