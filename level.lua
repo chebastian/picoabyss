@@ -6,7 +6,9 @@ end
 function tile_borders()
  cmapsig(function(x,y,sig)
     local sld = chk_solid(p(x,y))
-    if sig_match(sig, 0b10101111,0b10001101) and not sld then
+    if sig_match(sig, 0b11011111,0b11001101) and sld then
+        mset(x,y,176) -- L 
+    elseif sig_match(sig, 0b10101111,0b10001101) and not sld then
         mset(x,y,146) --left
     elseif sig_match(sig, 0b11011111,0b11001111) and sld then
         mset(x,y,144) --right
@@ -16,12 +18,13 @@ function tile_borders()
         mset(x,y,145) --bottom
     elseif sig_match(sig, 0b11001111,0b11001101) and not sld then
         mset(x,y,161) --top left corner
-    elseif sig_match(sig, 0b00011101,0b01101101) and not sld then
+    -- elseif sig_match(sig, 0b00011101,0b01101101) and not sld then
+    elseif sig_match(sig, 0b11011111,0b11001111) and not sld then
         mset(x,y,163) --top right corner (incorrect)
     elseif sig_match(sig, 0b11101101,0b11001101)  and not sld then
         mset(x,y,160) --bottom left corner
     elseif sig_match(sig, 0b11001101,0b11001111) and sld then
-        mset(x,y,162) --bottom right corner (!done)
+        mset(x,y,162) -- bottom right corner
     -- elseif sig_match(sig, 0b11111111,0b11001111) and sld then
     --     mset(x,y,132) --solid not (correct?)
     end
