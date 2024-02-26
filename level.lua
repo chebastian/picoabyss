@@ -8,6 +8,12 @@ function tile_borders()
     local sld = chk_solid(p(x,y))
     if sig_match(sig, 0b11011111,0b11001101) and sld then
         mset(x,y,176) -- L 
+    elseif sig_match(sig, 0b11111101,0b11001101) and sld then
+        mset(x,y,179) -- L 90
+    elseif sig_match(sig, 0b11101111,0b11001101) and sld then
+        mset(x,y,178) -- L 180
+    elseif sig_match(sig, 0b01111111,0b01001101) and not sld then
+        mset(x,y,177) -- L 270
     elseif sig_match(sig, 0b10101111,0b10001101) and not sld then
         mset(x,y,146) --left
     elseif sig_match(sig, 0b11011111,0b11001111) and sld then
