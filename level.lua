@@ -31,8 +31,8 @@ function tile_borders()
         mset(x,y,160) --bottom left corner
     elseif sig_match(sig, 0b11001101,0b11001111) and sld then
         mset(x,y,162) -- bottom right corner
-    -- elseif sig_match(sig, 0b11111111,0b11001111) and sld then
-    --     mset(x,y,132) --solid not (correct?)
+    elseif sig_match(sig, 0b11111111,0b11001111) and sld then
+        mset(x,y,132) --solid not (correct?)
     end
  end)
 end
