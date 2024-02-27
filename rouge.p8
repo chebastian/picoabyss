@@ -587,7 +587,7 @@ function drw_game()
   end
  end
  
--- blackout()
+ blackout()
  drw_dmg()
  
  if _drw_dbg then
@@ -646,7 +646,7 @@ function updatefow()
     --
     if chk_tile(np,_flos_no)
 	   or losents[ptoi(np)] then
-	    _los[ptoi(np)] = true
+	    _los[ptoi(np)] = dist(np,_plyr.pos) <= _plyr.srchd
     end
   	end
   end
@@ -668,7 +668,7 @@ function blackout()
 	  local d = dist(pxy,_plyr.pos)
 	  if not _los[idx] then
 --   	print("▒",x*8,y*8+1,1)
-   	drw_rectf(x*8,y*8,8,8,0)
+   	drw_rectf((x*8)-4,(y*8)-4,8,8,0)
 	  end
 		end
 	end
