@@ -1,5 +1,21 @@
 -- gen
 
+function start_rnd_gen()
+	gen()
+	flag_map()
+	merge_areas()
+	upd_tiles()
+    -- add_slimes()
+end
+
+function start_test()
+	init_gen()
+    upd_tiles()
+	add_mob(_mobsqid,p(3,6))
+	add_mob(_mobsnek,p(3,3))
+    add_trap(_mobsmok,p(8,4),trap_noop)
+end
+
 function go_to_o(lookup, pos, ocp)
     local cp, cd = min_d_on_map(lookup, pos, ocp)
     if not cp then

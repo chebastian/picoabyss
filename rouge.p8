@@ -34,15 +34,6 @@ function _init()
 	start()
 
 	start_rnd_gen()
---	start_test()
-end
-
-function start_rnd_gen()
-	gen()
-	flag_map()
- upd_tiles()
-	merge_areas()
- add_slimes()
 end
 
 function dbg(str)
@@ -230,16 +221,8 @@ function start()
    )
  _vis_lookup = arr_to_tbl(_vis)
  updatefow()
-
 end
 
-function start_test()
-	init_gen()
- upd_tiles()
-	add_mob(_mobsqid,p(3,6))
-	add_mob(_mobsnek,p(3,3))
- add_trap(_mobsmok,p(8,4),trap_noop)
-end
 
 function get_vis_ents()
 	local res = {}
