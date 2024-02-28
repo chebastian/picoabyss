@@ -452,6 +452,10 @@ end
 
 -- signature funcs
 
+function tile_sigxy(x,y)
+  tile_sig(p(x,y))
+end
+
 function tile_sig(po)
   local sig = 0
   for i = 1, 8 do

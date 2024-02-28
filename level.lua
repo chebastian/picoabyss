@@ -3,9 +3,21 @@ function upd_tiles()
     tile_borders()
 end
 
+function upd_tiles_aorund(x,y)
+    for dir in all(dirs) do
+        local nx,ny= x + dir.x, y + dir.y
+        local sig = tile_sigxy(nx,ny)
+    end
+end
+
 function tile_borders()
  cmapsig(function(x,y,sig)
     local sld = chk_solid(p(x,y))
+    remap_tile(x,y,sig,sld)
+ end)
+end
+
+function remap_tile(x,y,sig, sld)
     if sig_match(sig, 0b11011111,0b11001101) and sld then
         mset(x,y,176) -- L 
     elseif sig_match(sig, 0b11111101,0b11001101) and sld then
@@ -34,7 +46,6 @@ function tile_borders()
     elseif sig_match(sig, 0b11111111,0b11001111) and sld then
         mset(x,y,132) --solid not (correct?)
     end
- end)
 end
 
 function cmapsig(func)
