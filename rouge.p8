@@ -656,6 +656,10 @@ function updatefow()
 end
 
 function blackout()
+	if noblackout then
+	 return
+ end
+ 
  local mw = 17
  local mh = 17
  
