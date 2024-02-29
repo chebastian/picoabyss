@@ -534,9 +534,11 @@ function merge_areas()
   merge_small_areas()
   flag_map()
   gen_junctions()
-  --
-  -- add door to random passage
-  --
+  gen_doors();
+
+end
+
+function gen_doors()
   for i = 0, _cf do
     local cons = {}
 
@@ -554,20 +556,23 @@ function merge_areas()
   end
 end
 
+noblackout = true
+
 ofset = {}
 function upd_door_tiles(x, y)
-  if ofset[ptoix(x, y)] then
-    --		stop("cao")
-    return
-  end
   offset_tile(x, y, 5)
-  ofset[ptoix(x, y)] = true
   offset_tile(x - 1, y, 5)
   offset_tile(x, y - 1, 5)
   offset_tile(x - 1, y - 1, 5)
 end
 
 function offset_tile(x, y, of)
+  if ofset[ptoix(x, y)] then
+    --		stop("cao")
+    return
+  end
+
+  ofset[ptoix(x, y)] = true
   local tk = mget(x, y)
   --	stop()
   mset(x, y, tk + of)

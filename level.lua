@@ -1,13 +1,22 @@
 
-function upd_tiles()
-    tile_borders()
+-- temp function to test upd
+function digat(x,y)
+    mset(x,y,0)
+    upd_tiles_aorund(x,y)
 end
 
 function upd_tiles_aorund(x,y)
-    for dir in all(dirs) do
+    for dir in all(dir8) do
         local nx,ny= x + dir.x, y + dir.y
-        local sig = tile_sigxy(nx,ny)
+        local sig = tile_sig(p(nx,ny))
+        remap_tile(nx,ny,sig,chk_solid(p(nx,ny)))
     end
+
+    remap_tile(x,y,tile_sig(p(x,y)), chk_solid(p(x,y)))
+end
+
+function upd_tiles()
+    tile_borders()
 end
 
 function tile_borders()
@@ -45,6 +54,8 @@ function remap_tile(x,y,sig, sld)
         mset(x,y,162) -- bottom right corner
     elseif sig_match(sig, 0b11111111,0b11001111) and sld then
         mset(x,y,132) --solid not (correct?)
+    else
+        mset(x,y,0) --empty
     end
 end
 

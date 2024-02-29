@@ -965,6 +965,7 @@ function on_bump(tile,at,ent,d)
 --  
 --  -- ★ tmp to dig walls
 --  mset(at.x,at.y,0)
+	digat(at.x,at.y)
 
   if fget(tile,_fchest) and is_player(ent) then
    local lo_idx = flr(max(1,rnd(#_lo_chst)))
