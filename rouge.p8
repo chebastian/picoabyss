@@ -1509,8 +1509,6 @@ end
 
 
 -->8
-
--->8
 -- █ todo
 
 -- [] enemy idle patterns
