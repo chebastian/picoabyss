@@ -539,24 +539,32 @@ function merge_areas()
 end
 
 function gen_doors()
+  local mdoors = {}
   for i = 0, _cf do
     local cons = {}
 
-    local p = get_passage(_junctions, i)
-    if (#p > 0) then
-      local opn = arr_choose(p)
-      for co in all(p) do
+    local passage = get_passage(_junctions, i)
+    if (#passage > 0) then
+      local opn = arr_choose(passage)
+      for co in all(passage) do
         if not cons[co.v] then
           cons[co.v] = true
           mset(co.x, co.y, 0)
+          --add_mob(_mobdoor,p(co.x,co.y))
           -- upd_door_tiles(co.x, co.y)
+          -- stop("adding")
+          mdoors[ptoix(co.x,co.y)] = p(co.x,co.y)
         end
       end
     end
   end
+
+  for k,v in pairs(mdoors) do
+    add_mob(_mobdoor,v)
+  end
 end
 
-noblackout = true
+-- noblackout = true
 
 ofset = {}
 function upd_door_tiles(x, y)

@@ -1,8 +1,8 @@
 
 -- temp function to test upd
 function digat(x,y)
-    mset(x,y,0)
-    upd_tiles_aorund(x,y)
+    upd_door_tiles(x,y)
+    -- upd_tiles_aorund(x,y)
 end
 
 function upd_tiles_aorund(x,y)
