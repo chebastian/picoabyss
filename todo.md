@@ -10,6 +10,23 @@
 -- [] enemy trail (manet with tail?)
 -- [] potion drop when destroying pots
 
+# New tile set issues
+## Doors
+- [] hide dmg on hit?
+- [] new sprite, should work in all directions
+    if its grass, then it can be used for both mid level and doors, animated
+- [] break/open animation?
+
+## Chests
+- [] rework to entity
+- [] noop entities should not affect player step time
+
+## Tiles
+- [] make tunnel floor more interesting (random spots gravel?)
+
+
+
+
 
 -- █ done
 -- [x] order rendering of ents (smoke on top of enemies, slime bellow)
