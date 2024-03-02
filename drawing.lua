@@ -224,16 +224,23 @@ function blackout()
  local mh = 17
  
  local cp = _cam.pos
- local cpx,cpy = cp.x-9
- 																,cp.y-7
- for x=cpx,cpx+mw,1 do
-	 for y=cpy,cpy+mh,1 do
-	  local pxy = p(x,y)
+ local cpx,cpy = cp.x-9,cp.y-7
+
+  map2d(cpx,cpy,mw,mh,
+  function(x,y)
 	  local idx = ptoix(x,y)
 	  if not _los[idx] then
 --   	print("▒",x*8,y*8+1,1)
-   	drw_rectf((x*8)-4,(y*8)-4,8,8,0)
+      drw_rectf((x*8)-4,(y*8)-4,8,8,0)
 	  end
-		end
-	end
+  end)
+end
+
+-- 7520
+function map2d(sx,sy,lenx,leny,fun)
+  for x=sx,sx+lenx,1 do
+    for y=sy,sy+leny,1 do
+      fun(x,y)
+    end
+  end
 end

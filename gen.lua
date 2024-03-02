@@ -216,30 +216,6 @@ function spl_rct(r, hor)
   end
 end
 
--- map things to tilemap
-function map_rct(r)
-  local x, y, w, h = r.x, r.y, r.w, r.h
-  local idx = 1
-  local flrid = 2 + _room_idx
-  for i = 0, w, 1 do
-    mset(x + i, y, idx)
-    mset(x + i, y + h, idx)
-  end
-
-  for i = 0, h, 1 do
-    mset(x, y + i, idx)
-    mset(x + w, y + i, idx)
-    if i != 0 and i != h then
-      for mx = 1, w - 1, 1 do
-        mset(x + mx, y + i, flrid)
-      end
-    end
-  end
-
-  _room_idx += 1
-  _room_idx %= 5
-end
-
 function map_rct_rnd(r)
   -- ★ hack to never gen rooms of size 1
   local nw = rnd_rng(r.w / 2, r.w)
@@ -408,6 +384,7 @@ function arr_choose(myarr)
 end
 
 function mapsig(func)
+-- token: -2 if map2d
   for y = 0, _size do
     for x = 0, _size do
       func(x, y, tile_sig(p(x, y)))
