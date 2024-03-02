@@ -218,13 +218,12 @@ end
 
 function map_rct_rnd(r)
   -- ★ hack to never gen rooms of size 1
-  local nw = rnd_rng(r.w / 2, r.w)
-  local nh = rnd_rng(r.h / 2, r.h)
-  local nx = r.x
-  local x, y, w, h = nx, r.y,
-      nw, nh
-  local idx = 1
-  local flrid = 2 + _room_idx
+  local nw,nh,nx,idx,flrid = rnd_rng(r.w / 2, r.w),
+                rnd_rng(r.h / 2, r.h),
+                r.x,
+                1,
+                2+_room_idx
+  local x, y, w, h = nx, r.y, nw, nh
   for i = 0, w, 1 do
     mset(x + i, y, idx)
     mset(x + i, y + h, idx)
