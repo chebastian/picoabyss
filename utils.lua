@@ -20,10 +20,6 @@ function is_player(ent)
 end
 
 -- projections
-function ent_to_idx(ent)
- return ptoi(ent.pos)
-end
-
 function lerp(a,b,d)
 	if(d >= 1.0) return b
  return a+(b-a)*d
@@ -87,6 +83,7 @@ function cmp_po(a,b)
  return a.x == b.x and a.y == b.y
 end
 
+-- tokens: big gain here
 function pline(x1,y1,x2,y2)
  local dx,dy = abs(x2-x1),
  													 abs(y2 - y1)

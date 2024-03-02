@@ -1,5 +1,6 @@
 -- █ todo
 
+-- [] cleanup pline for tokens
 -- [] enemy idle patterns
 -- [] enemy sight structure
 -- [] snek charge plyr
@@ -23,6 +24,8 @@
 
 ## Tiles
 - [] make tunnel floor more interesting (random spots gravel?)
+- [] randomly shoose different straight walls with features
+- [] 
 
 
 
