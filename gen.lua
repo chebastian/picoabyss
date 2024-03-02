@@ -153,12 +153,12 @@ function regen(iter, sz)
 
       while (not valid) do
         nl, nr = spl_rct(ir, hr)
-        if not hr then
-          local a, b = p(nl.x, nl.y + nl.h),
+        if hr then
+          local a, b = p(nl.x + nl.w, nl.y),
               p(nl.x + nl.w, nl.y + nl.h)
           valid = _ps[ptoi(a)] == nil and _ps[ptoi(b)] == nil
         else
-          local a, b = p(nl.x + nl.w, nl.y),
+          local a, b = p(nl.x, nl.y + nl.h),
               p(nl.x + nl.w, nl.y + nl.h)
           valid = _ps[ptoi(a)] == nil and _ps[ptoi(b)] == nil
         end
