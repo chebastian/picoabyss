@@ -230,7 +230,6 @@ function blackout()
 	 for y=cpy,cpy+mh,1 do
 	  local pxy = p(x,y)
 	  local idx = ptoix(x,y)
-	  local d = dist(pxy,_plyr.pos)
 	  if not _los[idx] then
 --   	print("▒",x*8,y*8+1,1)
    	drw_rectf((x*8)-4,(y*8)-4,8,8,0)
