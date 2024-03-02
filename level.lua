@@ -20,7 +20,7 @@ function upd_tiles()
 end
 
 function tile_borders()
- cmapsig(function(x,y,sig)
+ mapsig(function(x,y,sig)
     local sld = chk_solid(p(x,y))
     remap_tile(x,y,sig,sld)
  end)
@@ -57,19 +57,4 @@ function remap_tile(x,y,sig, sld)
     else
         mset(x,y,0) --empty
     end
-end
-
-function cmapsig(func)
-    local sigs = {}
-	for y=0,_size do
-		for x=0,_size do
-            sigs[ptoix(x,y)] = tile_sig(p(x,y))
-		end
-	end
-
-	for y=0,_size do
-		for x=0,_size do
-			func(x,y,sigs[ptoix(x,y)])
-		end
-	end
 end
