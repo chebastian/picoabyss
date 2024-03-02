@@ -1,5 +1,6 @@
 -- █ todo
 
+-- [] doors are now opened by broad sword when diagonal or in front oops
 -- [] cleanup pline for tokens
 -- [] enemy idle patterns
 -- [] enemy sight structure
