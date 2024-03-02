@@ -456,9 +456,6 @@ function gen_doors()
         if not cons[co.v] then
           cons[co.v] = true
           mset(co.x, co.y, 0)
-          --add_mob(_mobdoor,p(co.x,co.y))
-          -- upd_door_tiles(co.x, co.y)
-          -- stop("adding")
           mdoors[ptoix(co.x,co.y)] = p(co.x,co.y)
         end
       end
