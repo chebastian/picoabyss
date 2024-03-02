@@ -224,13 +224,13 @@ function map_rct_rnd(r)
                 1,
                 2+_room_idx
 
-  local x, y, w, h = nx, r.y, nw, nh
-  for i = 0, h, 1 do
-    mset(x, y + i, idx)
-    mset(x + w, y + i, idx)
-    if i != 0 and i != h then
-      for mx = 1, w - 1, 1 do
-        mset(x + mx, y + i, flrid)
+  local y = r.y
+  for i = 0, nh, 1 do
+    mset(nx, y + i, idx)
+    mset(nx + nw, y + i, idx)
+    if i != 0 and i != nh then
+      for mx = 1, nw - 1, 1 do
+        mset(nx + mx, y + i, flrid)
       end
     end
   end
