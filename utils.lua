@@ -172,7 +172,7 @@ function flood_fill(po,ocp,maxd,chk)
 					  and not ocp[pi]
 					  and not visited[pi]
 		  then
-		   visited[ptoi(np)] = true
+		   visited[pi] = true
 		   add(queue,{po=p(np.x,np.y),dst=dpth})
 		  end		  
 		 end
