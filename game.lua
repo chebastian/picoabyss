@@ -47,13 +47,13 @@ function start()
 	_hp = {10,1,5,1,1,1,1,1}
 	_atk = {1,1,1,1,1,0,1,1,0}
 	_anims = {240, --plyr
-											210, --slme
-											194, --bird
-											198, --acid
-											214, --sqid
-											222, --smok
-											218, --snek
-											231} --door
+              210, --slme
+              194, --bird
+              198, --acid
+              214, --sqid
+              222, --smok
+              218, --snek
+              231} --door
 	_mobupd = {}
 	_mobupd[_mobsqid] = upd_sqid
 	_mobupd[_mobsnek] = upd_snek
