@@ -245,23 +245,19 @@ function dig(po)
 end
 
 function dig_tunnel()
-  local start = arr_choose(_digable)
+  local start,dug = arr_choose(_digable), {}
   local ndig = dig(start)
   local keepdigging = #ndig > 0
 
-  local dug = {}
   while keepdigging do
     local pdig = arr_choose(ndig)
     if dug[ptoi(pdig)] then
       printh("backtracking lets break")
       break
     end
-    dug[ptoi(pdig)] = true
-    ndig = dig(pdig)
 
-    _curx = pdig.x * 8
-    _cury = pdig.y * 8
-    keepdigging = #ndig > 0
+    dug[ptoi(pdig)],ndig = true, dig(pdig)
+    _curx,_cury,keepdigging = pdig.x * 8, pdig.y * 8, #ndig >0
   end
 end
 
