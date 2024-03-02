@@ -127,8 +127,7 @@ function pline(x1,y1,x2,y2)
 end
 
 function line_of_sight(a,b)
- local l = pline(a.x,a.y,b.x,b.y)
- local vi_ent = get_vis_ents()
+ local l,vi_ent = pline(a.x,a.y,b.x,b.y), get_vis_ents()
  
  for _p in all(l) do
   if chk_tile(_p,_flos_no)
@@ -158,8 +157,7 @@ end
 function flood_fill(po,ocp,maxd,chk)
 	chk = chk and chk or chk_solid
  local dpth,queue,visited = 0,{},{}
- visited[ptoi(po)] = true
- local nxt = {}
+ visited[ptoi(po)], nxt = true, {}
  add(nxt,{po=p(po.x,po.y),dst=0})
 	maxd = maxd or 255
  local found = {nxt[1]}
@@ -171,8 +169,8 @@ function flood_fill(po,ocp,maxd,chk)
 		  local np = p(it.x+d.x,it.y+d.y)
 		  local pi = ptoi(np)
 		  if chk(np) == false
-					  and ocp[pi] == nil
-					  and visited[pi] == nil
+					  and not ocp[pi]
+					  and not visited[pi]
 		  then
 		   visited[ptoi(np)] = true
 		   add(queue,{po=p(np.x,np.y),dst=dpth})
