@@ -85,11 +85,8 @@ end
 
 -- tokens: big gain here
 function pline(x1,y1,x2,y2)
- local dx,dy = abs(x2-x1),
- 													 abs(y2 - y1)
- local signx,signy = 1,1
+ local dx,dy,signx,signy,px,py = abs(x2-x1), abs(y2 - y1),1,1,x1,y1
  local derr = dx*0.5
- local px,py = x1,y1
  if( dy > dx)  derr = -dy * 0.5
  
  if( x2 < x1 ) signx = -1 
