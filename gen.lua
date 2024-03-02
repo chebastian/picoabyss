@@ -143,19 +143,14 @@ end
 
 function regen(iter, sz)
   --	 reload(0x1000, 0x1000, 0x2000)
-  local w, h = sz, sz
-  local rc = rct(0, 0, w, h)
-  local iters = iter
-  local rs = { rc }
-  local cnt = 0
+  local w, h, iters = sz, sz, iter
+  local rs = {rct(0, 0, w, h)}
   _ps = {}
   while iters > 0 do
     local nxt = {}
     for ir in all(rs) do
-      local hr = iters % 2 == 0
-      local valid = false
-      local retry = 10
-      local nl, nr = {}, {}
+      local hr,valid,retry,nl,nr = iters % 2 == 0,false,10,{},{}
+
       while (not valid) do
         nl, nr = spl_rct(ir, hr)
         if not hr then
@@ -172,7 +167,6 @@ function regen(iter, sz)
           break
         end
       end
-      cnt += 1
       add_door(nl, hr, _ps)
       add(nxt, nl)
       add(nxt, nr)
