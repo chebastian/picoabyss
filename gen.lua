@@ -129,14 +129,14 @@ end
 function add_door(r, hr, existing)
   local ranx = rnd()
   local np = {}
-  if not hr then
-    np =
-        p(in_rng(r.x + flr(ranx * r.w), r.x + 1, r.x + r.w - 1),
-          r.y + r.h)
-  else
+  if hr then
     np = p(r.x + r.w,
       in_rng(r.y + flr(ranx * r.h),
         r.y + 1, r.y + r.h - 1))
+  else
+    np =
+        p(in_rng(r.x + flr(ranx * r.w), r.x + 1, r.x + r.w - 1),
+          r.y + r.h)
   end
   existing[ptoi(np)] = np
 end
