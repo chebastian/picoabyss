@@ -463,7 +463,7 @@ function gen_doors()
   end
 
   for k,v in pairs(mdoors) do
-    add_mob(_mobdoor,v)
+    add_fmob(_mobdoor,v)
   end
 end
 
@@ -479,13 +479,11 @@ end
 
 function offset_tile(x, y, of)
   if ofset[ptoix(x, y)] then
-    --		stop("cao")
     return
   end
 
   ofset[ptoix(x, y)] = true
   local tk = mget(x, y)
-  --	stop()
   mset(x, y, tk + of)
 end
 

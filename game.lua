@@ -53,7 +53,7 @@ function start()
               214, --sqid
               222, --smok
               218, --snek
-              231} --door
+              69} --door
 	_mobupd = {}
 	_mobupd[_mobsqid] = upd_sqid
 	_mobupd[_mobsnek] = upd_snek
