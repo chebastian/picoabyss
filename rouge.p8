@@ -9,7 +9,6 @@ __lua__
 #include drawing.lua
 #include items.lua
 #include utils.lua
-#include items.lua
 function _init()
  _st_upd = {}
  _dbg = {}
