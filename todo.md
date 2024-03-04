@@ -1,25 +1,26 @@
--- █ todo
+# Todo 
 
--- [] cleanup pline for tokens
--- [] enemy idle patterns
--- [] enemy sight structure
--- [] starfish charge til somethings hit
--- [] snek only charge til player last location
--- [] only update visible (or once visible) entities
---				major slowdowns if updating all ents and ink etc.
--- [] random birds
--- [] clean, remov unused _upds
--- [] enemy trail (manet with tail?)
--- [] potion drop when destroying pots
+-- [] cleanup pline for tokens  
+-- [] enemy idle patterns  
+-- [] enemy sight structure  
+-- [] starfish charge til somethings hit  
+-- [] snek only charge til player last location  
+-- [] only update visible (or once visible) entities  
+--				major slowdowns if updating all ents and ink etc.  
+-- [] random birds  
+-- [] clean, remov unused _upds  
+-- [] enemy trail (manet with tail?)  
+-- [] potion drop when destroying pots  
 
 # New tile set issues
 ## Doors
--- [] chests can be opened at attack distance
--- [] doors are now opened by broad sword when diagonal or in front oops
-- [] snakes can pickup items (when charging they bump into anything in the way)
 - [] rubble can be rendered over player
-- [] entities can now open doors? (unverified)
+- [] gras and smoke should be ontop of player?? (do i need ordering now)
 - [] tiles and other entities can accidentially be generated on the same spot
+- [] chests can be opened at attack distance
+- [] doors are now opened by broad sword when diagonal or in front oops
+- [] snakes can pickup items (when charging they bump into anything in the way)
+- [] entities can now open doors? (unverified)
 - [] hide dmg on hit?
 - [] new sprite, should work in all directions
     if its grass, then it can be used for both mid level and doors, animated
