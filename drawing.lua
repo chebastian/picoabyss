@@ -129,7 +129,11 @@ function drw_game()
  
  for e in all(_ents) do
   e:upd_ren()
-  e.sprid = upd_anim(_pl,e.anim)
+
+  if e.anim then
+    e.sprid = upd_anim(_pl,e.anim)
+  end
+
 	 if _vis_lookup[ptoi(e.pos)] then 
 	 	drw_ent(e,e.pos_ren)
 	 end

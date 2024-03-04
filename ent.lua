@@ -55,17 +55,14 @@ function add_fmob(id, p)
   local e, frames, anim_id
   = ent(id, p), {}, _anims[id]
 
-  gen_frames(anim_id, 0, frames)
-
-  e.anim = anim(frames, 3, 1)
+  e.sprid = _anims[id]
   e.hp = _hp[id]
   e.atk = _atk[id]
   e.upd = noop
   e.upd_ren = noop
-  e.can_dmg = true
-  e.can_walk = false
-  e.can_pickup = false
-  e.can_open = true
+  e.can_dmg = true  -- meaning can we bump into this thing and hit it
+  e.can_walk = false -- when false entities will not walk over this in pathfinding
+  e.can_pickup = false -- can be picked up?
 
   e.on_ent = on_open
   add_ent(e)
@@ -74,12 +71,9 @@ end
 
 function on_open(ent, atk, np, d)
   bump_at(atk, d)
-  ent.hp -= atk.atk
-  ent.flash = 10
-  if ent.hp <= 0 then
-    del(_ents, ent)
-  end
-
+  ent.sprid += 1
+  ent.can_dmg = false
+  ent.can_walk = true
   sfx(4)
 end
 

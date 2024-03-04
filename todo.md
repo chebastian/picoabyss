@@ -1,10 +1,10 @@
 -- █ todo
 
--- [] doors are now opened by broad sword when diagonal or in front oops
 -- [] cleanup pline for tokens
 -- [] enemy idle patterns
 -- [] enemy sight structure
--- [] snek charge plyr
+-- [] starfish charge til somethings hit
+-- [] snek only charge til player last location
 -- [] only update visible (or once visible) entities
 --				major slowdowns if updating all ents and ink etc.
 -- [] random birds
@@ -14,6 +14,11 @@
 
 # New tile set issues
 ## Doors
+-- [] doors are now opened by broad sword when diagonal or in front oops
+- [] snakes can pickup items (when charging they bump into anything in the way)
+- [] rubble can be rendered over player
+- [] entities can now open doors? (unverified)
+- [] tiles and other entities can accidentially be generated on the same spot
 - [] hide dmg on hit?
 - [] new sprite, should work in all directions
     if its grass, then it can be used for both mid level and doors, animated
@@ -33,6 +38,8 @@
 
 
 -- █ done
+-- [x] enemies wont walk on other entities, so they cant walk through doors 
+        fixed by setting is_walkable to true once opened.
 -- [x] order rendering of ents (smoke on top of enemies, slime bellow)
 -- [x] thermal vent traps
 -- [x] lower visibility in inktrap
@@ -52,6 +59,7 @@
 -- [x] atk dst
 -- [x] turn order
 -- [x] enemies turn is 2 frames in none visible
+-- [x] snek charge plyr
 
 
 -- ★★★ defects ★★★

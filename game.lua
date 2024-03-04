@@ -43,7 +43,11 @@ function start()
 	_mobsqid = 5
 	_mobsmok = 6
 	_mobsnek = 7
+	-- 
+	-- fmobs
+	-- 
 	_mobdoor = 8
+	_mobchest = 9
 	_hp = {10,1,5,1,1,1,1,1}
 	_atk = {1,1,1,1,1,0,1,1,0}
 	_anims = {240, --plyr
@@ -53,13 +57,22 @@ function start()
               214, --sqid
               222, --smok
               218, --snek
-              69} --door
+
+					--
+					-- fmobs
+					--
+              68, --door
+              70}  --chest
 	_mobupd = {}
 	_mobupd[_mobsqid] = upd_sqid
 	_mobupd[_mobsnek] = upd_snek
 	_mobupd[_mobslme] = wlk_to_plyr	
 	_mobupd[_mobbird] = wlk_to_plyr	
 	_mobupd[_mobdoor] = noop	
+
+	_fmobs = {}
+	_fmobs[_mobdoor] = on_open
+	_fmobs[_mobchest] = on_open
 	-- mob gen
 	_gensqid =
  {
