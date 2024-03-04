@@ -51,7 +51,7 @@ function add_trap(id, p, cbk)
   return mob
 end
 
-function add_fmob(id, p)
+function add_fmob(id, p, canwalk)
   local e, frames, anim_id
   = ent(id, p), {}, _anims[id]
 
@@ -61,7 +61,7 @@ function add_fmob(id, p)
   e.upd = noop
   e.upd_ren = noop
   e.can_dmg = true  -- meaning can we bump into this thing and hit it
-  e.can_walk = false -- when false entities will not walk over this in pathfinding
+  e.can_walk = canwalk -- when false entities will not walk over this in pathfinding
   e.can_pickup = false -- can be picked up?
 
   e.on_ent = on_open

@@ -532,13 +532,14 @@ function gen_traps(x, y, sig, r)
 end
 
 function gen_tiles(x, y, sig, r)
+  local po = p(x,y)
   if _genweed.pred(sig)
       and r <= _genweed.r
   then
-    mset(x, y, _idweed)
+    add_fmob(_mobgrass, po, true)
     return true
   elseif r < _genclam.r then
-    mset(x, y, _idclam)
+    add_fmob(_mobchest, po, false)
     return true
   end
 

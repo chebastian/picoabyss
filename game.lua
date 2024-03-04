@@ -48,6 +48,8 @@ function start()
 	-- 
 	_mobdoor = 8
 	_mobchest = 9
+	_mobgrass = 10
+
 	_hp = {10,1,5,1,1,1,1,1}
 	_atk = {1,1,1,1,1,0,1,1,0}
 	_anims = {240, --plyr
@@ -62,7 +64,9 @@ function start()
 					-- fmobs
 					--
               68, --door
-              70}  --chest
+              70, --chest
+		      72, --grass
+			}  
 	_mobupd = {}
 	_mobupd[_mobsqid] = upd_sqid
 	_mobupd[_mobsnek] = upd_snek
