@@ -56,8 +56,8 @@ function add_fmob(id, p, canwalk)
   = ent(id, p), {}, _anims[id]
 
   e.sprid = _anims[id]
-  e.hp = _hp[id]
-  e.atk = _atk[id]
+  e.hp = 1
+  e.atk = 0
   e.upd = noop
   e.upd_ren = noop
   e.can_dmg = true  -- meaning can we bump into this thing and hit it

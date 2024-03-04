@@ -52,8 +52,8 @@ function drw_spr_8(ent,at,bg)
 	for di in all(dirs) do
   local tx,ty = di.x, di.y
   spr(ent.sprid,
-					 at.x*8+tx,
-					 at.y*8+ty,
+					 (at.x*8+tx)-4,
+					 (at.y*8+ty)-4,
 					 1,1,ent.hflip)
  end
  pal()

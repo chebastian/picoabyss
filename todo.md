@@ -14,6 +14,7 @@
 
 # New tile set issues
 ## Doors
+-- [] chests can be opened at attack distance
 -- [] doors are now opened by broad sword when diagonal or in front oops
 - [] snakes can pickup items (when charging they bump into anything in the way)
 - [] rubble can be rendered over player
