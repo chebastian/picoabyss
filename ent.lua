@@ -71,6 +71,15 @@ end
 
 function on_open(ent, atk, np, d)
   bump_at(atk, d)
+  if fget(ent.sprid, _fchest) and is_player(atk) then
+    local lo_idx = flr(max(1, rnd(#_lo_chst)))
+    local itm_idx = _lo_chst[lo_idx]
+    if itm_idx >= 0 then
+      add_itm(itm_idx, p(ent.pos.x, ent.pos.y))
+    else
+      show_msg("the chest is empty")
+    end
+  end
   ent.sprid += 1
   ent.can_dmg = false
   ent.can_walk = true
@@ -328,20 +337,6 @@ function on_bump(tile, at, ent, d)
   if fget(tile, _frubble)
       and is_player(ent) then
     mset(at.x, at.y, tile - 1)
-  end
-  --
-  --  -- ★ tmp to dig walls
-  --  mset(at.x,at.y,0)
-  --	digat(at.x,at.y)
-
-  if fget(tile, _fchest) and is_player(ent) then
-    local lo_idx = flr(max(1, rnd(#_lo_chst)))
-    local itm_idx = _lo_chst[lo_idx]
-    if itm_idx >= 0 then
-      add_itm(itm_idx, p(at.x, at.y))
-    else
-      show_msg("the chest is empty")
-    end
   end
 
   bump_at(ent, d)
