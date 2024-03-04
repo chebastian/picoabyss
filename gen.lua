@@ -5,7 +5,7 @@ function start_rnd_gen()
   flag_map()
   merge_areas()
   upd_tiles()
-  -- add_slimes()
+  add_slimes()
 end
 
 function start_test()
