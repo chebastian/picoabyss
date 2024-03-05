@@ -1,31 +1,22 @@
 # Todo 
 
--- [] add wobble to player idle (this is super for overall feeling and sells swimming)
--- [] cleanup pline for tokens  
--- [] enemy idle patterns  
--- [] enemy sight structure  
--- [] starfish charge til somethings hit  
--- [] snek only charge til player last location  
--- [] only update visible (or once visible) entities  
---				major slowdowns if updating all ents and ink etc.  
--- [] random birds  
--- [] clean, remov unused _upds  
--- [] enemy trail (manet with tail?)  
--- [] potion drop when destroying pots  
--- [] rooms are always generated in the same X position
-
-# New tile set issues
-## Doors
-- [x] tiles and other entities can accidentially be generated on the same spot
-- [] chests can be opened at attack distance
-- [] rubble can be rendered over player
+- [] rubble is rendered over player
+- [] add wobble to player idle (this is super for overall feeling and sells swimming)
+- [] starfish charge til somethings hit  
+- [] snek only charge til player last location  
 - [] gras and smoke should be ontop of player?? (do i need ordering now)
-- [] doors are now opened by broad sword when diagonal or in front oops
 - [] snakes can pickup items (when charging they bump into anything in the way)
+- [] enemy idle patterns  
+- [] enemy sight structure  
+- [] random birds  
+- [] clean, remov unused _upds  
+- [] rooms are always generated in the same X position
 - [] entities can now open doors? (verified, snakes)
+- [] cleanup pline for tokens  
+- [] enemy trail (manet with tail?)  
+- [] potion drop when destroying pots  
 
 ## Chests
-- [x] rework to entity
 - [] noop entities should not affect player step time
 
 ## Tiles
@@ -38,6 +29,12 @@
 
 
 -- █ done
+- [x] rework chests to entity
+- [x] doors are now opened by broad sword when diagonal or in front oops
+- [x] tiles and other entities can accidentially be generated on the same spot
+- [x] chests can be opened at attack distance
+-- [x] only update visible (or once visible) entities  
+--				major slowdowns if updating all ents and ink etc.  
 -- [x] enemies wont walk on other entities, so they cant walk through doors 
         fixed by setting is_walkable to true once opened.
 -- [x] order rendering of ents (smoke on top of enemies, slime bellow)
