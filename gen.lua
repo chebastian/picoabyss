@@ -512,7 +512,7 @@ function add_slimes()
     local r1, r2, r3 = rnd(1000),
         rnd(1000),
         rnd(1000)
-    if not chk_solid(p(x, y)) then
+    if not chk_solid(p(x, y)) and not sld_ent_at(p(x,y)) then
       if gen_traps(x, y, sig, r1) then
       elseif gen_tiles(x, y, sig, r2) then
       elseif gen_mobs(x, y, sig, r3) then
