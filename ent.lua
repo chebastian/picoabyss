@@ -279,10 +279,6 @@ function move_ent(ent, d)
     ent.ease = ease_bump
     on_bump(tile, np, ent, d)
     return
-    -- flag set for visually obsructing
-    -- tiles, e.g grass
-  elseif chk_tile(np, _fgrass) then
-    mset(np.x, np.y, tile - 1)
   end
   -- pickup item
   local itm = sld_ent_at(np)
