@@ -12,23 +12,20 @@
 -- [] clean, remov unused _upds  
 -- [] enemy trail (manet with tail?)  
 -- [] potion drop when destroying pots  
+-- [] rooms are always generated in the same X position
 
 # New tile set issues
 ## Doors
+- [x] tiles and other entities can accidentially be generated on the same spot
+- [] chests can be opened at attack distance
 - [] rubble can be rendered over player
 - [] gras and smoke should be ontop of player?? (do i need ordering now)
-- [] tiles and other entities can accidentially be generated on the same spot
-- [] chests can be opened at attack distance
 - [] doors are now opened by broad sword when diagonal or in front oops
 - [] snakes can pickup items (when charging they bump into anything in the way)
-- [] entities can now open doors? (unverified)
-- [] hide dmg on hit?
-- [] new sprite, should work in all directions
-    if its grass, then it can be used for both mid level and doors, animated
-- [] break/open animation?
+- [] entities can now open doors? (verified, snakes)
 
 ## Chests
-- [] rework to entity
+- [x] rework to entity
 - [] noop entities should not affect player step time
 
 ## Tiles

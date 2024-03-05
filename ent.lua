@@ -63,6 +63,7 @@ function add_fmob(id, p, canwalk)
   e.can_dmg = true  -- meaning can we bump into this thing and hit it
   e.can_walk = canwalk -- when false entities will not walk over this in pathfinding
   e.can_pickup = false -- can be picked up?
+  e.is_fmob = true
 
   e.on_ent = on_open
   add_ent(e)
@@ -289,6 +290,10 @@ function move_ent(ent, d)
     ent.ease = ease_bump
     itm:on_ent(ent, np, d)
     return
+  elseif itm and itm.is_fmob then
+    ent.ease = ease_bump
+    itm:on_ent(ent, np, d) --★ 223
+    return
   end
 
   -- atk with weapon
@@ -296,7 +301,7 @@ function move_ent(ent, d)
   for atk in all(atk_tiles) do
     local ent2 = sld_ent_at(atk)
     -- ★ atk self bugfix on use item
-    if ent2 and ent2.can_dmg and ent2 != ent then
+    if ent2 and ent2.can_dmg and not ent2.is_fmob and ent2 != ent then
       ent.ease = ease_bump
       ent2:on_ent(ent, np, d) --★ 223
       return
