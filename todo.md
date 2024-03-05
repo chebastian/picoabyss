@@ -1,5 +1,6 @@
 # Todo 
 
+-- [] add wobble to player idle (this is super for overall feeling and sells swimming)
 -- [] cleanup pline for tokens  
 -- [] enemy idle patterns  
 -- [] enemy sight structure  
