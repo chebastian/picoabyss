@@ -11,8 +11,10 @@ end
 function start_test()
   init_gen()
   upd_tiles()
-  add_mob(_mobsqid, p(3, 6))
-  add_mob(_mobsnek, p(3, 3))
+  add_mob(_mobmine, p(11, 3))
+  add_mob(_mobmine, p(10, 3))
+  add_mob(_mobmine, p(12, 3))
+  add_mob(_mobmine, p(10, 4))
   add_trap(_mobsmok, p(8, 4), trap_noop)
 end
 
@@ -548,7 +550,7 @@ end
 
 function gen_mobs(x, y, sig, r)
   if r <= _gensqid.r then
-    add_mob(_gensqid.id, p(x, y))
+    add_mob(_mobmine, p(x, y))
     return true
   elseif r <= _gensnek.r then
     add_mob(_gensnek.id, p(x, y))

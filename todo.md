@@ -1,5 +1,9 @@
 # Todo 
 
+- [] deleted entities animation does not finish?
+    perhaps add a trailing animation which plays once then quits?
+    Fade out via blink?
+- [] chainable mines
 - [] rubble is rendered over player
 - [] add wobble to player idle (this is super for overall feeling and sells swimming)
 - [] starfish charge til somethings hit  

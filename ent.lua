@@ -226,6 +226,30 @@ function upd_snek(ent)
   end
 end
 
+function upd_mine(ent)
+  for dir in all(dir8) do
+    local np = p(ent.pos.x+dir.x,ent.pos.y+dir.y)
+    if (sld_ent_at(np) and not ent.countdown and ent.hp <= 4) or (ent.hp <= 4 and not ent.countdown) then
+      ent.countdown = 1
+    end
+  end
+
+  if ent.countdown then
+    ent.countdown -= 1
+    ent.flash = 10
+  end
+
+  if (ent.countdown and ent.countdown == 0) or ent.hp != 5 then
+    del(_ents, ent)
+    for dir in all(dir8) do
+      local np = p(ent.pos.x+dir.x,ent.pos.y+dir.y)
+      local tr = add_trap(_mobexpl,np)
+      tr.life = 1
+    end
+  end
+
+end
+
 function wlk_to_plyr(ent)
   local lookup = arr_to_tbl(_srch_tiles)
   local mini, mind, curpt, curd, ocp =

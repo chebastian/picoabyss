@@ -37,12 +37,13 @@ function start()
 	-- mob init
 	--
 	_mobplyr = 1
-	_mobslme = 2
-	_mobbird = 3
+	_mobexpl = 2
+	_mobmine = 3
 	_mobacid = 4
 	_mobsqid = 5
 	_mobsmok = 6
 	_mobsnek = 7
+
 	-- 
 	-- fmobs
 	-- 
@@ -53,8 +54,8 @@ function start()
 	_hp = {10,1,5,1,1,1,1,1}
 	_atk = {1,1,1,1,1,0,1,1,0}
 	_anims = {240, --plyr
-              210, --slme
-              194, --bird
+              206, --slme
+              226, --mine
               198, --acid
               214, --sqid
               222, --smok
@@ -68,10 +69,9 @@ function start()
 		      72, --grass
 			}  
 	_mobupd = {}
+	_mobupd[_mobmine] = upd_mine
 	_mobupd[_mobsqid] = upd_sqid
 	_mobupd[_mobsnek] = upd_snek
-	_mobupd[_mobslme] = wlk_to_plyr	
-	_mobupd[_mobbird] = wlk_to_plyr	
 	_mobupd[_mobdoor] = noop	
 
 	_fmobs = {}
@@ -95,8 +95,10 @@ function start()
  _trapupd ={}
  _trapupd[_mobsmok] = upd_smok
  _trapupd[_mobacid] = trap_noop
+ _trapupd[_mobexpl] = upd_smok	
  _traplife = {}
  _traplife[_mobsmok] = 5
+ _traplife[_mobexpl] = 5
  _traplife[_mobacid] = -1
  
  --
@@ -303,9 +305,15 @@ function turn_done()
 end
 
 function chk_traps(e)
-	local trap = _traps[ptoi(e.pos)]
+	local key = ptoi(e.pos)
+	local trap = _traps[key]
 	if trap and trap != e then
+		g = trap
 	 trap:on_trap(e)
+	end
+
+	if trap and trap.life <= 0 then
+		_traps[key] = nil
 	end
 end
 
