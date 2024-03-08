@@ -229,8 +229,9 @@ end
 function upd_mine(ent)
   for dir in all(dir8) do
     local np = p(ent.pos.x+dir.x,ent.pos.y+dir.y)
-    if (sld_ent_at(np) and not ent.countdown and ent.hp <= 4) or (ent.hp <= 4 and not ent.countdown) then
-      ent.countdown = 1
+    -- set a magic number for when to start explode
+    if (ent.hp < 5 and not ent.countdown) then
+      ent.countdown = 2
     end
   end
 
@@ -239,13 +240,15 @@ function upd_mine(ent)
     ent.flash = 10
   end
 
-  if (ent.countdown and ent.countdown == 0) or ent.hp != 5 then
+  if (ent.countdown and ent.countdown == 0) or ent.hp < 4 then
     del(_ents, ent)
     for dir in all(dir8) do
       local np = p(ent.pos.x+dir.x,ent.pos.y+dir.y)
       local tr = add_trap(_mobexpl,np)
       tr.life = 1
+      tr.can_dmg = false
     end
+    sfx(6)
   end
 
 end

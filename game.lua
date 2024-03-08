@@ -52,9 +52,9 @@ function start()
 	_mobgrass = 10
 
 	_hp = {10,1,5,1,1,1,1,1}
-	_atk = {1,1,1,1,1,0,1,1,0}
+	_atk = {1,2,1,1,1,0,1,1,0}
 	_anims = {240, --plyr
-              206, --slme
+              206, --expl
               226, --mine
               198, --acid
               214, --sqid
@@ -307,7 +307,7 @@ end
 function chk_traps(e)
 	local key = ptoi(e.pos)
 	local trap = _traps[key]
-	if trap and trap != e then
+	if trap and trap != e and e.can_dmg then
 		g = trap
 	 trap:on_trap(e)
 	end

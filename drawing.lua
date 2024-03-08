@@ -236,7 +236,7 @@ function blackout()
 	  local idx = ptoix(x,y)
 	  if not _los[idx] then
 --   	print("▒",x*8,y*8+1,1)
-      drw_rectf((x*8)-4,(y*8)-4,8,8,0)
+      drw_rectf((x*8)-4,(y*8)-4,8,8,1)
 	  end
   end)
 end
