@@ -1,9 +1,10 @@
 # Todo 
 
+- [] mines can now destroy clams and doors, perhaps ok?
 - [] deleted entities animation does not finish?
     perhaps add a trailing animation which plays once then quits?
     Fade out via blink?
-- [] chainable mines
+- [x] chainable mines
 - [] rubble is rendered over player
 - [] add wobble to player idle (this is super for overall feeling and sells swimming)
 - [] starfish charge til somethings hit  
@@ -12,7 +13,6 @@
 - [] snakes can pickup items (when charging they bump into anything in the way)
 - [] enemy idle patterns  
 - [] enemy sight structure  
-- [] random birds  
 - [] clean, remov unused _upds  
 - [] rooms are always generated in the same X position
 - [] entities can now open doors? (verified, snakes)
