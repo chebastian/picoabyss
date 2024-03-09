@@ -1,5 +1,9 @@
 # Todo 
 
+- [] random start point, on open tile
+- [] start updating entities only after seen
+     to reduce amount of damage made by snakes xD
+- [] on death restart game
 - [] mines can now destroy clams and doors, perhaps ok?
 - [] deleted entities animation does not finish?
     perhaps add a trailing animation which plays once then quits?

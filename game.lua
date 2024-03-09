@@ -265,6 +265,10 @@ function plr_turn()
  _srch_tiles =
    flood_fill(_plyr.pos,{},_plyr.srchd)
  
+   upd_vistiles()
+end
+
+function upd_vistiles()
  _vis =
    flood_fill(_plyr.pos,
    {},

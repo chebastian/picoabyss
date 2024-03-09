@@ -5,7 +5,33 @@ function start_rnd_gen()
   flag_map()
   merge_areas()
   upd_tiles()
+  rnd_plyr_startpos()
   add_slimes()
+end
+
+function rnd_plyr_startpos()
+  local posset = false
+  local open = {}
+  mapsig(function(x,y,sig)
+    if not chk_tile(p(x,y),_fsolid) then
+      add(open,{x=x,y=y})
+    end
+end)
+
+  local startpos = arr_choose(open)
+  _plyr.pos.x = startpos.x
+  _plyr.pos.y = startpos.y
+  _plyr.pos_ren.x = startpos.x
+  _plyr.pos_ren.y = startpos.y
+  set_lst_pos(_plyr)
+
+  _cam.pos.x = startpos.x
+  _cam.pos.y = startpos.y
+  _cam.pos_ren.x = startpos.x
+  _cam.pos_ren.y = startpos.y
+  set_lst_pos(_cam)
+  upd_vistiles()
+
 end
 
 function start_test()
