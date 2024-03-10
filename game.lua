@@ -51,7 +51,7 @@ function start()
 	_mobchest = 9
 	_mobgrass = 10
 
-	_hp = {10,1,5,1,1,1,1,1}
+	_hp = {10,1,5,1,1,1,3,1}
 	_atk = {1,2,1,1,1,0,1,1,0}
 	_anims = {240, --plyr
               206, --expl

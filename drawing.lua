@@ -23,6 +23,10 @@ function drw_ent(ent,at)
 				 1,1,ent.hflip)
 	pal()
 	ini_pal()
+	-- draw indicator above entity with target
+	if ent.target then
+		spr(63, ent.pos_ren.x*8-4,ent.pos_ren.y*8-10,1,1)
+	end
 
 end
 
