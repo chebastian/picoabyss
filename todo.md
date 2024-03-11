@@ -1,7 +1,8 @@
 # Todo 
 
-- [] indicate that snake charge you
 - [] BUG, trap sno longer work?
+    cause of the life introduced for splosions
+- [x] indicate that snake charge you
 - [] random start point, on open tile
 - [] start updating entities only after seen
      to reduce amount of damage made by snakes xD

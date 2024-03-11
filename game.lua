@@ -99,7 +99,7 @@ function start()
  _traplife = {}
  _traplife[_mobsmok] = 5
  _traplife[_mobexpl] = 5
- _traplife[_mobacid] = -1
+ _traplife[_mobacid] = nil
  
  --
  -- rest
@@ -312,11 +312,10 @@ function chk_traps(e)
 	local key = ptoi(e.pos)
 	local trap = _traps[key]
 	if trap and trap != e and e.can_dmg then
-		g = trap
 	 trap:on_trap(e)
 	end
 
-	if trap and trap.life <= 0 then
+	if trap and trap.life and trap.life <= 0 then
 		_traps[key] = nil
 	end
 end
