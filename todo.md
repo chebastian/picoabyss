@@ -7,6 +7,7 @@
 - [] randomly shoose different straight walls with features
 - [] add wobble to player idle (this is super for overall feeling and sells swimming)
 - [] noop entities should not affect player step time
+- [] BUG, acid traps can be killed but they are not removed
 - [] rubble is rendered over player
 - [] start updating entities only after seen
      to reduce amount of damage made by snakes xD

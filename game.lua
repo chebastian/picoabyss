@@ -51,7 +51,7 @@ function start()
 	_mobchest = 9
 	_mobgrass = 10
 
-	_hp = {10,1,5,1,1,1,3,1}
+	_hp = {4,1,5,1,1,1,3,1}
 	_atk = {1,2,1,1,1,0,1,1,0}
 	_anims = {240, --plyr
               206, --expl
@@ -305,6 +305,9 @@ function turn_done()
  _on_turn_done = noop
    -- traps/poison
  foreach(_ents,chk_traps)
+
+
+ chk_endgame()
 end
 
 function chk_traps(e)
@@ -317,6 +320,29 @@ function chk_traps(e)
 	if trap and trap.life and trap.life <= 0 then
 		_traps[key] = nil
 	end
+end
+
+function chk_endgame()
+ if _plyr.hp <= 0 then
+	pop_upd()
+	push_upd(upd_endgame)
+	_drw = drw_endgame
+ end
+end
+
+function upd_endgame()
+	if btnp(4) or btnp(5) then
+		pop_upd()
+		_drw = drw_game
+		push_upd(upd_game)
+		start()
+		start_rnd_gen()
+	end
+end
+
+function drw_endgame()
+	print("Y O U   D I E D", 40,40)
+	print("press a key to restart", 25,50)
 end
 
 function ease_lerp(ent)
