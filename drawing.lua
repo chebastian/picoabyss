@@ -10,7 +10,7 @@ function drw_ent(ent,at)
 	if flash and flash > 0 then
 	 pal(9,7)
 	 pal(5,1)
-   pal(6,9) -- mine flash
+     pal(6,9) -- mine flash
 	 ent.flash -= 1
 	end
 	if ent.outline then

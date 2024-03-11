@@ -1,23 +1,19 @@
 # Todo 
 
-- [] BUG, trap sno longer work?
-    cause of the life introduced for splosions
-- [x] indicate that snake charge you
-- [] random start point, on open tile
+- [] on death restart game
+- [] snek only charge til player last location  
+- [] starfish charge til somethings hit  
+- [] make tunnel floor more interesting (random spots gravel?)
+- [] randomly shoose different straight walls with features
+- [] add wobble to player idle (this is super for overall feeling and sells swimming)
+- [] noop entities should not affect player step time
+- [] rubble is rendered over player
 - [] start updating entities only after seen
      to reduce amount of damage made by snakes xD
-- [] on death restart game
-- [] mines can now destroy clams and doors, perhaps ok?
 - [] deleted entities animation does not finish?
     perhaps add a trailing animation which plays once then quits?
     Fade out via blink?
-- [x] chainable mines
-- [] rubble is rendered over player
-- [] add wobble to player idle (this is super for overall feeling and sells swimming)
-- [] starfish charge til somethings hit  
-- [] snek only charge til player last location  
 - [] gras and smoke should be ontop of player?? (do i need ordering now)
-- [] snakes can pickup items (when charging they bump into anything in the way)
 - [] enemy idle patterns  
 - [] enemy sight structure  
 - [] clean, remov unused _upds  
@@ -26,20 +22,25 @@
 - [] cleanup pline for tokens  
 - [] enemy trail (manet with tail?)  
 - [] potion drop when destroying pots  
+- [] moraan or snek endboss that has a trail and chases the player
 
 ## Chests
-- [] noop entities should not affect player step time
 
 ## Tiles
-- [] make tunnel floor more interesting (random spots gravel?)
-- [] randomly shoose different straight walls with features
-- [] 
 
 
 
 
 
 -- █ done
+- [x] mines can now destroy clams and doors, perhaps ok?
+- [x] chainable mines
+- [x] trap which has frames enabled and disabled
+      perhaps make acid trap idle n turns then enable, would also add dynamic
+- [x] random start point, on open tile
+- [x] BUG, trap sno longer work?
+    cause of the life introduced for splosions
+- [x] indicate that snake charge you
 - [x] rework chests to entity
 - [x] doors are now opened by broad sword when diagonal or in front oops
 - [x] tiles and other entities can accidentially be generated on the same spot

@@ -38,8 +38,8 @@ function _init()
 	sfx_door=3
 	start()
 
-	-- start_rnd_gen()
-	start_test()
+	start_rnd_gen()
+	--start_test()
 end
 
 function dbg(str)

@@ -137,7 +137,6 @@ function start()
 
  _traps = {}
  -- test
- add_trap(4,p(7,2))								 
 	_plyr = add_mob(1,p(8,3))
 	_plyr.upd = upd_plyr
 	_pl = anim_pl(4)
