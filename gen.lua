@@ -581,7 +581,12 @@ end
 
 function gen_mobs(x, y, sig, r)
   if r <= _gensqid.r then
-    add_mob(_mobmine, p(x, y))
+    local type = rnd(1000)
+    if type < 300 then
+      add_mob(_mobsqid, p(x, y))
+    else
+      add_mob(_mobmine, p(x, y))
+    end
     return true
   elseif r <= _gensnek.r then
     add_mob(_gensnek.id, p(x, y))
