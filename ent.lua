@@ -39,7 +39,7 @@ end
 
 function add_trap(id, p, cbk)
   printh("upd: " .. tostr(_trapupd[id]) .. "at: " .. id)
-  cbk = cbk and cbk or on_atk
+  cbk = cbk and cbk or on_trap_atk
   local mob = add_mob(id, p)
   mob.upd = _trapupd[id]
   mob.life = _traplife[id]
@@ -348,7 +348,7 @@ function on_dmg(ent, atk, at, d)
   sfx(4)
 end
 
-function on_atk(atk, ent)
+function on_trap_atk(atk, ent)
   bump_at(atk, p(0, 0))
 
   ent.hp -= atk.atk
