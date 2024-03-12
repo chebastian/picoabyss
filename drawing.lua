@@ -17,15 +17,26 @@ function drw_ent(ent,at)
 		drw_spr_8(ent,at,0)
 		ini_pal()
 	end
-	spr(ent.sprid,
-				 (at.x*8)-4,
-				 (at.y*8)-4,
-				 1,1,ent.hflip)
+	if not ent.death or (ent.death and ent.flash > 0) then
+		spr(ent.sprid,
+					(at.x*8)-4,
+					(at.y*8)-4,
+					1,1,ent.hflip)
+	end
 	pal()
 	ini_pal()
 	-- draw indicator above entity with target
 	if ent.target then
 		spr(63, ent.pos_ren.x*8-4,ent.pos_ren.y*8-10,1,1)
+	end
+
+	if ent.death then
+		ent.death -= 1
+		ent.flash = ent.death%3
+		if ent.death <= 0 then
+			del(_ents, ent)
+			chk_endgame()
+		end
 	end
 
 end

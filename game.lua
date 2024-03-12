@@ -306,8 +306,6 @@ function turn_done()
    -- traps/poison
  foreach(_ents,chk_traps)
 
-
- chk_endgame()
 end
 
 function chk_traps(e)

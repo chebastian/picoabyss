@@ -118,6 +118,15 @@ end
 function noop(e)
 end
 
+function kill_ent(ent)
+ ent.upd = noop
+ ent.death = 16
+ ent.can_dmg = false
+ if is_player(ent) then
+  ent.death = 55
+ end
+end
+
 function rand_wlk(e)
   if e.d == nil then
     e.d = next_d()
@@ -342,7 +351,7 @@ function on_dmg(ent, atk, at, d)
   ent.flash = 10
   add_atk(atk, ent)
   if ent.hp <= 0 then
-    del(_ents, ent)
+    kill_ent(ent)
   end
 
   sfx(4)
@@ -355,7 +364,7 @@ function on_trap_atk(atk, ent)
   ent.flash = 10
   add_atk(atk, ent)
   if ent.hp <= 0 then
-    del(_ents, ent)
+    kill_ent(ent)
   end
 
   sfx(4)
