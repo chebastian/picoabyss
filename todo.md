@@ -1,30 +1,24 @@
 # Todo 
 
-- [] gracefull death
-- [x] on death restart game
 - [] BUG, can spawn on another entity (fmmob rather)
+- [] BUG, acid traps can be killed but they are not removed
 - [] snek only charge til player last location  
 - [] starfish charge til somethings hit  
 - [] make tunnel floor more interesting (random spots gravel?)
 - [] randomly shoose different straight walls with features
 - [] add wobble to player idle (this is super for overall feeling and sells swimming)
 - [] noop entities should not affect player step time
-- [] BUG, acid traps can be killed but they are not removed
 - [] rubble is rendered over player
 - [] start updating entities only after seen
      to reduce amount of damage made by snakes xD
-- [] deleted entities animation does not finish?
+- [x] deleted entities animation does not finish?
     perhaps add a trailing animation which plays once then quits?
     Fade out via blink?
-- [] gras and smoke should be ontop of player?? (do i need ordering now)
 - [] enemy idle patterns  
-- [] enemy sight structure  
 - [] clean, remov unused _upds  
 - [] rooms are always generated in the same X position
-- [] entities can now open doors? (verified, snakes)
 - [] cleanup pline for tokens  
 - [] enemy trail (manet with tail?)  
-- [] potion drop when destroying pots  
 - [] moraan or snek endboss that has a trail and chases the player
 
 ## Chests
@@ -36,6 +30,8 @@
 
 
 -- █ done
+- [x] gracefull death
+- [x] on death restart game
 - [x] mines can now destroy clams and doors, perhaps ok?
 - [x] chainable mines
 - [x] trap which has frames enabled and disabled
