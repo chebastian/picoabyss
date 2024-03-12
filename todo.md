@@ -1,6 +1,7 @@
 # Todo 
 
 - [] on death restart game
+- [] BUG, can spawn on another entity (fmmob rather)
 - [] snek only charge til player last location  
 - [] starfish charge til somethings hit  
 - [] make tunnel floor more interesting (random spots gravel?)
