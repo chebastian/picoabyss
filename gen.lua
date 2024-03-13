@@ -37,16 +37,6 @@ end
 function start_test()
   init_gen()
   upd_tiles()
-  add_mob(_mobmine, p(11, 3))
-  add_mob(_mobmine, p(10, 3))
-  add_mob(_mobmine, p(12, 3))
-  add_mob(_mobmine, p(10, 4))
-  add_mob(_mobmine, p(10, 4))
-  add_trap(_mobsmok, p(8, 4), trap_noop)
-
-  add_mob(_mobsnek, p(10, 3))
-  add_mob(_mobsnek, p(11, 3))
-  add_fmob(_mobgrass, p(8, 3))
 end
 
 function go_to_o(lookup, pos, ocp)
