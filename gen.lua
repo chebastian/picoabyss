@@ -366,8 +366,6 @@ function flag_map()
 
   _flagmap = {}
   _flagmap = mapf
-  _dbg[3] = #_flagmap
-  _dbg[4] = _cf
 end
 
 function flag_section(x, y, f, res)

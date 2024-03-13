@@ -175,7 +175,6 @@ function upd_sqid(ent)
     wlk_to_plyr(ent)
   else
     -- release squid
-    _dbg[1] = #dirs
     for d in all(dirs) do
       local dx, dy = ent.pos.x + d.x, ent.pos.y + d.y
       if not chk_solid(p(dx, dy))
@@ -184,8 +183,6 @@ function upd_sqid(ent)
       end
     end
     add_trap(_mobsmok, p(ent.pos.x, ent.pos.y), trap_noop)
-
-    --		_dbg[1] = "ents: " .. #_ents
   end
 end
 

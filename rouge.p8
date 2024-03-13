@@ -51,15 +51,6 @@ function _draw()
 	cls()
  _drw()
  drw_win()
-  
- if _drw_dbg then
-	 cursor(0,20)
-	 for i=0,10 do
-	  print(_dbg[i])
-	 end
- end
- 
--- _dbg ={}
 end
 
 function _update60()
