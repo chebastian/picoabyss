@@ -5,6 +5,10 @@ function p(x,y)
 	return {x=x,y=y}
 end
 
+function  clone_p(po)
+	return p(po.x,po.y)
+end
+
 function vec_right(x,y)
  return y*-1,x	
 end

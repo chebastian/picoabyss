@@ -44,12 +44,12 @@ function go_to_o(lookup, pos, ocp)
   if not cp then
     return
   end
-  local path = { p(pos.x + cp.x, pos.y + cp.y) }
+  local path = { add_t(pos,cp) }
   local nxtp = path[1]
   while cd > 0 do
     cp, cd = min_d_on_map(lookup, nxtp, ocp)
-    local np = p(nxtp.x + cp.x, nxtp.y + cp.y)
-    add(path, p(np.x, np.y))
+    local np = add_t(nxtp, cp)
+    add(path, clone_p(np))
     nxtp = np
   end
 
@@ -477,7 +477,7 @@ function gen_doors()
         if not cons[co.v] then
           cons[co.v] = true
           mset(co.x, co.y, 0)
-          mdoors[ptoix(co.x,co.y)] = p(co.x,co.y)
+          mdoors[ptoix(co.x,co.y)] = clone_p(co)
         end
       end
     end
@@ -568,16 +568,17 @@ function gen_tiles(x, y, sig, r)
 end
 
 function gen_mobs(x, y, sig, r)
+  local po = p(x,y)
   if r <= _gensqid.r then
     local type = rnd(1000)
     if type < 300 then
-      add_mob(_mobsqid, p(x, y))
+      add_mob(_mobsqid, po)
     else
-      add_mob(_mobmine, p(x, y))
+      add_mob(_mobmine, po)
     end
     return true
   elseif r <= _gensnek.r then
-    add_mob(_gensnek.id, p(x, y))
+    add_mob(_gensnek.id, po)
     return true
   end
 

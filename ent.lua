@@ -12,8 +12,8 @@ function ent(id, po)
     upd_ren = noop,
     ease = ease_lerp,
     on_ent = on_dmg,
-    pos_ren = p(po.x, po.y),
-    pos_lst = p(po.x, po.y),
+    pos_ren = clone_p(po),
+    pos_lst = clone_p(po),
     dx = 0,
     dy = 0,
     can_dmg = false,
@@ -76,7 +76,7 @@ function on_open(ent, atk, np, d)
     local lo_idx = flr(max(1, rnd(#_lo_chst)))
     local itm_idx = _lo_chst[lo_idx]
     if itm_idx >= 0 then
-      add_itm(itm_idx, p(ent.pos.x, ent.pos.y))
+      add_itm(itm_idx, clone_p(ent.pos))
     else
       show_msg("the chest is empty")
     end
@@ -165,7 +165,7 @@ function upd_sqid(ent)
         add_trap(_mobsmok, p(dx,dy), trap_noop)
       end
     end
-    add_trap(_mobsmok, p(ent.pos.x, ent.pos.y), trap_noop)
+    add_trap(_mobsmok, clone_p(ent.pos), trap_noop)
   end
 end
 
@@ -232,7 +232,7 @@ function upd_mine(ent)
   if (ent.countdown and ent.countdown == 0) or ent.hp < 4 then
     del(_ents, ent)
     for dir in all(dir8) do
-      local np = p(ent.pos.x+dir.x,ent.pos.y+dir.y)
+      local np = add_t(ent.pos,dir)
       local tr = add_trap(_mobexpl,np)
       tr.life = 1
       tr.can_dmg = false
