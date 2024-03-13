@@ -154,24 +154,11 @@ function start()
 	
 	_slime_anim = anim({210,211},3,1)
 
- -- <test>
- -- </test>
- 
  -- init fov and search tiles
  _srch_tiles =
    flood_fill(_plyr.pos,{},_plyr.srchd)
- _vis =
-   flood_fill(_plyr.pos,
-			{},
-   _plyr.srchd,
-	  function(p)
-	  	return chk_tile(p,_flos_no)
-	  end
-   )
- _vis_lookup = arr_to_tbl(_vis)
- updatefow()
+	 upd_vistiles()
 end
-
 
 function get_vis_ents()
 	local res = {}
