@@ -217,7 +217,6 @@ end
 
 function upd_mine(ent)
   for dir in all(dir8) do
-    local np = p(ent.pos.x+dir.x,ent.pos.y+dir.y)
     -- set a magic number for when to start explode
     if (ent.hp < 5 and not ent.countdown) then
       ent.countdown = 2
