@@ -50,15 +50,14 @@ function drw_box(x,y,w,h,fg,bg)
  drw_rectf(x+1,y+1,w-2,h-2,bg)
 end
 
-function drw_txt8(txt,pos,fg,bg)
+function drw_txt8(txt,tx,ty,fg,bg)
 	for di in all(dir8) do
-  local tx,ty = pos.x, pos.y
   print(txt,tx+di.x
      ,di.y+ty,bg)
  end
  
- print(txt,pos.x
-      ,pos.y,fg)   
+ print(txt,tx
+      ,ty,fg)   
 end
 
 function drw_spr_8(ent,at,bg)
@@ -189,8 +188,8 @@ for dmg in all(_txts) do
   local off = 1-(dmg.t/dmg.ot)
   
   drw_txt8(dmg.txt,
-           p(dmg.pos.x*8,
-             8*dmg.pos.y-off*8),
+           dmg.pos.x*8,
+             8*dmg.pos.y-off*8,
            dmg.bg,dmg.fg)
   dmg.t-=1
   if(dmg.t<=0)del(_txts,dmg)
@@ -200,7 +199,7 @@ end
 function drw_hud()
   drw_rectf(0,0,128,10,1)
   drw_txt8("♥ ".._plyr.hp..
-           " カ " .. _plyr.atk,p(8,2),3,7)
+           " カ " .. _plyr.atk,8,2,3,7)
 end
 
 _los = {}
