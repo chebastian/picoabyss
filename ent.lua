@@ -174,10 +174,10 @@ function upd_snek(ent)
   if not ent.target then
     for dir in all(dirs) do
       for i = 1, 10 do
-        local pn = p(ent.pos.x + (dir.x * i),
-          ent.pos.y + (dir.y * i))
-        if _plyr.pos.x == pn.x and
-            _plyr.pos.y == pn.y then
+        local pnx,pny= ent.pos.x + (dir.x * i),
+          ent.pos.y + (dir.y * i)
+        if _plyr.pos.x == pnx and
+            _plyr.pos.y == pny then
           -- set target
           ent.target = _plyr.pos
           ent.targetd = dir
