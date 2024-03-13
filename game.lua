@@ -151,8 +151,6 @@ function start()
 	[15]=sfx_lmp,
 	[1]=sfx_bmp
 	}
-	
-	_slime_anim = anim({210,211},3,1)
 
  -- init fov and search tiles
  _srch_tiles =
