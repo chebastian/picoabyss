@@ -141,6 +141,7 @@ function start()
 	_plyr.upd = upd_plyr
 	_pl = anim_pl(4)
 	_plyr.ease = ease_lerp
+	_plyr.upd_ren = wobble_upd
 	_plyr.srchd = 6
  _cam = ent(99,p(_plyr.pos.x,
  																_plyr.pos.y))
@@ -260,6 +261,7 @@ function plr_turn()
  _on_turn_done = ai_turn
  _trn_spd = 1/10
  push_upd(upd_ease)
+ _plyr.upd_ren = noop
  
  _srch_tiles =
    flood_fill(_plyr.pos,{},_plyr.srchd)
@@ -306,6 +308,7 @@ function turn_done()
    -- traps/poison
  foreach(_ents,chk_traps)
 
+ _plyr.upd_ren = wobble_upd
 end
 
 function chk_traps(e)
