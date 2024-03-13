@@ -29,6 +29,11 @@ function add_t(po,d)
  return p(po.x+d.x,po.y+d.y)
 end
 
+-- take two points and returns their sum as tuple
+function add_pt(p1,p2)
+	return p1.x+p2.x, p1.y + p2.y
+end
+
 function move_t(po,d)
  po.x += d.x
  po.y += d.y

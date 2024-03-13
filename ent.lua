@@ -135,23 +135,6 @@ function rand_wlk(e)
   e.d = nil
 end
 
-function wlk_in_d(enta)
-  local mini, mind = 0, 999
-  for i = 1, #dirs do
-    local nx, ny, ndist = enta.pos.x + dirs[i].x
-    , enta.pos.y + dirs[i].y
-    , dist(p(nx, ny), entb.pos)
-    if ndist < mind then
-      mini = i
-      mind = ndist
-    end
-  end
-
-  enta.d = dirs[mini]
-  move_ent(enta, dirs[mini])
-  enta.d = nil
-end
-
 function ptoi(po)
   --★ arbitrary w, fix
   return po.x + po.y * 128
@@ -176,10 +159,10 @@ function upd_sqid(ent)
   else
     -- release squid
     for d in all(dirs) do
-      local dx, dy = ent.pos.x + d.x, ent.pos.y + d.y
+      local dx, dy = add_pt(ent.pos, d)
       if not chk_solid(p(dx, dy))
           and not sld_ent_at(p(dx, dy)) then
-        add_trap(_mobsmok, p(ent.pos.x + d.x, ent.pos.y + d.y), trap_noop)
+        add_trap(_mobsmok, p(dx,dy), trap_noop)
       end
     end
     add_trap(_mobsmok, p(ent.pos.x, ent.pos.y), trap_noop)
