@@ -238,7 +238,7 @@ end
 function update_digables()
   _digable = {}
   mapsig(function(x, y, sig)
-    if chk_solid(p(x, y)) and sig == sig_dig then
+    if chk_solidx(x, y) and sig == sig_dig then
       mset(x, y, t_dig)
       add(_digable, { x = x, y = y })
     end
@@ -306,7 +306,7 @@ end
 
 function set_digable_start()
   mapsig(function(x, y, sig)
-    if chk_solid(p(x, y)) then
+    if chk_solidx(x, y) then
       if is_digable(sig) then
         mset(x, y, t_dig)
         add(digs, p(x, y))
@@ -357,7 +357,7 @@ function flag_map()
     function(x, y, sig)
       local idx = ptoix(x, y)
       if mapf[idx] then
-      elseif not chk_solid(p(x, y)) then
+      elseif not chk_solidx(x, y) then
         flag_section(x, y, _cf, mapf)
         _cf += 1
       end
@@ -409,7 +409,7 @@ function gen_junctions()
           and inbound(x, y + 1)
           and sig_match(sig, 0b10100000,
             0b00001111)
-          and chk_solid(p(x, y))
+          and chk_solidx(x, y)
       then
         add(_junctions,
           {
@@ -422,7 +422,7 @@ function gen_junctions()
           and inbound(x + 1, y)
           and sig_match(sig, 0b01010000,
             0b00001111)
-          and chk_solid(p(x, y))
+          and chk_solidx(x, y)
       then
         add(_junctions,
           {
@@ -533,7 +533,7 @@ function add_slimes()
     local r1, r2, r3 = rnd(1000),
         rnd(1000),
         rnd(1000)
-    if not chk_solid(p(x, y)) and not sld_ent_at(p(x,y)) then
+    if not chk_solidx(x, y) and not sld_ent_at(p(x,y)) then
       if gen_traps(x, y, sig, r1) then
       elseif gen_tiles(x, y, sig, r2) then
       elseif gen_mobs(x, y, sig, r3) then
@@ -543,7 +543,7 @@ function add_slimes()
 end
 
 function gen_traps(x, y, sig, r)
-  if not chk_solid(p(x, y)) then
+  if not chk_solidx(x, y) then
     if sig == 0 and r <= 100 then
       add_trap(_mobacid, p(x, y))
       return true

@@ -179,6 +179,11 @@ function chk_solid(po)
  return chk_tile(po,_fsolid)
 end
 
+-- 7378
+function chk_solidx(x,y)
+ return chk_tile(p(x,y),_fsolid)
+end
+
 function sld_ent_at(p)
  for ent in all(_ents) do
   if ent.pos.x == p.x

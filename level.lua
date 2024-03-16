@@ -9,10 +9,10 @@ function upd_tiles_aorund(x,y)
     for dir in all(dir8) do
         local nx,ny= x + dir.x, y + dir.y
         local sig = tile_sig(p(nx,ny))
-        remap_tile(nx,ny,sig,chk_solid(p(nx,ny)))
+        remap_tile(nx,ny,sig,chk_solidx(nx,ny))
     end
 
-    remap_tile(x,y,tile_sig(p(x,y)), chk_solid(p(x,y)))
+    remap_tile(x,y,tile_sig(p(x,y)), chk_solidx(x,y))
 end
 
 function upd_tiles()
@@ -21,7 +21,7 @@ end
 
 function tile_borders()
  mapsig(function(x,y,sig)
-    local sld = chk_solid(p(x,y))
+    local sld = chk_solidx(x,y)
     remap_tile(x,y,sig,sld)
  end)
 end
