@@ -11,25 +11,30 @@
 - [] rubble is rendered over player
 - [] start updating entities only after seen
      to reduce amount of damage made by snakes xD
-- [x] deleted entities animation does not finish?
-    perhaps add a trailing animation which plays once then quits?
-    Fade out via blink?
 - [] enemy idle patterns  
 - [] clean, remov unused _upds  
 - [] rooms are always generated in the same X position
 - [] cleanup pline for tokens  
 - [] enemy trail (manet with tail?)  
 - [] moraan or snek endboss that has a trail and chases the player
+- [] place mine at current location
 
-## Chests
+## potions and pickups
+- [] increase oxygen level
+- [] boost max oxycen level
+- [] reduce oxycen reduction for x turns
+- [] take no explosion dmg for x turns
+- [] enemies do not charge or follow you
+- [] mine
 
 ## Tiles
 
 
 
-
-
 -- █ done
+- [x] deleted entities animation does not finish?
+    perhaps add a trailing animation which plays once then quits?
+    Fade out via blink?
 - [x] gracefull death
 - [x] on death restart game
 - [x] mines can now destroy clams and doors, perhaps ok?

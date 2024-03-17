@@ -173,15 +173,21 @@ function upd_snek(ent)
   -- if snek has no target
   if not ent.target then
     for dir in all(dirs) do
+      local hit = false
       for i = 1, 10 do
         local pnx,pny= ent.pos.x + (dir.x * i),
           ent.pos.y + (dir.y * i)
-        if _plyr.pos.x == pnx and
+        if hit or chk_solidx(pnx,pny) then
+          hit = true
+          break
+        elseif _plyr.pos.x == pnx and
             _plyr.pos.y == pny then
           -- set target
           ent.target = _plyr.pos
           ent.targetd = dir
           break
+        elseif sld_ent_at(p(pnx,pny)) then
+          hit = true
         end
       end
 
@@ -195,6 +201,9 @@ function upd_snek(ent)
   -- do random walk
   if not ent.target then
     ent.d = arr_choose(dirs)
+    if sld_ent_at(ent.d) then
+      ent.d = arr_choose(dirs)
+    end
     move_ent(ent, ent.d)
     return
   end
