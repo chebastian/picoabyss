@@ -143,6 +143,7 @@ function start()
 	_plyr.ease = ease_lerp
 	_plyr.upd_ren = wobble_upd
 	_plyr.srchd = 6
+	_plyr.air = 100
  _cam = ent(99,p(_plyr.pos.x,
  																_plyr.pos.y))
 	_tile_sfx = {
@@ -299,6 +300,7 @@ function turn_done()
  foreach(_ents,chk_traps)
 
  _plyr.upd_ren = wobble_upd
+ _plyr.air -= 1
 end
 
 function chk_traps(e)

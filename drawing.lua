@@ -199,7 +199,9 @@ end
 function drw_hud()
   drw_rectf(0,0,128,10,1)
   drw_txt8("♥ ".._plyr.hp..
-           " カ " .. _plyr.atk,8,2,3,7)
+           " カ " .. _plyr.atk..
+           " air " .. _plyr.air
+		   ,8,2,3,7)
 end
 
 _los = {}
