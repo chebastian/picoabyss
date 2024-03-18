@@ -80,22 +80,6 @@ function upd_inv(win)
  win.sel = max(0,win.sel)
 end
 
-function ok_msg(txt)
- local l = #txt[1]
- for msg in all(txt) do
-   msg = " " .. msg .. " " 
-   l = max(#msg,l)
- end
- 
- local len=l/2
- local w = add_win(64-len*4,64
-           ,(l+1)*4
-           ,max(10,7*#txt)
-           ,txt)
-           
- return w
-end
-
 function show_msg(txt)
  	local msg = " " .. txt.. " "
  local len=#msg/2
