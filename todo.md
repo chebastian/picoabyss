@@ -26,6 +26,7 @@
 - [] take no explosion dmg for x turns
 - [] enemies do not charge or follow you
 - [] mine
+- [] reveal map
 
 ## Tiles
 

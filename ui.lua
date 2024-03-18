@@ -132,7 +132,7 @@ function add_hp(ent,hp)
       7,11))
 end
 
-function add_mp(ent,mp)
+function add_air(ent,mp)
  add(_txts,
    prl("+"..mp
       ,40

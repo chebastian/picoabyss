@@ -46,8 +46,9 @@ end
 
 function on_use_mana()
 --★ fix mp _plyr.hp+=1
- add_mp(_plyr,1)
+ add_air(_plyr,25)
  p_sfx(5,_plyr)
+ _plyr.air += 25
 end
 
 function on_use_grt_ptn()

@@ -119,7 +119,7 @@ function start()
              [0x51] = 3}
 	_lo_itms = {
 		[0] = crt_itm("potion",on_use_potion),
-		[1] = crt_itm("mana", on_use_mana),
+		[1] = crt_itm("air", on_use_mana),
 		[2] = crt_itm("grt potion",on_use_grt_ptn),
 		[3] = crt_itm("elixir",on_use_potion),
 		[16] = crt_eqp("swd",2,2,on_equip),
@@ -129,11 +129,12 @@ function start()
 	}
 	
 	_lo_chst = {-1,
-																0,0,0,
-																16,16,16,16,
-																17,17,17,
-																18,18,
-																19}
+				0,0,0,
+				1,1,1,1,1,1,1,1,1,1,
+				16,16,16,16,
+				17,17,17,
+				18,18,
+				19}
 
  _traps = {}
  -- test
