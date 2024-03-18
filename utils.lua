@@ -209,3 +209,18 @@ function flood_fill(po,ocp,maxd,chk)
 -- stop()
  return found
 end
+
+function csv_to_arr(str)
+	local num = ""
+	local arr = {}
+	for c in all(str) do
+		local cpy = num
+		num = c == "," and "" or num .. c
+		gn = num
+		if c == "," then
+			add(arr,tonum(cpy))
+		end
+	end
+	add(arr,tonum(num)) -- add last
+	return arr
+end

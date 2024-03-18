@@ -51,23 +51,9 @@ function start()
 	_mobchest = 9
 	_mobgrass = 10
 
-	_hp = {4,1,5,1,1,1,3,1}
-	_atk = {1,2,1,1,1,0,1,1,0}
-	_anims = {240, --plyr
-              206, --expl
-              226, --mine
-              198, --acid
-              214, --sqid
-              222, --smok
-              218, --snek
-
-					--
-					-- fmobs
-					--
-              68, --door
-              70, --chest
-		      72, --grass
-			}  
+	_hp = csv_to_arr("4,1,5,1,1,1,3,1")
+	_atk = csv_to_arr("1,2,1,1,1,0,1,1,0")
+	_anims = csv_to_arr("240,206,226,198,214,222,218,68,70,72")
 	_mobupd = {}
 	_mobupd[_mobmine] = upd_mine
 	_mobupd[_mobsqid] = upd_sqid
@@ -120,21 +106,14 @@ function start()
 	_lo_itms = {
 		[0] = crt_itm("potion",on_use_potion),
 		[1] = crt_itm("air", on_use_mana),
-		[2] = crt_itm("grt potion",on_use_grt_ptn),
-		[3] = crt_itm("elixir",on_use_potion),
 		[16] = crt_eqp("swd",2,2,on_equip),
 		[17] = crt_eqp("grt swd",3,2,on_equip),
 		[18] = crt_eqp("slv swd",4,3,on_equip),
-		[19] = crt_eqp("gld swd",5,1,on_equip),
 	}
-	
-	_lo_chst = {-1,
-				0,0,0,
-				1,1,1,1,1,1,1,1,1,1,
-				16,16,16,16,
-				17,17,17,
-				18,18,
-				19}
+
+	-- 7430
+	-- 7451
+	_lo_chst = csv_to_arr("-1,0,0,0,1,1,1,1,1,1,1,1,1,1,16,16,16,16,17,17,17,18,18,19")
 
  _traps = {}
  -- test
@@ -145,14 +124,13 @@ function start()
 	_plyr.upd_ren = wobble_upd
 	_plyr.srchd = 6
 	_plyr.air = 100
- _cam = ent(99,p(_plyr.pos.x,
- 																_plyr.pos.y))
-	_tile_sfx = {
-	[9]=sfx_door,
-	[13]=sfx_lmp,
-	[15]=sfx_lmp,
-	[1]=sfx_bmp
-	}
+ 	_cam = ent(99,p(_plyr.pos.x, _plyr.pos.y))
+
+	-- sfx_wkl=0
+	-- sfx_bmp=1
+	-- sfx_lmp=2
+	-- sfx_door=3
+	_tile_sfx = { [9]=3, [13]=2, [15]=2, [1]=1 }
 
  -- init fov and search tiles
  _srch_tiles =

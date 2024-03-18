@@ -33,10 +33,6 @@ function _init()
 									p(-1,-1), p(1,-1),
 								 p(1,1),p(-1,1)}
 	
-	sfx_wkl=0
-	sfx_bmp=1
-	sfx_lmp=2
-	sfx_door=3
 	start()
 
 	start_rnd_gen()
