@@ -4,7 +4,7 @@ function start_rnd_gen()
   gen()
   flag_map()
   merge_areas()
-  upd_tiles()
+  upd_visual_tiles()
   rnd_plyr_startpos()
   add_slimes()
 end
@@ -36,7 +36,7 @@ end
 
 function start_test()
   init_gen()
-  upd_tiles()
+  upd_visual_tiles()
 end
 
 function go_to_o(lookup, pos, ocp)
