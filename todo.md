@@ -1,5 +1,8 @@
 # Todo 
 
+- [] title screen
+- [] clear game screen
+- [] gameover screen
 - [] BUG, can spawn on another entity (fmmob rather)
 - [] BUG, acid traps can be killed but they are not removed
 - [] snek only charge til player last location  
