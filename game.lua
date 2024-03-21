@@ -3,7 +3,7 @@ function init_game()
 	--
 	-- spr ids
 	-- 
-	_splshy = 100
+	_splshy = 140
 	_idweed = 19
 	_idclam = 29
 	
@@ -121,7 +121,7 @@ function init_game()
 
 	_traps = {}
 	-- test
-	_plyr = add_mob(1,p(8,3))
+	_plyr = add_mob(1,p(8,12))
 	_plyr.upd = upd_plyr
 	_pl = anim_pl(4)
 	_plyr.ease = ease_lerp
@@ -139,8 +139,10 @@ function init_game()
 end
 
 function start()
-	stop("sss")
 	init_game()
+	for i=0,18 do
+		add_trap(11,p(i,10))
+	end
 end
 
 function restart()
@@ -221,7 +223,7 @@ function upd_plyr(ent)
 end
 
 function upd_splash()
-	_splshy -= 1
+	_splshy -= .5
 	_splshy = max(_splshy,50)
 	if btnp(❎) then
 		-- pop_upd()

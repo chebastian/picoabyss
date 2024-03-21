@@ -267,6 +267,17 @@ function map2d(sx,sy,lenx,leny,fun)
 end
 
 function drw_splash()
-	print("-- p i c o - a b y s s -- ", 20, _splshy)
 	map()
+	_pl.frame_cnt+=1
+ _updt = min(_updt+1/60,1)
+	print("-- p i c o - a b y s s -- ", 20, _splshy)
+	for e in all(_ents) do
+	e:upd_ren()
+
+	if e.anim then
+		e.sprid = upd_anim(_pl,e.anim)
+	end
+
+	drw_ent(e,e.pos_ren)
+	end
 end
