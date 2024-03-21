@@ -265,3 +265,8 @@ function map2d(sx,sy,lenx,leny,fun)
     end
   end
 end
+
+function drw_splash()
+	print("-- p i c o - a b y s s -- ", 20, _splshy)
+	map()
+end

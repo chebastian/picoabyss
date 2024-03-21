@@ -1,29 +1,30 @@
 -- game
-function start()
- --
- -- spr ids
- -- 
- _idweed = 19
- _idclam = 29
- 
- --
- -- generators
- --
- _genweed =
- {
-  id = _idweed,
-  r  = 400,
-  pred = function(sig)
-	  return sig_match(sig,0b1010000,0b00001111)
-				or sig_match(sig,0b0101000,0b00001111)
-  end
- }
- _genclam =
- {
-  id = _idclam,
-  r  = 100
- }
- 
+function init_game()
+	--
+	-- spr ids
+	-- 
+	_splshy = 100
+	_idweed = 19
+	_idclam = 29
+	
+	--
+	-- generators
+	--
+	_genweed =
+	{
+	id = _idweed,
+	r  = 400,
+	pred = function(sig)
+		return sig_match(sig,0b1010000,0b00001111)
+					or sig_match(sig,0b0101000,0b00001111)
+	end
+	}
+	_genclam =
+	{
+	id = _idclam,
+	r  = 100
+	}
+	
 	-- 
 	-- spr flags
 	--
@@ -50,10 +51,11 @@ function start()
 	_mobdoor = 8
 	_mobchest = 9
 	_mobgrass = 10
+	-- 11 waterline
 
-	_hp = csv_to_arr("4,1,5,1,1,1,3,1")
-	_atk = csv_to_arr("1,2,1,1,1,0,1,1,0")
-	_anims = csv_to_arr("240,206,226,198,214,222,218,68,70,72")
+	_hp = csv_to_arr("4,1,5,1,1,1,3,1,0")
+	_atk = csv_to_arr("1,2,1,1,1,0,1,1,0,0")
+	_anims = csv_to_arr("240,206,226,198,214,222,218,68,70,72,50")
 	_mobupd = {}
 	_mobupd[_mobmine] = upd_mine
 	_mobupd[_mobsqid] = upd_sqid
@@ -65,44 +67,46 @@ function start()
 	_fmobs[_mobchest] = on_open
 	-- mob gen
 	_gensqid =
- {
-  id = _mobsqid,
-  r = 35
- }
- _gensnek = 
- {
- 	id = _mobsnek,
- 	r = 45
- }
-	
+	{
+	id = _mobsqid,
+	r = 35
+	}
+	_gensnek = 
+	{
+		id = _mobsnek,
+		r = 45
+	}
+		
 	--
 	-- trap init
 	-- 
- _trapupd ={}
- _trapupd[_mobsmok] = upd_smok
- _trapupd[_mobacid] = trap_noop
- _trapupd[_mobexpl] = upd_smok	
- _traplife = {}
- _traplife[_mobsmok] = 5
- _traplife[_mobexpl] = 5
- _traplife[_mobacid] = nil
- 
- --
- -- rest
- --
+	_trapupd ={}
+	_trapupd[_mobsmok] = upd_smok
+	_trapupd[_mobacid] = trap_noop
+	_trapupd[_mobexpl] = upd_smok	
+	_trapupd[11] = trap_noop -- waterline
+	_traplife = {}
+	_traplife[_mobsmok] = 5
+	_traplife[_mobexpl] = 5
+	_traplife[_mobacid] = nil
+	_traplife[11] = nil -- waterline
+	
+	--
+	-- rest
+	--
 	_t⧗ = 0
- _pid = 1
- _updt = 0 -- a global 1s timer which can be used to update idle anim
+	_pid = 1
+	_updt = 0 -- a global 1s timer which can be used to update idle anim
 
 
- _upds = {noop,noop,wobble_upd}
+	_upds = {noop,noop,wobble_upd}
 	_txts = {}  -- floating text
 	_ents = {}  -- all entities, inc player
- _itms = {}  -- all pickups etc
- _bpack = {} -- player backpack
- _eqp = {}   -- player equipment
- _eqp_atk = {[0x50] = 2,
-             [0x51] = 3}
+	_itms = {}  -- all pickups etc
+	_bpack = {} -- player backpack
+	_eqp = {}   -- player equipment
+	_eqp_atk = {[0x50] = 2,
+				[0x51] = 3}
 	_lo_itms = {
 		[0] = crt_itm("potion",on_use_potion),
 		[1] = crt_itm("air", on_use_mana),
@@ -115,8 +119,8 @@ function start()
 	-- 7451
 	_lo_chst = csv_to_arr("-1,0,0,0,1,1,1,1,1,1,1,1,1,1,16,16,16,16,17,17,17,18,18,19")
 
- _traps = {}
- -- test
+	_traps = {}
+	-- test
 	_plyr = add_mob(1,p(8,3))
 	_plyr.upd = upd_plyr
 	_pl = anim_pl(4)
@@ -132,9 +136,17 @@ function start()
 	-- sfx_door=3
 	_tile_sfx = { [9]=3, [13]=2, [15]=2, [1]=1 }
 
- -- init fov and search tiles
- _srch_tiles =
-   flood_fill(_plyr.pos,{},_plyr.srchd)
+end
+
+function start()
+	stop("sss")
+	init_game()
+end
+
+function restart()
+	init_game()
+	start_rnd_gen()
+	_srch_tiles = flood_fill(_plyr.pos,{},_plyr.srchd)
 	 upd_vistiles()
 end
 
@@ -206,6 +218,18 @@ function upd_plyr(ent)
  _cam.pos.x = ent.pos.x
  _cam.pos.y = ent.pos.y
  set_lst_pos(_cam)
+end
+
+function upd_splash()
+	_splshy -= 1
+	_splshy = max(_splshy,50)
+	if btnp(❎) then
+		-- pop_upd()
+		-- _drw = drw_game
+		restart()
+		pop_upd()
+		_drw = drw_game
+	end
 end
 
 function upd_game()
@@ -307,8 +331,7 @@ function upd_endgame()
 		pop_upd()
 		_drw = drw_game
 		push_upd(upd_game)
-		start()
-		start_rnd_gen()
+		restart()
 	end
 end
 
