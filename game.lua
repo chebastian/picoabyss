@@ -225,12 +225,17 @@ end
 function upd_splash()
 	_splshy -= .5
 	_splshy = max(_splshy,50)
-	if btnp(❎) then
-		-- pop_upd()
+	if btnp(3) then
+		_starting = true
+	end
+	if _starting then
+		_plyr.pos.y += .1
+		if _plyr.pos.y > 20 then
 		-- _drw = drw_game
-		restart()
-		pop_upd()
-		_drw = drw_game
+			restart()
+			pop_upd()
+			_drw = drw_game
+		end
 	end
 end
 

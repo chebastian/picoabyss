@@ -1,11 +1,12 @@
 # Todo 
 
-- [] title screen
+- [x] splash screen
 - [] clear game screen
 - [] gameover screen
+- [] BUG, bump wall should not be one turn (other bumps should)
 - [] BUG, can spawn on another entity (fmmob rather)
 - [] BUG, acid traps can be killed but they are not removed
-- [] snek only charge til player last location  
+- [] snek should only charge til player last location  
 - [] starfish charge til somethings hit  
 - [] make tunnel floor more interesting (random spots gravel?)
 - [] randomly shoose different straight walls with features

@@ -269,15 +269,20 @@ end
 function drw_splash()
 	map()
 	_pl.frame_cnt+=1
- _updt = min(_updt+1/60,1)
+	_updt = min(_updt+1/60,1)
 	print("-- p i c o - a b y s s -- ", 20, _splshy)
-	for e in all(_ents) do
-	e:upd_ren()
 
-	if e.anim then
-		e.sprid = upd_anim(_pl,e.anim)
+	for e in all(_ents) do
+		e:upd_ren()
+
+		if e.anim then
+			e.sprid = upd_anim(_pl,e.anim)
+		end
+
+		drw_ent(e,e.pos_ren)
 	end
 
-	drw_ent(e,e.pos_ren)
+	if _splshy == 50 and t()%1 <= 0.5 then
+		print("⬇️",60,110)
 	end
 end
