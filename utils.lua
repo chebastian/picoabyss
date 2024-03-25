@@ -224,3 +224,7 @@ function csv_to_arr(str)
 	add(arr,tonum(num)) -- add last
 	return arr
 end
+
+function csv_to_val(str)
+	unpack(csv_to_arr(str))
+end

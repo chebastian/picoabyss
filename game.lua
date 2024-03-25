@@ -33,10 +33,10 @@ function init_game()
 	_flos_no,
 	_frubble,
 	_fgrass,
-	_fanchor = unpack(csv_to_arr("0,1,2,3,4,5"))
+	_fanchor = csv_to_val("0,1,2,3,4,5")
 	
 	--
-	-- mob init
+	-- mob inint
 	--
 	_mobplyr,
 	_mobexpl,
@@ -44,7 +44,7 @@ function init_game()
 	_mobacid,
 	_mobsqid,
 	_mobsmok,
-	_mobsnek = unpack(csv_to_arr("1,2,3,4,5,6,7"))
+	_mobsnek = csv_to_val("1,2,3,4,5,6,7")
 
 	-- 
 	-- fmobs
@@ -53,7 +53,7 @@ function init_game()
 	_mobchest,
 	_mobgrass,
 	-- 11 waterline
-	_mobanchor = unpack(csv_to_arr("8,9,10,12"))
+	_mobanchor = csv_to_val("8,9,10,12")
 
 	_hp = csv_to_arr("4,1,5,1,1,1,3,1,0")
 	_atk = csv_to_arr("1,2,1,1,1,0,1,1,0,0")
