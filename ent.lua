@@ -87,6 +87,14 @@ function on_open(ent, atk, np, d)
   sfx(4)
 end
 
+function on_anchor(ent, atk, np, d)
+  add_menu({"keep looking","return to surface"}, upd_inv, function(idx)
+    if idx == 2 then
+      restart()
+    end
+  end)
+end
+
 function gen_frames(id, len, arr)
   for i = 0, len do
     add(arr, id + i)
@@ -305,7 +313,16 @@ function move_ent(ent, d)
     return -- we hit a wall
   end
 
-  -- pickup item
+  -- step on item
+  local stepent = step_ent_at(np)
+  if stepent and stepent.on_wlk then
+    stepent:on_wlk(ent,np,d)
+    move_t(ent.pos, d)
+    ent.ease = ease_lerp
+    return
+  end
+
+  -- pickup item or interact with fmob
   local itm = sld_ent_at(np)
   if itm and itm.can_pickup then
     ent.ease = ease_bump

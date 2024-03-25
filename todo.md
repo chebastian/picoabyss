@@ -1,5 +1,40 @@
+# Game synops
+The player dives down between the cliffs, the goal is to find Tritons Trident
+the player sees the anchor which belongs to his boat on the surface.
+When the player returns to the anchor they are asked to return to surface.
+They may decide to do so because they are low on health, air or has found the levels item.
+Unless they have found the next "key item" going to the surface will take 
+them to a new location "regenerate the same level" to find the levels key.
+The key is placed in a chest on each level, a map or token that will guide 
+them to the next location.
+They get the item and then return to the Anchor to go to the next location.
+All in all there are 4 locations, each harder than the last.
+The player progresses on each level by picking up items, and wapons
+which persist between the levels. 
+The last level containst tritons trident, but also a moran/snake guarding it.
+
+# Technically
+- at the start of level, iterate over all tiles from the player
+ and place the key item furthest away from the anchor as possible
+
+# Levels
+1. Single randwalk enemy and grass (few to no traps)
+2. add squids, snakes and more traps
+3. adds mines and seastars
+4. moran boss level
+
+
+# Keys/Items ideas
+Compass
+Map
+Mermaid
+Tritons Trident
+
+
 # Todo 
 
+- [] chests may contain enemies
+- [] enemy that stuns, i.e you cannot move for one turn (electric eel trap, startfish on attack, knocked down for one turn)
 - [x] splash screen
 - [] clear game screen
 - [] gameover screen

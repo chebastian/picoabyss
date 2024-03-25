@@ -16,7 +16,7 @@ function rnd_plyr_startpos()
     if not chk_tile(p(x,y),_fsolid) then
       add(open,{x=x,y=y})
     end
-end)
+  end)
 
   local startpos = arr_choose(open)
   _plyr.pos.x = startpos.x
@@ -31,7 +31,8 @@ end)
   _cam.pos_ren.y = startpos.y
   set_lst_pos(_cam)
   upd_vistiles()
-
+  local anchor = add_fmob(_mobanchor, startpos, true)
+  anchor.on_wlk = on_anchor
 end
 
 function start_test()

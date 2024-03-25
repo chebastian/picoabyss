@@ -28,43 +28,47 @@ function init_game()
 	-- 
 	-- spr flags
 	--
-	_fsolid  = 0
-	_fchest  = 1
-	_flos_no = 2
-	_frubble  = 3
-	_fgrass = 4
+	_fsolid,
+	_fchest,
+	_flos_no,
+	_frubble,
+	_fgrass,
+	_fanchor = unpack(csv_to_arr("0,1,2,3,4,5"))
 	
 	--
 	-- mob init
 	--
-	_mobplyr = 1
-	_mobexpl = 2
-	_mobmine = 3
-	_mobacid = 4
-	_mobsqid = 5
-	_mobsmok = 6
-	_mobsnek = 7
+	_mobplyr,
+	_mobexpl,
+	_mobmine,
+	_mobacid,
+	_mobsqid,
+	_mobsmok,
+	_mobsnek = unpack(csv_to_arr("1,2,3,4,5,6,7"))
 
 	-- 
 	-- fmobs
 	-- 
-	_mobdoor = 8
-	_mobchest = 9
-	_mobgrass = 10
+	_mobdoor,
+	_mobchest,
+	_mobgrass,
 	-- 11 waterline
+	_mobanchor = unpack(csv_to_arr("8,9,10,12"))
 
 	_hp = csv_to_arr("4,1,5,1,1,1,3,1,0")
 	_atk = csv_to_arr("1,2,1,1,1,0,1,1,0,0")
-	_anims = csv_to_arr("240,206,226,198,214,222,218,68,70,72,50")
+	_anims = csv_to_arr("240,206,226,198,214,222,218,68,70,72,50,90")
 	_mobupd = {}
 	_mobupd[_mobmine] = upd_mine
 	_mobupd[_mobsqid] = upd_sqid
 	_mobupd[_mobsnek] = upd_snek
-	_mobupd[_mobdoor] = noop	
+	_mobupd[_mobdoor] = noop
+	_mobupd[_mobanchor] = noop
 
 	_fmobs = {}
 	_fmobs[_mobdoor] = on_open
 	_fmobs[_mobchest] = on_open
+	_fmobs[_mobanchor] = on_open
 	-- mob gen
 	_gensqid =
 	{
@@ -176,6 +180,17 @@ end
 -- 7378
 function chk_solidx(x,y)
  return chk_tile(p(x,y),_fsolid)
+end
+
+function step_ent_at(p)
+ for ent in all(_ents) do
+  if ent.pos.x == p.x
+  and ent.pos.y == p.y 
+  and ent.can_walk 
+  then
+   return ent
+  end
+ end
 end
 
 function sld_ent_at(p)
@@ -391,7 +406,6 @@ function upd_ease()
   pop_upd()
   set_lst_pos(_cam)
   foreach(_ents,set_lst_pos)
---  foreach(_ents,on_ent_turn_done)
   _on_turn_done()
   return
  end

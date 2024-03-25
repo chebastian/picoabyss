@@ -11,17 +11,17 @@ end
 function win_noop(win)
 end
 
+
+function add_menu(choices, upd, on_sel)
+   local win = add_win(30,30,40,10*#choices,choices)
+   win.upd = upd
+   win.on_sel = on_sel
+   win.sel = 1
+   return win
+end
+
 function add_menu_win()
- local choice = {
-  "equip",
-  "items",
-  "close"
- }
- 
- local win = add_win(8,11,40,10*#choice,choice)
- win.upd = upd_inv
- win.sel = 1
- win.on_sel = on_menu_sel
+   add_menu({"equip", "items", "close"}, upd_inv,on_menu_sel)
 end
 
 function on_menu_sel(idx)
@@ -45,10 +45,7 @@ function add_inv_win(inv,sel_cbk,chk_idx)
  for i in all(inv) do
   add(str,"".._lo_itms[i.id].name)
  end
- local win = add_win(8,11,40,10*#inv,str) 
- win.upd = upd_inv
- win.on_sel = sel_cbk
- win.sel = 1
+ local win = add_menu(str,upd_inv, sel_cbk)
  win.t = nil
  win.chk_idx = chk_idx
 end
