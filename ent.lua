@@ -302,18 +302,19 @@ function move_ent(ent, d)
   if sld then
     ent.ease = ease_bump
     on_bump(tile, np, ent, d)
-    return
+    return -- we hit a wall
   end
+
   -- pickup item
   local itm = sld_ent_at(np)
   if itm and itm.can_pickup then
     ent.ease = ease_bump
     itm:on_ent(ent, np, d)
-    return
+    return -- we hit a item we can pickup
   elseif itm and itm.is_fmob then
     ent.ease = ease_bump
     itm:on_ent(ent, np, d) --★ 223
-    return
+    return -- we hit a fmob (clam or door)
   end
 
   -- atk with weapon
@@ -324,10 +325,11 @@ function move_ent(ent, d)
     if ent2 and ent2.can_dmg and not ent2.is_fmob and ent2 != ent then
       ent.ease = ease_bump
       ent2:on_ent(ent, np, d) --★ 223
-      return
+      return -- we hit something with our weapon
     end
   end
 
+  -- we didnt hit anything solid so move
   p_sfx(sfx_wlk, ent)
   move_t(ent.pos, d)
   ent.ease = ease_lerp
