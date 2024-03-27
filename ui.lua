@@ -1,7 +1,13 @@
 -- ui
 
+-- set w to 0 for auto width
 function add_win(x,y,w,h,txt)
- local win = {x=x,y=y,w=w,h=h,txt=txt} 
+   local mw = 0
+   for choice in all(txt) do
+      mw = max(#choice, mw)
+   end
+   local ww = w == 0 and (mw+1) * 4 or w
+ local win = {x=x,y=y,w=ww,h=h,txt=txt} 
  win.upd = win_noop
  add(_wnd,win)
  push_upd(upd_win)
@@ -11,9 +17,8 @@ end
 function win_noop(win)
 end
 
-
 function add_menu(choices, upd, on_sel)
-   local win = add_win(30,30,40,10*#choices,choices)
+   local win = add_win(30,30,0,10*#choices,choices)
    win.upd = upd
    win.on_sel = on_sel
    win.sel = 1
