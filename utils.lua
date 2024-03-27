@@ -226,5 +226,5 @@ function csv_to_arr(str)
 end
 
 function csv_to_val(str)
-	unpack(csv_to_arr(str))
+	return unpack(csv_to_arr(str))
 end
