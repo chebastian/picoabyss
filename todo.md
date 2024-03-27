@@ -33,6 +33,7 @@ Tritons Trident
 
 # Todo 
 
+- [] death on no air
 - [] chests may contain enemies
 - [] enemy that stuns, i.e you cannot move for one turn (electric eel trap, startfish on attack, knocked down for one turn)
 - [x] splash screen

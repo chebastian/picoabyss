@@ -88,6 +88,9 @@ function on_open(ent, atk, np, d)
 end
 
 function on_anchor(ent, atk, np, d)
+  if not is_player(atk) then
+    return
+  end
   add_menu({"keep looking","return to surface"}, upd_inv, function(idx)
     if idx == 2 then
       restart()
