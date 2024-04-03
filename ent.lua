@@ -56,7 +56,7 @@ function add_fmob(id, p, canwalk)
   = ent(id, p), {}, _anims[id]
 
   e.sprid = _anims[id]
-  e.hp = 1
+  e.hp = id == _lvlkey and 50 or 1
   e.atk = 0
   e.upd = noop
   e.upd_ren = noop

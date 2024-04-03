@@ -8,14 +8,12 @@ function start_rnd_gen()
   rnd_plyr_startpos()
   add_slimes()
   add_key()
-
 end
 
 function add_key()
-  _keyp = p(_plyr.pos.x, _plyr.pos.y-1)
-  add_fmob(_mobchest, _keyp)
-  for chest in all(get_flg_ent(_fchest)) do
-  end
+  _,chests = get_flg_ent(_fchest)
+  randkey = arr_choose(chests)
+  _keyp = clone_p(randkey)
 end
 
 function rnd_plyr_startpos()

@@ -147,7 +147,7 @@ end
 function start()
 	init_game()
 	for i=0,18 do
-		add_trap(11,p(i,10))
+		add_trap(11,p(i,10)) -- add waves to startscreen
 	end
 end
 
@@ -162,14 +162,19 @@ function get_vis_ents()
 	return get_flg_ent(_flos_no)
 end
 
+-- returns both a table of hashes of the entities with the flags position
+-- and their positions in an array
 function get_flg_ent(flag)
 	local res = {}
+	local pos = {}
 	for ent in all(_ents) do
 		if fget(ent.sprid,flag) then
 			res[ptoi(ent.pos)] = true
+			add(pos,ent.pos)
 		end
 	end
-	return res
+
+	return res, pos
 end
 
 function chk_tile(p,flag)
