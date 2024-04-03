@@ -33,6 +33,7 @@ Tritons Trident
 
 # Todo 
 
+- [] BUG, anchor can be destroyed
 - [] death on no air
 - [] chests may contain enemies
 - [] enemy that stuns, i.e you cannot move for one turn (electric eel trap, startfish on attack, knocked down for one turn)
@@ -124,6 +125,7 @@ Tritons Trident
 -- [] ★224 sld_ent_at slow?
 -- [] ★xxx smoke interupts traps
 -- [] ★666 dirs hack, for interpolation perhaps? cant remember
+-- [] 321, hardcoded tile value when mergeing areas
 -- █ ideas
 
 -- spear gun, unlim range til hit enemy

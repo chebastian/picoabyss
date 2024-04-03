@@ -7,6 +7,15 @@ function start_rnd_gen()
   upd_visual_tiles()
   rnd_plyr_startpos()
   add_slimes()
+  add_key()
+
+end
+
+function add_key()
+  _keyp = p(_plyr.pos.x, _plyr.pos.y-1)
+  add_fmob(_mobchest, _keyp)
+  for chest in all(get_flg_ent(_fchest)) do
+  end
 end
 
 function rnd_plyr_startpos()
@@ -375,7 +384,6 @@ function flag_section(x, y, f, res)
     --		add(res,{po=po.po, f=f})
     res[ptoi(po.po)] = { po = po.po, f = f }
   end
-  --	stop()
 end
 
 -- signature funcs
@@ -449,7 +457,7 @@ function merge_small_areas()
           if section_sz(co.v) <= minsz
               and section_sz(i) <= minsz
           then
-            mset(co.x, co.y, 48)
+            mset(co.x, co.y, 48) -- 321 why, replace
           end
         end
       end

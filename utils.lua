@@ -205,8 +205,6 @@ function flood_fill(po,ocp,maxd,chk)
 
  end
  
--- printh("maximum depth flooded")
--- stop()
  return found
 end
 

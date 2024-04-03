@@ -30,7 +30,10 @@ function on_pickup(itm,ent,po,d)
  bump_at(ent,d)
  del(_ents,itm)
  
- if itm.id >= 0 and itm.id < 0x10 then
+ local hk = _plyr.has_key
+ _plyr.has_key = hk and hk or itm.id == _lvlkey
+
+ if itm.id >= 0 and itm.id < 0x10 or itm.id == _lvlkey then
 	 add(_bpack,itm)
  elseif (itm.id >= 0x10 and itm.id < 0x20) then
   add(_eqp,itm)
@@ -44,11 +47,14 @@ function on_use_potion()
  p_sfx(5,_plyr)
 end
 
-function on_use_mana()
---★ fix mp _plyr.hp+=1
+function on_use_air()
  add_air(_plyr,25)
  p_sfx(5,_plyr)
  _plyr.air += 25
+end
+
+function on_use_key()
+	show_msg("return it to surface")
 end
 
 function on_use_grt_ptn()
@@ -79,6 +85,11 @@ function use_item(idx,ent)
 	end
  local item = _bpack[idx]
  item.on_use()
+
+ if item.id == _lvlkey then -- dont remove the key
+	return
+ end
+
  del(_bpack,item)
 end
 

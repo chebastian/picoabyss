@@ -75,7 +75,9 @@ function on_open(ent, atk, np, d)
   if fget(ent.sprid, _fchest) and is_player(atk) then
     local lo_idx = flr(max(1, rnd(#_lo_chst)))
     local itm_idx = _lo_chst[lo_idx]
-    if itm_idx >= 0 then
+    if _keyp.x == ent.pos.x and _keyp.y == ent.pos.y then
+      add_itm(_lvlkey,clone_p(ent.pos))
+    elseif itm_idx >= 0 then
       add_itm(itm_idx, clone_p(ent.pos))
     else
       show_msg("the chest is empty")
@@ -91,7 +93,10 @@ function on_anchor(ent, atk, np, d)
   if not is_player(atk) then
     return
   end
-  add_menu({"keep looking","return to surface"}, upd_inv, function(idx)
+
+  local choices = _plyr.has_key and {"keep exploring", "go to next level"}
+                   or {"keep looking", "return to surface"}
+  add_menu(choices, upd_inv, function(idx)
     if idx == 2 then
       restart()
     end

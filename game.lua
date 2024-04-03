@@ -35,6 +35,7 @@ function init_game()
 	_fgrass,
 	_fanchor = csv_to_val("0,1,2,3,4,5")
 	
+	_lvlkey = 48
 	--
 	-- mob inint
 	--
@@ -113,10 +114,11 @@ function init_game()
 				[0x51] = 3}
 	_lo_itms = {
 		[0] = crt_itm("potion",on_use_potion),
-		[1] = crt_itm("air", on_use_mana),
+		[1] = crt_itm("air", on_use_air),
 		[16] = crt_eqp("swd",2,2,on_equip),
 		[17] = crt_eqp("grt swd",3,2,on_equip),
 		[18] = crt_eqp("slv swd",4,3,on_equip),
+		[_lvlkey] = crt_itm("treasure", on_use_key)
 	}
 
 	-- 7430
@@ -157,14 +159,16 @@ function restart()
 end
 
 function get_vis_ents()
+	return get_flg_ent(_flos_no)
+end
+
+function get_flg_ent(flag)
 	local res = {}
 	for ent in all(_ents) do
-		if fget(ent.sprid,_flos_no) then
---			add(res,ptoi(ent.pos))
+		if fget(ent.sprid,flag) then
 			res[ptoi(ent.pos)] = true
 		end
 	end
-	printh("vis" .. #res)
 	return res
 end
 
