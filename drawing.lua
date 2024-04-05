@@ -153,6 +153,8 @@ function drw_game()
 	 	drw_ent(e,e.pos_ren)
 	 end
  end
+
+ drw_ent(_plyr,_plyr.pos_ren)
  
  if _drw_dbg then
   for dtil in all(_srch_tiles) do
