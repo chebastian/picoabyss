@@ -73,8 +73,7 @@ end
 function on_open(ent, atk, np, d)
   bump_at(atk, d)
   if fget(ent.sprid, _fchest) and is_player(atk) then
-    local lo_idx = flr(max(1, rnd(#_lo_chst)))
-    local itm_idx = _lo_chst[lo_idx]
+    local itm_idx = arr_choose(_lo_chst)
     if _keyp.x == ent.pos.x and _keyp.y == ent.pos.y then
       add_itm(_lvlkey,clone_p(ent.pos))
     elseif itm_idx >= 0 then
