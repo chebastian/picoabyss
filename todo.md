@@ -32,33 +32,29 @@ Tritons Trident
 
 
 # Todo 
-
 - [] BUG, anchor can be destroyed
 - [] death on no air
 - [] chests may contain enemies
 - [] enemy that stuns, i.e you cannot move for one turn (electric eel trap, startfish on attack, knocked down for one turn)
-- [x] splash screen
 - [] clear game screen
-- [] gameover screen
 - [] BUG, bump wall should not be one turn (other bumps should)
 - [] BUG, can spawn on another entity (fmmob rather)
 - [] BUG, acid traps can be killed but they are not removed
 - [] snek should only charge til player last location  
 - [] starfish charge til somethings hit  
 - [] make tunnel floor more interesting (random spots gravel?)
-- [] randomly shoose different straight walls with features
-- [] add wobble to player idle (this is super for overall feeling and sells swimming)
+- [] randomly choose different straight walls with features
 - [] noop entities should not affect player step time
-- [] rubble is rendered over player
-- [] start updating entities only after seen
-     to reduce amount of damage made by snakes xD
-- [] enemy idle patterns  
 - [] clean, remov unused _upds  
 - [] rooms are always generated in the same X position
 - [] cleanup pline for tokens  
-- [] enemy trail (manet with tail?)  
 - [] moraan or snek endboss that has a trail and chases the player
+
+# Wont do
 - [] place mine at current location
+- [] enemy trail (manet with tail?)  
+- [] start updating entities only after seen
+     to reduce amount of damage made by snakes xD
 
 ## potions and pickups
 - [] increase oxygen level
@@ -74,6 +70,10 @@ Tritons Trident
 
 
 -- █ done
+- [x] splash screen
+- [x] gameover screen
+- [x] add wobble to player idle (this is super for overall feeling and sells swimming)
+- [x] rubble is rendered over player
 - [x] deleted entities animation does not finish?
     perhaps add a trailing animation which plays once then quits?
     Fade out via blink?
