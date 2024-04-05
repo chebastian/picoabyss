@@ -11,9 +11,10 @@ function start_rnd_gen()
 end
 
 function add_key()
-  _,chests = get_flg_ent(_fchest)
-  randkey = arr_choose(chests)
-  _keyp = clone_p(randkey)
+  local _,chests = get_flg_ent(_fchest)
+  _keyp = arr_choose(chests)
+  local chest = sld_ent_at(_keyp)
+  chest.sprid = 11 -- turn it into a chest
 end
 
 function rnd_plyr_startpos()
