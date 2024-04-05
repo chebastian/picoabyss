@@ -136,6 +136,7 @@ end
 function kill_ent(ent)
  ent.upd = noop
  ent.death = 16
+ ent.flash = 10
  ent.can_dmg = false
  if is_player(ent) then
   ent.death = 55

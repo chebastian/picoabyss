@@ -35,9 +35,10 @@ function drw_ent(ent,at)
 		ent.flash = ent.death%3
 		if ent.death <= 0 then
 			del(_ents, ent)
-			chk_endgame()
 		end
 	end
+
+	chk_endgame()
 
 end
 

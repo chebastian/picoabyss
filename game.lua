@@ -335,6 +335,9 @@ function turn_done()
 
  _plyr.upd_ren = wobble_upd
  _plyr.air -= 1
+ if _plyr.air <= 0 then
+	kill_ent(_plyr)
+ end
 end
 
 function chk_traps(e)
@@ -350,7 +353,7 @@ function chk_traps(e)
 end
 
 function chk_endgame()
- if _plyr.hp <= 0 then
+ if (_plyr.hp <= 0 or _plyr.air <= 0) and _plyr.death <= 0 then
 	pop_upd()
 	push_upd(upd_endgame)
 	_drw = drw_endgame
