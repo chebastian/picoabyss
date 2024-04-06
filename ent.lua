@@ -97,9 +97,33 @@ function on_anchor(ent, atk, np, d)
                    or {"keep looking", "return to surface"}
   add_menu(choices, upd_inv, function(idx)
     if idx == 2 then
-      restart()
+      if _plyr.has_key then
+        nextlevel()
+      else
+        restart()
+      end
     end
   end)
+end
+
+function nextlevel()
+  pop_upd()
+  _wnd = {}
+  push_upd(upd_nextlevel)
+  push_upd(noop) -- 433 hack 
+  _drw = drw_nextlevel
+end
+
+function drw_nextlevel()
+  print("complete press x for next level", 10,10)
+end
+
+function upd_nextlevel()
+  if btnp(4) then
+    restart()
+    pop_upd()
+    _drw = drw_game
+  end
 end
 
 function gen_frames(id, len, arr)

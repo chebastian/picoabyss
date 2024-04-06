@@ -10,11 +10,27 @@ function start_rnd_gen()
   add_key()
 end
 
-function add_key()
-  local _,chests = get_flg_ent(_fchest)
-  _keyp = arr_choose(chests)
+function add_key_plr()
+  local open = {}
+  for dir in all(dirs) do
+    if is_valid_move(_plyr, dir) then
+      add(open, dir)
+    end
+  end
+
+  local rnddir = arr_choose(open)
+  _keyp = clone_p(add_t(_plyr.pos,rnddir))
+  add_fmob(_fchest, _keyp)
   local chest = sld_ent_at(_keyp)
   chest.sprid = 11 -- turn it into a chest
+end
+function add_key()
+  add_key_plr()
+
+  -- local _,chests = get_flg_ent(_fchest)
+  -- _keyp = arr_choose(chests)
+  -- local chest = sld_ent_at(_keyp)
+  -- chest.sprid = 11 -- turn it into a chest
 end
 
 function rnd_plyr_startpos()

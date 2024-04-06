@@ -126,6 +126,7 @@ Tritons Trident
 -- [] ★xxx smoke interupts traps
 -- [] ★666 dirs hack, for interpolation perhaps? cant remember
 -- [] 321, hardcoded tile value when mergeing areas
+-- [] 433, hack: push a empty state to the stack so when the window closes it pops the empty state and keeps our "finished state"
 -- █ ideas
 
 -- spear gun, unlim range til hit enemy
