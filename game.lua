@@ -238,12 +238,19 @@ end
 
 function upd_plyr(ent)
  ent.d = _d
+ if not is_valid_move(ent, _d) then
+    ent.ease = ease_bump
+    on_bump(0, add_pt(_plyr.pos, _d), ent, _d)
+	_d = nil
+	return false
+ end
  move_ent(ent,ent.d)
  ent.d = nil
  _d = nil
  _cam.pos.x = ent.pos.x
  _cam.pos.y = ent.pos.y
  set_lst_pos(_cam)
+ return true
 end
 
 function upd_splash()
@@ -282,8 +289,10 @@ function plr_turn()
 	if _d == nil then
   _d = p(0,0)
  end
- _plyr:upd()
- _on_turn_done = ai_turn
+ local valid = _plyr:upd()
+ -- dont move to ai turn if move was not valid
+ _on_turn_done = valid and ai_turn or on_turn_done
+
  _trn_spd = 1/10
  push_upd(upd_ease)
  _plyr.upd_ren = noop

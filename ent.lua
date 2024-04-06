@@ -308,6 +308,17 @@ function wlk_to_plyr(ent)
   ent.d = nil
 end
 
+function is_valid_move(ent, d)
+  local np = add_t(ent.pos, d)
+  local sld, tile = chk_tile(np, _fsolid)
+
+  if sld then
+    return false -- we hit a wall
+  end
+  
+  return true
+end
+
 function move_ent(ent, d)
   ent.hflip = d.x < 0 or (ent.hflip and d.x == 0)
   ent.dx = ent.d.x
