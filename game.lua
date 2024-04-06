@@ -1,5 +1,5 @@
 -- game
-function init_game()
+function init_game(eqp, lvl, atk)
 	--
 	-- spr ids
 	-- 
@@ -109,7 +109,7 @@ function init_game()
 	_ents = {}  -- all entities, inc player
 	_itms = {}  -- all pickups etc
 	_bpack = {} -- player backpack
-	_eqp = {}   -- player equipment
+	_eqp = eqp and eqp or {}   -- player equipment
 	_eqp_atk = {[0x50] = 2,
 				[0x51] = 3}
 	_lo_itms = {
@@ -133,7 +133,9 @@ function init_game()
 	_plyr.ease = ease_lerp
 	_plyr.upd_ren = wobble_upd
 	_plyr.srchd = 6
+	_plyr.lvl = lvl and lvl or 1
 	_plyr.air = 100
+	_plyr.atk = atk and atk or 1
  	_cam = ent(99,p(_plyr.pos.x, _plyr.pos.y))
 
 	-- sfx_wkl=0
@@ -144,18 +146,6 @@ function init_game()
 
 end
 
-function init_next_level()
-	_txts = {}
-	_ents = {}
-	_itms = {}
-
-	_bpack = {} -- empty items
- 	_cam = ent(99,p(_plyr.pos.x, _plyr.pos.y))
-	_plyr.has_key = false
-	_plyr.air = 100
-	add(_ents, _plyr)
-end
-
 function start()
 	init_game()
 	for i=0,18 do
@@ -164,11 +154,8 @@ function start()
 end
 
 function restart(nextlevel)
- if nextlevel then
-	init_next_level()
-else
-	init_game()
- end
+
+	init_game(_eqp, 1, _plyr.atk)
 
 	start_rnd_gen()
 	_srch_tiles = flood_fill(_plyr.pos,{},_plyr.srchd)
