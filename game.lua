@@ -153,10 +153,9 @@ function start()
 	end
 end
 
-function restart(nextlevel)
+function restart()
 
-	init_game(_eqp, 1, _plyr.atk)
-
+	init_game(_eqp, _plyr.lvl, _plyr.atk)
 	start_rnd_gen()
 	_srch_tiles = flood_fill(_plyr.pos,{},_plyr.srchd)
 	 upd_vistiles()
@@ -378,6 +377,9 @@ function upd_endgame()
 		pop_upd()
 		_drw = drw_game
 		push_upd(upd_game)
+		_plyr.lvl = 1
+		_eqp = {}
+		_plyr.atk = 1
 		restart()
 	end
 end
