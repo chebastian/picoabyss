@@ -116,7 +116,11 @@ function nextlevel()
 end
 
 function drw_nextlevel()
-  print("complete press x for next level", 10,10)
+  if _plyr.lvl > 4 then
+    print("You have found the trident, the game is over", 10,10)
+  else
+    print("complete press x for next level", 10,10)
+  end
 end
 
 function upd_nextlevel()

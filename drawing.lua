@@ -137,9 +137,12 @@ end
 --end
 
 function drw_game()
- local cp = get_cam_renpos()
- camera(cp.x,cp.y)
+	local cp = get_cam_renpos()
+	local levelpal = csv_to_arr("5,4,3,2")
+	pal(15, levelpal[_plyr.lvl])
+	camera(cp.x,cp.y)
 	map()
+	pal()
 	_pl.frame_cnt+=1
  _updt = min(_updt+1/60,1)
  
