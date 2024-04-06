@@ -34,7 +34,7 @@ function init_game()
 	_frubble,
 	_fgrass,
 	_fanchor = csv_to_val("0,1,2,3,4,5")
-	
+
 	_lvlkey = 48
 	--
 	-- mob inint
@@ -144,6 +144,18 @@ function init_game()
 
 end
 
+function init_next_level()
+	_txts = {}
+	_ents = {}
+	_itms = {}
+
+	_bpack = {} -- empty items
+ 	_cam = ent(99,p(_plyr.pos.x, _plyr.pos.y))
+	_plyr.has_key = false
+	_plyr.air = 100
+	add(_ents, _plyr)
+end
+
 function start()
 	init_game()
 	for i=0,18 do
@@ -151,8 +163,13 @@ function start()
 	end
 end
 
-function restart()
+function restart(nextlevel)
+ if nextlevel then
+	init_next_level()
+else
 	init_game()
+ end
+
 	start_rnd_gen()
 	_srch_tiles = flood_fill(_plyr.pos,{},_plyr.srchd)
 	 upd_vistiles()

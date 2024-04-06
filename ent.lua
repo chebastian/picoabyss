@@ -100,7 +100,7 @@ function on_anchor(ent, atk, np, d)
       if _plyr.has_key then
         nextlevel()
       else
-        restart()
+        restart(true)
       end
     end
   end)
@@ -120,7 +120,7 @@ end
 
 function upd_nextlevel()
   if btnp(4) then
-    restart()
+    restart(true)
     pop_upd()
     _drw = drw_game
   end
