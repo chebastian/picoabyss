@@ -33,7 +33,7 @@ Tritons Trident
 
 # Todo 
 - [] BUG, anchor can be destroyed
-- [] death on no air
+- [x] death on no air
 - [] chests may contain enemies
 - [] enemy that stuns, i.e you cannot move for one turn (electric eel trap, startfish on attack, knocked down for one turn)
 - [] clear game screen
