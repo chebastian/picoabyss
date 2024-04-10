@@ -116,11 +116,11 @@ function nextlevel()
 end
 
 function drw_nextlevel()
-  if _plyr.lvl > 4 then
-    print("You have found the trident, the game is over", 10,10)
-  else
-    print("complete press x for next level", 10,10)
-  end
+    local idx = (_plyr.lvl-1)*2-1 -- we have already incremented the lvl when we get here, so reduce it by one first
+
+    msg = csv_to_arr("a bottled map,guiding you to sea,a inscribed seashell,its markings guide you,a magical compass,its needle shows the way", true)
+    print(msg[idx], 20,40)
+    print(msg[idx+1], 20,50)
 end
 
 function upd_nextlevel()

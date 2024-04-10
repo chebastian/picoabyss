@@ -35,7 +35,7 @@ function init_game(eqp, lvl, atk)
 	_fgrass,
 	_fanchor = csv_to_val("0,1,2,3,4,5")
 
-	_lvlkey = 48
+	_lvlkey = lvl and 47 + lvl or 48
 	--
 	-- mob inint
 	--

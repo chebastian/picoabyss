@@ -208,18 +208,17 @@ function flood_fill(po,ocp,maxd,chk)
  return found
 end
 
-function csv_to_arr(str)
+function csv_to_arr(str, notnum)
 	local num = ""
 	local arr = {}
 	for c in all(str) do
 		local cpy = num
 		num = c == "," and "" or num .. c
-		gn = num
 		if c == "," then
-			add(arr,tonum(cpy))
+			add(arr,notnum and cpy or tonum(cpy))
 		end
 	end
-	add(arr,tonum(num)) -- add last
+	add(arr,notnum and num or tonum(num)) -- add last
 	return arr
 end
 
