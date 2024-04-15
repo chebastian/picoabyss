@@ -7,24 +7,6 @@ function init_game(eqp, lvl, atk)
 	_idweed = 19
 	_idclam = 29
 	
-	--
-	-- generators
-	--
-	_genweed =
-	{
-	id = _idweed,
-	r  = 400,
-	pred = function(sig)
-		return sig_match(sig,0b1010000,0b00001111)
-					or sig_match(sig,0b0101000,0b00001111)
-	end
-	}
-	_genclam =
-	{
-	id = _idclam,
-	r  = 100
-	}
-	
 	-- 
 	-- spr flags
 	--

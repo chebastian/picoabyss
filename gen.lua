@@ -554,12 +554,11 @@ end
 
 function add_slimes()
   mapsig(function(x, y, sig)
-    local r1, r2, r3 = rnd(1000),
-        rnd(1000),
+    local r1, r3 = rnd(1000),
         rnd(1000)
     if not chk_solidx(x, y) and not sld_ent_at(p(x,y)) then
       if gen_traps(x, y, sig, r1) then
-      elseif gen_tiles(x, y, sig, r2) then
+      elseif gen_tiles(x, y, sig) then
       elseif gen_mobs(x, y, sig, r3) then
       end
     end
@@ -567,23 +566,23 @@ function add_slimes()
 end
 
 function gen_traps(x, y, sig, r)
-  if not chk_solidx(x, y) then
-    if sig == 0 and r <= 100 then
-      add_trap(_mobacid, p(x, y))
-      return true
-    end
+  if sig == 0 and r <= 100 then
+    add_trap(_mobacid, p(x, y))
+    return true
   end
   return false
 end
 
-function gen_tiles(x, y, sig, r)
+function gen_tiles(x, y, sig)
+  local tilesarr = csv_to_arr("1,2,2,2,2,0,0,0,0,0")
+  local idx = arr_choose(tilesarr)
   local po = p(x,y)
-  if _genweed.pred(sig)
-      and r <= _genweed.r
-  then
+	local weedSig =	sig_match(sig,0b1010000,0b00001111)
+					or sig_match(sig,0b0101000,0b00001111)
+  if weedSig and idx == 2 then
     add_fmob(_mobgrass, po, true)
     return true
-  elseif r < _genclam.r then
+  elseif idx == 1 then
     add_fmob(_mobchest, po, false)
     return true
   end

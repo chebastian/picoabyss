@@ -32,7 +32,7 @@ Tritons Trident
 
 
 # Todo 
-- [] BUG, sometimes (rare) we crash cause there is no item in the lookup at that index
+- [] BUG, sometimes (rare) we crash in add_itm cause there is no item in the lookup at that index
 - [] BUG, anchor can be destroyed
 - [x] death on no air
 - [] chests may contain enemies
