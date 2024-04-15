@@ -112,12 +112,18 @@ function nextlevel()
   _wnd = {}
   push_upd(upd_nextlevel)
   push_upd(noop) -- 433 hack 
-  _drw = drw_nextlevel
+  _drw = drw_splash
+
+  _ents = {}
+  fill_map(0)
+	for i=0,18 do
+		add_trap(11,p(i,10)) -- add waves to startscreen
+	end
 end
 
 function drw_nextlevel()
-    local idx = (_plyr.lvl-1)*2-1 -- we have already incremented the lvl when we get here, so reduce it by one first
-
+    pal(15, _levelpal[_plyr.lvl])
+    map()
     msg = csv_to_arr("a bottled map,guiding you to sea,a inscribed seashell,its markings guide you,a magical compass,its needle shows the way", true)
     print(msg[idx], 20,40)
     print(msg[idx+1], 20,50)

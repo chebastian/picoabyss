@@ -144,6 +144,8 @@ function init_game(eqp, lvl, atk)
 	-- sfx_door=3
 	_tile_sfx = { [9]=3, [13]=2, [15]=2, [1]=1 }
 
+	_levelpal = csv_to_arr("5,4,3,2")
+	pal(15, _levelpal[_plyr.lvl])
 end
 
 function start()
