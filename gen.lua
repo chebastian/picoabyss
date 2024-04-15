@@ -592,16 +592,10 @@ end
 
 function gen_mobs(x, y, sig, r)
   local po = p(x,y)
-  if r <= _gensqid.r then
-    local type = rnd(1000)
-    if type < 300 then
-      add_mob(_mobsqid, po)
-    else
-      add_mob(_mobmine, po)
-    end
-    return true
-  elseif r <= _gensnek.r then
-    add_mob(_gensnek.id, po)
+  local types = csv_to_arr("1,1,1,2,2,2,2,2,2,3")
+  local tmap = {_mobsqid, _mobmine, _mobsnek}
+  if r <= 45 then
+    add_mob(tmap[arr_choose(types)], po)
     return true
   end
 

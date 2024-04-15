@@ -52,18 +52,7 @@ function init_game(eqp, lvl, atk)
 	_fmobs[_mobdoor] = on_open
 	_fmobs[_mobchest] = on_open
 	_fmobs[_mobanchor] = on_open
-	-- mob gen
-	_gensqid =
-	{
-	id = _mobsqid,
-	r = 35
-	}
-	_gensnek = 
-	{
-		id = _mobsnek,
-		r = 45
-	}
-		
+
 	--
 	-- trap init
 	-- 
