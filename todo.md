@@ -32,6 +32,8 @@ Tritons Trident
 
 
 # Todo 
+- [] increase chanse of air when player air is low and inv empty
+- [] always put air in alcoves
 - [] BUG, sometimes (rare) we crash in add_itm cause there is no item in the lookup at that index
 - [] BUG, anchor can be destroyed
 - [x] death on no air
