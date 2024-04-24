@@ -43,8 +43,6 @@ function add_trap(id, p, cbk)
   local mob = add_mob(id, p)
   mob.upd = _trapupd[id]
   mob.life = _traplife[id]
-  mob.can_dmg = false
-  mob.can_pickup = false
   mob.can_walk = true
   mob.on_trap = cbk
   _traps[ptoi(p)] = mob
@@ -62,7 +60,6 @@ function add_fmob(id, p, canwalk)
   e.upd_ren = noop
   e.can_dmg = true  -- meaning can we bump into this thing and hit it
   e.can_walk = canwalk -- when false entities will not walk over this in pathfinding
-  e.can_pickup = false -- can be picked up?
   e.is_fmob = true
 
   e.on_ent = on_open
@@ -155,8 +152,6 @@ function add_mob(id, p)
   e.upd = _mobupd[id]
   e.upd_ren = noop
   e.can_dmg = true
-  e.can_walk = false
-  e.can_pickup = false
   add_ent(e)
   return e
 end

@@ -17,8 +17,6 @@ function add_itm(id,po)
  ent.upd = noop
  ent.upd_ren = wobble_upd
  ent.itm = true
- ent.can_walk = false
- ent.can_dmg = false
  ent.can_pickup = true
  ent.outline = true
  ent.on_ent = on_pickup
@@ -31,11 +29,12 @@ function on_pickup(itm,ent,po,d)
  del(_ents,itm)
  
  local hk = _plyr.has_key
- _plyr.has_key = hk and hk or itm.id == _lvlkey
+ local itid = itm.id
+ _plyr.has_key = hk and hk or itid == _lvlkey
 
- if itm.id >= 0 and itm.id < 0x10 or itm.id == _lvlkey then
+ if itid >= 0 and itid < 0x10 or itid == _lvlkey then
 	 add(_bpack,itm)
- elseif (itm.id >= 0x10 and itm.id < 0x20) then
+ elseif itid >= 0x10 and itid < 0x20 then
   add(_eqp,itm)
  end
  p_sfx(5,ent)
