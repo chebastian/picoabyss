@@ -22,20 +22,22 @@ function ent(id, po)
   }
 end
 
-function trap_noop(e)
+function add_mob(id, p)
+  local e, frames, anim_id
+  = ent(id, p), {}, _anims[id]
+
+  gen_frames(anim_id, 3, frames)
+
+  e.anim = anim(frames, 3, 1)
+  e.hp = _hp[id]
+  e.atk = _atk[id]
+  e.upd = _mobupd[id]
+  e.upd_ren = noop
+  e.can_dmg = true
+  add_ent(e)
+  return e
 end
 
-function upd_smok(e)
-  if e.life <= 0 then
-    del(_ents, e)
-    --		updatefow()
-  else
-    e.life -= 1
-    if e.life <= 1 then
-      e.flash = 10
-    end
-  end
-end
 
 function add_trap(id, p, cbk)
   printh("upd: " .. tostr(_trapupd[id]) .. "at: " .. id)
@@ -65,6 +67,21 @@ function add_fmob(id, p, canwalk)
   e.on_ent = on_open
   add_ent(e)
   return e
+end
+
+function trap_noop(e)
+end
+
+function upd_smok(e)
+  if e.life <= 0 then
+    del(_ents, e)
+    --		updatefow()
+  else
+    e.life -= 1
+    if e.life <= 1 then
+      e.flash = 10
+    end
+  end
 end
 
 function on_open(ent, atk, np, d)
@@ -138,22 +155,6 @@ function gen_frames(id, len, arr)
   for i = 0, len do
     add(arr, id + i)
   end
-end
-
-function add_mob(id, p)
-  local e, frames, anim_id
-  = ent(id, p), {}, _anims[id]
-
-  gen_frames(anim_id, 3, frames)
-
-  e.anim = anim(frames, 3, 1)
-  e.hp = _hp[id]
-  e.atk = _atk[id]
-  e.upd = _mobupd[id]
-  e.upd_ren = noop
-  e.can_dmg = true
-  add_ent(e)
-  return e
 end
 
 function add_ent(ent)
