@@ -216,6 +216,17 @@ function upd_sqid(ent)
   end
 end
 
+function walkable_dirs(po)
+  local drs = {}
+  for dir in all(dirs) do
+    if not sld_ent_at(add_t(po,dir)) then
+      add(drs,dir)
+    end
+  end
+
+  return drs
+end
+
 function upd_snek(ent)
   -- if snek has no target
   if not ent.target then
@@ -247,10 +258,11 @@ function upd_snek(ent)
   -- player not found
   -- do random walk
   if not ent.target then
-    ent.d = arr_choose(dirs)
-    if sld_ent_at(ent.d) then
-      ent.d = arr_choose(dirs)
+    ent.d = arr_choose(walkable_dirs(ent.pos))
+    if not ent.d then
+      stop("could not find walkable dir")
     end
+
     move_ent(ent, ent.d)
     return
   end
