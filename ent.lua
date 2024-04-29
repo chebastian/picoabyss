@@ -136,9 +136,7 @@ function nextlevel()
 end
 
 function drw_nextlevel()
-    map()
-    --lv 1 2 3 4
-    --id 1 3 5 7
+    drw_splash()
     local idx = ((_plyr.lvl-1)*2)-1
     msg = csv_to_arr("a bottled map,guiding you to sea,a inscribed seashell,its markings guide you,a magical compass,its needle shows the way", true)
     print(msg[idx], 20,40)
