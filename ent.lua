@@ -126,7 +126,7 @@ function nextlevel()
   _wnd = {}
   push_upd(upd_nextlevel)
   push_upd(noop) -- 433 hack 
-  _drw = drw_splash
+  _drw = drw_nextlevel
 
   _ents = {}
   fill_map(0)
@@ -136,8 +136,10 @@ function nextlevel()
 end
 
 function drw_nextlevel()
-    pal(15, _levelpal[_plyr.lvl])
     map()
+    --lv 1 2 3 4
+    --id 1 3 5 7
+    local idx = ((_plyr.lvl-1)*2)-1
     msg = csv_to_arr("a bottled map,guiding you to sea,a inscribed seashell,its markings guide you,a magical compass,its needle shows the way", true)
     print(msg[idx], 20,40)
     print(msg[idx+1], 20,50)
