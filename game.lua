@@ -40,7 +40,7 @@ function init_game(eqp, lvl, atk)
 
 	_hp = csv_to_arr("4,1,5,1,1,1,3,1,0")
 	_atk = csv_to_arr("1,2,1,1,1,0,1,1,0,0")
-	_anims = csv_to_arr("240,206,226,198,214,222,218,68,70,72,50,90")
+	_anims = csv_to_arr("240,206,226,198,214,222,218,68,70,72,50,90,33,248")
 	_mobupd = {}
 	_mobupd[_mobmine] = upd_mine
 	_mobupd[_mobsqid] = upd_sqid

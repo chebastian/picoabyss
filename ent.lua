@@ -128,11 +128,14 @@ function nextlevel()
   push_upd(noop) -- 433 hack 
   _drw = drw_nextlevel
 
+  _boat = 0
   _ents = {}
   fill_map(0)
 	for i=0,18 do
-		add_trap(11,p(i,10)) -- add waves to startscreen
+		add_trap(13,p(i,10)) -- add waves to startscreen
 	end
+
+  _ship = add_trap(14,p(4,10));
 end
 
 function drw_nextlevel()
@@ -141,6 +144,7 @@ function drw_nextlevel()
     msg = csv_to_arr("a bottled map,guiding you to sea,a inscribed seashell,its markings guide you,a magical compass,its needle shows the way", true)
     print(msg[idx], 20,40)
     print(msg[idx+1], 20,50)
+    -- spr(103,40, 78)
 end
 
 function upd_nextlevel()
