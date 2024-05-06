@@ -229,23 +229,6 @@ function upd_plyr(ent)
  return true
 end
 
-function upd_splash()
-	_splshy -= .5
-	_splshy = max(_splshy,50)
-	if btnp(3) then
-		_starting = true
-	end
-	if _starting then
-		_plyr.pos.y += .1
-		if _plyr.pos.y > 20 then
-			drw_loading()
-			restart()
-			pop_upd()
-			_drw = drw_game
-		end
-	end
-end
-
 function upd_game()
 	buff_input()
 	
@@ -343,23 +326,6 @@ function chk_endgame()
 	push_upd(upd_endgame)
 	_drw = drw_endgame
  end
-end
-
-function upd_endgame()
-	if btnp(4) or btnp(5) then
-		pop_upd()
-		_drw = drw_game
-		push_upd(upd_game)
-		_plyr.lvl = 1
-		_eqp = {}
-		_plyr.atk = 1
-		restart()
-	end
-end
-
-function drw_endgame()
-	print("Y O U   D I E D", 40,40)
-	print("press a key to restart", 25,50)
 end
 
 function ease_lerp(ent)

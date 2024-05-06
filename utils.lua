@@ -225,3 +225,9 @@ end
 function csv_to_val(str)
 	return unpack(csv_to_arr(str))
 end
+
+function drw_loading()
+  cls()
+  print("loading...", 40, 60)
+  flip()
+end

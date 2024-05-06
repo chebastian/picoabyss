@@ -138,30 +138,6 @@ function nextlevel()
   _ship = add_trap(14,p(4,10));
 end
 
-function drw_nextlevel()
-    drw_splash()
-    local idx = ((_plyr.lvl-1)*2)-1
-    msg = csv_to_arr("a bottled map,guiding you to sea,a inscribed seashell,its markings guide you,a magical compass,its needle shows the way", true)
-    print(msg[idx], 20,40)
-    print(msg[idx+1], 20,50)
-    -- spr(103,40, 78)
-end
-
-function drw_loading()
-  cls()
-  print("loading...", 40, 60)
-  flip()
-end
-
-function upd_nextlevel()
-  if btnp(4) then
-    drw_loading()
-    restart()
-    pop_upd()
-    _drw = drw_game
-  end
-end
-
 function gen_frames(id, len, arr)
   for i = 0, len do
     add(arr, id + i)
