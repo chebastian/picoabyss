@@ -147,8 +147,15 @@ function drw_nextlevel()
     -- spr(103,40, 78)
 end
 
+function drw_loading()
+  cls()
+  print("loading...", 40, 60)
+  flip()
+end
+
 function upd_nextlevel()
   if btnp(4) then
+    drw_loading()
     restart()
     pop_upd()
     _drw = drw_game

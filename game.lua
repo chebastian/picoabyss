@@ -238,7 +238,7 @@ function upd_splash()
 	if _starting then
 		_plyr.pos.y += .1
 		if _plyr.pos.y > 20 then
-		-- _drw = drw_game
+			drw_loading()
 			restart()
 			pop_upd()
 			_drw = drw_game
