@@ -121,6 +121,13 @@ function on_anchor(ent, atk, np, d)
 end
 
 function nextlevel()
+  cls()
+  local slp = 30
+  while slp > 0 do
+      flip()
+      slp -= 1
+  end
+
   _plyr.lvl += 1
   pop_upd()
   _wnd = {}
