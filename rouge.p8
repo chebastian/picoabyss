@@ -10,7 +10,7 @@ __lua__
 #include items.lua
 #include utils.lua
 #include ui.lua
-
+#include scenes.lua
 -- …
 -- …∧░➡️⧗▤⬆️☉🅾️◆
 -- █★⬇️✽●♥웃⌂⬅️

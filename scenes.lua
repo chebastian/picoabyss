@@ -53,8 +53,8 @@ function drw_nextlevel()
 end
 
 function upd_nextlevel()
-  _ship.pos.x += 0.2
-  if btnp(4) then
+  _ship.pos_ren.x += 0.05
+  if btnp(4) or _ship.pos_ren.x > 14 then
     drw_loading()
     restart()
     pop_upd()
