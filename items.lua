@@ -109,13 +109,15 @@ function atk_ptrn(ent,wp)
  local dlx,dly = -drx,-dry
  local dux,duy = ent.dx,ent.dy
  local lr = {
- 	drx,dry,dlx,dly,0,0,dux,duy
+ 	drx,dry,
+	dlx,dly,
+	0,0,
+	dux,duy
  }
  
  local res = {}
  for i=1,#lr-1,2 do
- 	add(res,p(ent.pos.x+ent.dx+lr[i],
- 										 ent.pos.y+ent.dy+lr[i+1]))
+ 	add(res,p(ent.pos.x+ent.dx+lr[i], ent.pos.y+ent.dy+lr[i+1]))
  end
  
  if wp == 1 then
