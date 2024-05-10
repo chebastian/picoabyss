@@ -553,6 +553,7 @@ function get_passage(juncs, to)
 end
 
 function add_slimes()
+  _chests = {}
   mapsig(function(x, y, sig)
     local r1, r3 = rnd(1000),
         rnd(1000)
@@ -563,6 +564,13 @@ function add_slimes()
       end
     end
   end)
+
+  local numC = flr(#_chests*0.1)
+  for i = 1, numC, 1 do
+    local ch = arr_choose(_chests)
+    ch.sprid = _anims[_mobchest2]
+    ch.has_item = true
+  end
 end
 
 function gen_traps(x, y, sig, r)
@@ -587,7 +595,8 @@ function gen_tiles(x, y, sig)
     add_fmob(_mobgrass, po, true)
     return true
   elseif idx == 1 then
-    add_fmob(_mobchest, po, false)
+    local chest = add_fmob(_mobchest, po)
+    add(_chests, chest)
     return true
   end
 

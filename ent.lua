@@ -84,10 +84,38 @@ function upd_smok(e)
   end
 end
 
+function get_rnd_itm(itms,inv)
+  local itm_lookup = {}
+  for itm in all(itms) do
+    
+  end
+end
+
+function except(a,exc)
+  local exc_set = {}
+  for ie in all(exc) do
+    exc_set[ie] = true
+  end
+
+  local res = {}
+  for ia in all(a) do
+    if not exc_set[ia] then
+      add(res,id)
+    end
+  end
+
+  return res
+end
+
 function on_open(ent, atk, np, d)
   bump_at(atk, d)
   if fget(ent.sprid, _fchest) and is_player(atk) then
-    local itm_idx = arr_choose(_lo_chst)
+    local itm_idx = arr_choose(_lo_clam)
+    -- only lookup items in item carrying chests, all clams contains air
+    if ent.has_item then
+      itm_idx = arr_choose(_lo_chst)
+    end
+
     if _keyp.x == ent.pos.x and _keyp.y == ent.pos.y then
       add_itm(_lvlkey,clone_p(ent.pos))
     elseif itm_idx >= 0 then
