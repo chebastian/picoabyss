@@ -84,28 +84,6 @@ function upd_smok(e)
   end
 end
 
-function get_rnd_itm(itms,inv)
-  local itm_lookup = {}
-  for itm in all(itms) do
-    
-  end
-end
-
-function except(a,exc)
-  local exc_set, res = {}, {}
-  for ie in all(exc) do
-    exc_set[ie] = true
-  end
-
-  for ia in all(a) do
-    if not exc_set[ia] then
-      add(res,id)
-    end
-  end
-
-  return res
-end
-
 function on_open(ent, atk, np, d)
   bump_at(atk, d)
   if fget(ent.sprid, _fchest) and is_player(atk) then
