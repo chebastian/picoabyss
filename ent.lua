@@ -109,18 +109,13 @@ end
 function on_open(ent, atk, np, d)
   bump_at(atk, d)
   if fget(ent.sprid, _fchest) and is_player(atk) then
-    local itm_idx = arr_choose(_lo_clam)
-    -- only lookup items in item carrying chests, all clams contains air
-    if ent.has_item then
-      itm_idx = arr_choose(_lo_chst)
-    end
+    local itm_lookup = ent.has_item and _lo_chst or _lo_clam
+    itm_idx = arr_choose(itm_lookup)
 
     if _keyp.x == ent.pos.x and _keyp.y == ent.pos.y then
       add_itm(_lvlkey,clone_p(ent.pos))
     elseif itm_idx >= 0 then
       add_itm(itm_idx, clone_p(ent.pos))
-    else
-      show_msg("the chest is empty")
     end
   end
   ent.sprid += 1
