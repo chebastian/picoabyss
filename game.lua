@@ -97,11 +97,13 @@ function init_game(eqp, lvl, atk)
 
 	-- 7430
 	-- 7451
-	_lo_chst = csv_to_arr("-1,0,0,0,1,1,1,1,1,1,1,1,1,1,16,16,16,16,17,17,17,18,18")
+	_lo_chst = csv_to_arr("0,0,0,16,16,16,16,17,17,17,18,18")
+	_lo_clam = csv_to_arr("1,1")
 
 	_traps = {}
 	-- test
 	_plyr = add_mob(1,p(8,12))
+	_plyr.has_key = true
 	_plyr.upd = upd_plyr
 	_pl = anim_pl(4)
 	_plyr.ease = ease_lerp
