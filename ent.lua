@@ -92,12 +92,11 @@ function get_rnd_itm(itms,inv)
 end
 
 function except(a,exc)
-  local exc_set = {}
+  local exc_set, res = {}, {}
   for ie in all(exc) do
     exc_set[ie] = true
   end
 
-  local res = {}
   for ia in all(a) do
     if not exc_set[ia] then
       add(res,id)
