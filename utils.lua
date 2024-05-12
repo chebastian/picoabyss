@@ -47,11 +47,6 @@ function next_d()
  return dirs[flr(rnd(4))+1]
 end
 
-function next_p(_p)
- local d = next_d()
- return p(_p.x+d.x,_p.y+d.y),d
-end
-
 function p_sfx(id,ent)
  if(is_player(ent)) sfx(id)
 end
@@ -77,19 +72,6 @@ function upd_anim(pl,anim)
  end
  
  return anim.f[pl.frame_i%#anim.f+1]
-end
-
--- note this expects 
--- b to wrap a point in po
-function cmp_p(a,b)
-assert(a != nil, "a is nil")
-assert(b != nil, "b is nil")
- return a.x == b.po.x and a.y == b.po.y
-end
-
--- straight poitn compare
-function cmp_po(a,b)
- return a.x == b.x and a.y == b.y
 end
 
 -- tokens: big gain here
