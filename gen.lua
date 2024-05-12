@@ -67,23 +67,6 @@ function start_test()
   upd_visual_tiles()
 end
 
-function go_to_o(lookup, pos, ocp)
-  local cp, cd = min_d_on_map(lookup, pos, ocp)
-  if not cp then
-    return
-  end
-  local path = { add_t(pos,cp) }
-  local nxtp = path[1]
-  while cd > 0 do
-    cp, cd = min_d_on_map(lookup, nxtp, ocp)
-    local np = add_t(nxtp, cp)
-    add(path, clone_p(np))
-    nxtp = np
-  end
-
-  return path
-end
-
 function min_d_on_map(lookup, pos, ocp)
   -- local lookup = arr_to_tbl(nodes)
   local mini, mind = -1, 999
