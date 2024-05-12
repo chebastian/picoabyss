@@ -457,26 +457,6 @@ function gen_doors()
   end
 end
 
--- noblackout = true
-
-ofset = {}
-function upd_door_tiles(x, y)
-  offset_tile(x, y, 5)
-  offset_tile(x - 1, y, 5)
-  offset_tile(x, y - 1, 5)
-  offset_tile(x - 1, y - 1, 5)
-end
-
-function offset_tile(x, y, of)
-  if ofset[ptoix(x, y)] then
-    return
-  end
-
-  ofset[ptoix(x, y)] = true
-  local tk = mget(x, y)
-  mset(x, y, tk + of)
-end
-
 function section_sz(idx)
   cnt = 0
   for k, v in pairs(_flagmap) do

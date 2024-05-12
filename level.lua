@@ -1,20 +1,3 @@
-
--- temp function to test upd
-function digat(x,y)
-    upd_door_tiles(x,y)
-    -- upd_tiles_aorund(x,y)
-end
-
-function upd_tiles_aorund(x,y)
-    for dir in all(dir8) do
-        local nx,ny= x + dir.x, y + dir.y
-        local sig = tile_sig(p(nx,ny))
-        remap_tile(nx,ny,sig,chk_solidx(nx,ny))
-    end
-
-    remap_tile(x,y,tile_sig(p(x,y)), chk_solidx(x,y))
-end
-
 function upd_visual_tiles()
     _tile_sigs = csv_to_arr("223,205,1,176,253,205,1,179,239,205,1,178,127,205,0,177,239,205,0,146,223,207,1,144,23,205,0,147,237,205,1,145,207,205,0,161,223,207,0,163,237,205,0,160,205,207,1,162,255,207,1,132")
 
