@@ -86,12 +86,6 @@ function on_use_key()
 	show_msg("return it to surface")
 end
 
-function on_use_grt_ptn()
- _plyr.hp+=3
- add_hp(_plyr,3)
- p_sfx(5,_plyr)
-end
-
 function on_equip()
  sfx(2)
 end
