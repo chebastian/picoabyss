@@ -300,12 +300,8 @@ end
 
 -- utils for rnd
 
-function rnd_idx(n)
-  return flr(rnd() * n) + 1
-end
-
 function arr_choose(myarr)
-  local mri = rnd_idx(#myarr)
+  local mri = flr(rnd() * #myarr) + 1
   return myarr[mri]
 end
 
