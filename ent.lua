@@ -168,14 +168,6 @@ function kill_ent(ent)
  end
 end
 
-function rand_wlk(e)
-  if e.d == nil then
-    e.d = next_d()
-  end
-  move_ent(e, e.d)
-  e.d = nil
-end
-
 function ptoi(po)
   --★ arbitrary w, fix
   return po.x + po.y * 128

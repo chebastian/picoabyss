@@ -43,10 +43,6 @@ function move_t(po,d)
  po.y += d.y
 end
 
-function next_d()
- return dirs[flr(rnd(4))+1]
-end
-
 function p_sfx(id,ent)
  if(is_player(ent)) sfx(id)
 end
