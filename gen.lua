@@ -10,6 +10,9 @@ function start_rnd_gen()
   add_key()
 end
 
+-- 
+--  This function is temporary, to set chest next to plr
+-- 
 function add_key_plr()
   local open = {}
   for dir in all(dirs) do
