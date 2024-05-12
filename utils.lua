@@ -209,3 +209,13 @@ function drw_loading()
   print("loading...", 40, 60)
   flip()
 end
+
+--
+-- debug utils
+--
+
+-- function ptl(arr)
+-- 	for a in all(arr) do
+-- 		print(a .. ", ")
+-- 	end
+-- end
