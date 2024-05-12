@@ -36,8 +36,32 @@ function on_pickup(itm,ent,po,d)
 	 add(_bpack,itm)
  elseif itid >= 0x10 and itid < 0x20 then
   add(_eqp,itm)
+  lo_swap_inv(_lo_chst,0) -- swap pickup with potion
  end
  p_sfx(5,ent)
+end
+
+function upgd_itm_lookup(inv, lo)
+	local invmax = max(unpack(inv))
+	for i,inv_itm in ipairs(lo) do
+		if inv_itm > 0 and inv_itm <= invmax then
+			lo[i] = invmax + 1
+		end
+	end
+
+	return lo
+end
+
+function lo_swap_inv(lo,swp)
+  for inv_itm in all(_eqp) do
+	for i,pu_itm in ipairs(lo) do
+		if inv_itm.id == pu_itm then
+			lo[i] = swp -- make it a potion
+		end
+	end
+  end
+
+  return lo
 end
 
 function on_use_potion()

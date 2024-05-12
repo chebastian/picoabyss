@@ -97,7 +97,21 @@ function init_game(eqp, lvl, atk)
 
 	-- 7430
 	-- 7451
-	_lo_chst = csv_to_arr("0,0,0,16,16,16,16,17,17,17,18,18")
+	_level_items = {
+		csv_to_arr("16"), -- one in four to get sword
+		-- csv_to_arr("0,0,0,16"), -- one in four to get sword
+		csv_to_arr("0,0,0,0,0,16,17"), --  1/7 sword 1/7 great swrd
+		csv_to_arr("0,0,0,0,0,16,17,18"), --  1/8 sword 1/8 great swrd 1/8 slv swrd
+		csv_to_arr("0,0,0,0,0,16,17,18") --  1/8 sword 1/8 great swrd 1/8 slv swrd
+	}
+
+	-- 
+	-- on each level replace picked up equipment with next lvl eqp
+	-- so if the plyr has sword, replace it with great sword (on enter level, or pickup)
+	-- 
+
+	-- _lo_chst = csv_to_arr("0,0,0,16,16,16,16,17,17,17,18,18")
+	_lo_chst = upgd_itm_lookup(eqp or {},_level_items[lvl])
 	_lo_clam = csv_to_arr("1,1")
 
 	_traps = {}
