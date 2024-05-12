@@ -67,43 +67,6 @@ function start_test()
   upd_visual_tiles()
 end
 
-function min_d_on_map(lookup, pos, ocp)
-  -- local lookup = arr_to_tbl(nodes)
-  local mini, mind = -1, 999
-  local curd = lookup[ptoi(pos)]
-
-  -- if we are on map our min is our current dist
-  if curd then
-    mind = curd
-  end
-
-  for i = 1, #dirs do
-    local nx = pos.x + dirs[i].x
-    local ny = pos.y + dirs[i].y
-
-    local ndist = 999
-    local look_d = lookup[ptoix(nx, ny)]
-    -- if lookd_d is on path
-    -- and aint occupied
-    -- and is new low
-    if look_d
-        and ocp[ptoix(nx, ny)] == nil
-        and look_d < mind
-    then
-      mini = i
-      mind = look_d
-    end
-  end
-
-  if mini == -1 then
-    return
-  end
-
-  return dirs[mini], mind
-end
-
--- generate
-
 function add_door(r, hr, existing)
   local ranx = rnd()
   local np = {}
