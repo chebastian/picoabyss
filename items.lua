@@ -38,11 +38,17 @@ function on_pickup(itm,ent,po,d)
   add(_eqp,itm)
   lo_swap_inv(_lo_chst,0) -- swap pickup with potion
  end
+
  p_sfx(5,ent)
 end
 
 function upgd_itm_lookup(inv, lo)
-	local invmax = max(unpack(inv))
+	local keys = {}
+	for it in all(inv) do
+		add(keys, it.id)
+	end
+
+	local invmax = max(unpack(keys))
 	for i,inv_itm in ipairs(lo) do
 		if inv_itm > 0 and inv_itm <= invmax then
 			lo[i] = invmax + 1
