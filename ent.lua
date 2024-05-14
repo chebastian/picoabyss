@@ -90,9 +90,12 @@ function on_open(ent, atk, np, d)
     local itm_lookup = ent.has_item and _lo_chst or _lo_clam
     itm_idx = arr_choose(itm_lookup)
 
+    local rndTrap = rnd(100) <= 1
     if _keyp.x == ent.pos.x and _keyp.y == ent.pos.y then
       add_itm(_lvlkey,clone_p(ent.pos))
-    elseif itm_idx >= 0 then
+    elseif itm_idx >= 0 and rndTrap then
+      add_mob(_mobsnek, clone_p(ent.pos))
+    else
       add_itm(itm_idx, clone_p(ent.pos))
     end
   end
