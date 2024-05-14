@@ -366,7 +366,7 @@ function move_ent(ent, d)
 
   -- step on item
   local stepent = step_ent_at(np)
-  if stepent and stepent.on_wlk then
+  if stepent and stepent.on_wlk and not sld_ent_at(np) then
     stepent:on_wlk(ent,np,d)
     move_t(ent.pos, d)
     ent.ease = ease_lerp
