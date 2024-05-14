@@ -530,17 +530,16 @@ end
 
 function gen_mobs(x, y, sig, r)
   local po = p(x,y)
-  local types = csv_to_arr("1,1,1,2,2,2,2,2,2,3")
-  local typesmap = {}
-  typesmap[1] = csv_to_arr("3")
-  typesmap[2] = csv_to_arr("1,1,1,1,1,3,3,3,3,3")
-  typesmap[3] = csv_to_arr("1,1,2,2,3,3,3")
-  typesmap[4] = csv_to_arr("1,1,2,2,3,3,3")
+  local typesmap = {
+    csv_to_arr("3"),
+    csv_to_arr("1,1,1,1,1,3,3,3,3,3"),
+    csv_to_arr("1,1,2,2,3,3,3"),
+    csv_to_arr("1,1,2,2,3,3,3"),
+  }
 
   local tmap = {_mobsqid, _mobmine, _mobsnek}
   if r <= 45 then
     add_mob(tmap[arr_choose(typesmap[_plyr.lvl])], po)
-    return true
   end
 
   return true
