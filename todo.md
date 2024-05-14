@@ -17,13 +17,6 @@ The last level containst tritons trident, but also a moran/snake guarding it.
 - at the start of level, iterate over all tiles from the player
  and place the key item furthest away from the anchor as possible
 
-# Levels
-1. Single randwalk enemy and grass (few to no traps)
-2. add squids, snakes and more traps
-3. adds mines and seastars
-4. moran boss level
-
-
 # Keys/Items ideas
 Compass
 Map
@@ -32,16 +25,19 @@ Tritons Trident
 
 
 # Todo 
-- [] always put air in alcoves
-- [] increase chanse of air when player air is low and inv empty
 - [] allow chests to contain enemy as a trap
+- [] increase chanse of air when player air is low and inv empty
 - [] make tunnel floor more interesting (random spots gravel?)
+- [] always put air in alcoves
 - [] randomly choose different straight walls with features
 - [] noop entities should not affect player step time
 - [] cleanup pline for tokens  
 - [] BUG, anchor can be destroyed
 - [] BUG, can spawn on another entity (fmmob rather)
 - [] BUG, acid traps can be killed but they are not removed
+
+# Tokens
+- [] rnd_player_start_pos is duplicating access
 
 # Wont do
 - [] snek should only charge til player last location  
